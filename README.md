@@ -22,7 +22,7 @@ pod 'ZHHAnneKit'
 
 ## Author
 
-ningxiaomo0516, 136769890@qq.com
+宁小陌y, 136769890@qq.com
 
 ## License
 
