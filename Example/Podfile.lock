@@ -1,0 +1,16 @@
+PODS:
+  - ZHHAnneKit (0.0.1)
+
+DEPENDENCIES:
+  - ZHHAnneKit (from `../`)
+
+EXTERNAL SOURCES:
+  ZHHAnneKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  ZHHAnneKit: ced7687025159ede0d20d93a3f58293e215f751c
+
+PODFILE CHECKSUM: de88518a70ee9c805874c8adf96e408cc0ee822a
+
+COCOAPODS: 1.11.2

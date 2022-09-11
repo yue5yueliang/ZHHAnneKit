@@ -1,0 +1,6 @@
+framework module ZHHAnneKit {
+  umbrella header "ZHHAnneKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
