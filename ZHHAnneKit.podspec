@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = '项目常用的拓展方法,方便自己开发.'
 
 # This description is used to generate tags and improve search results.
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+项目中常用到的一些分类及工具类,方便自己开发.
                        DESC
 
   s.homepage         = 'https://github.com/yue5yueliang/ZHHAnneKit'
