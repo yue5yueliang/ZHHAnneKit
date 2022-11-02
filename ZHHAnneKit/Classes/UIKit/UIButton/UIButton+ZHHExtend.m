@@ -9,5 +9,14 @@
 #import "UIButton+ZHHExtend.h"
 
 @implementation UIButton (ZHHExtend)
+#pragma mark --- 创建默认按钮--有标题、字体、颜色
++ (instancetype)zhh_buttonWithTitle:(NSString *)title titleColor:(UIColor *)titleColor font:(UIFont *)font{
+    UIButton *button = [[UIButton alloc] init];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:titleColor forState:UIControlStateNormal];
+    button.titleLabel.font = font;
+    button.adjustsImageWhenHighlighted = NO;
+    return button;
+}
 
 @end

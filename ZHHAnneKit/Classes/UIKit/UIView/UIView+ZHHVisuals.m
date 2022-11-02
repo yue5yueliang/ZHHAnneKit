@@ -22,26 +22,6 @@
 }
 
 /*
- * 设置圆角点
- */
-- (void)zhh_setRoundedCorners:(UIRectCorner)corners radius:(CGFloat)radius {
-    CGRect rect = self.bounds;
-    
-    // Create the path
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:rect
-                                                   byRoundingCorners:corners
-                                                         cornerRadii:CGSizeMake(radius, radius)];
-    
-    // Create the shape layer and set its path
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.frame = rect;
-    maskLayer.path = maskPath.CGPath;
-    
-    // Set the newly created shape layer as the mask for the view's layer
-    self.layer.mask = maskLayer;
-}
-
-/*
  *  使用属性绘制阴影
  */
 - (void)zhh_shadowWithColor:(UIColor *)color offset:(CGSize)offset opacity:(CGFloat)opacity radius:(CGFloat)radius {

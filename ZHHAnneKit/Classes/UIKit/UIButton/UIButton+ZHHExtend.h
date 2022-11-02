@@ -11,7 +11,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIButton (ZHHExtend)
-
+@property (nonatomic, copy) NSString *education;
+/**
+ *  创建普通按钮
+ *  @param title         标题
+ *  @param titleColor    字体颜色
+ *  @param font          字号
+ *  @return UIButton
+ */
++ (instancetype)zhh_buttonWithTitle:(NSString *)title titleColor:(UIColor *)titleColor font:(UIFont *)font;
 @end
 
 NS_ASSUME_NONNULL_END

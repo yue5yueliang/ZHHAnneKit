@@ -48,4 +48,27 @@
 - (NSString *)zhh_trimmingWhitespaceAndNewlines {
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
+
+/**
+ *  去掉最后一个字符串如", ."
+ */
++ (NSString *)zhh_removeTheLastOneStr:(NSString*)string{
+    if([string length] > 0){
+        return [string substringToIndex:([string length]-1)];//去掉最后一个字符串如", ."
+    }else{
+        return string;
+    }
+}
+
+/**
+ *  移除结尾的子字符串
+ */
+- (NSString *)zhh_removeLastSubString:(NSString *)string {
+    NSString *result = self;
+    if ([result hasSuffix:string]) {
+        result = [result substringToIndex:self.length - string.length];
+        result = [result zhh_removeLastSubString:string];
+    }
+    return result;
+}
 @end

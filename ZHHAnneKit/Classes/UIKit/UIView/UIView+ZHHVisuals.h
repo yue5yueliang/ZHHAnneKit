@@ -16,11 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)zhh_cornerRadius:(CGFloat)radius strokeSize:(CGFloat)size color:(UIColor *)color;
 /*
- * 设置圆角点
- */
-- (void)zhh_setRoundedCorners:(UIRectCorner)corners radius:(CGFloat)radius;
-
-/*
  *  使用属性绘制阴影
  */
 - (void)zhh_shadowWithColor:(UIColor *)color offset:(CGSize)offset opacity:(CGFloat)opacity radius:(CGFloat)radius;

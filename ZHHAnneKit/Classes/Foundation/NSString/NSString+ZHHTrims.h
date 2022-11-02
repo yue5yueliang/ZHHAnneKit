@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 去除字符串与空行的字符串
  */
 - (NSString *)zhh_trimmingWhitespaceAndNewlines;
+/// 去掉最后一个字符串如", ."
++ (NSString *_Nullable)zhh_removeTheLastOneStr:(NSString *_Nullable)string;
+/// 移除结尾的子字符串
+- (NSString *)zhh_removeLastSubString:(NSString *)string;
 @end
 
 NS_ASSUME_NONNULL_END

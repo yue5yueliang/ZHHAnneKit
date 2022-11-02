@@ -9,7 +9,7 @@
 #import <sys/utsname.h>
 #import <objc/runtime.h>
 
-@implementation UIDevice (ZHHDeviceModelName)
+@implementation NSString (ZHHDeviceModelName)
 //获取设备型号名称
 + (NSString *)zhh_deviceModelName{
     struct utsname systemInfo;
