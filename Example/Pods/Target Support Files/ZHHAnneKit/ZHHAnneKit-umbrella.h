@@ -119,6 +119,7 @@
 #import "UITabBar+ZHHExtend.h"
 #import "UITableView+ZHHExtend.h"
 #import "UITableView+ZHHiOS7Style.h"
+#import "UITableViewHeaderFooterView+ZHHExtend.h"
 #import "UITextField+ZHHCustomView.h"
 #import "UITextField+ZHHExtend.h"
 #import "UITextField+ZHHSelect.h"

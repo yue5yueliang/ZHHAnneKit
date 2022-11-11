@@ -58,6 +58,7 @@
 #import <ZHHAnneKit/UITabBar+ZHHExtend.h>
 #import <ZHHAnneKit/UITableView+ZHHExtend.h>
 #import <ZHHAnneKit/UITableView+ZHHiOS7Style.h>
+#import <ZHHAnneKit/UITableViewHeaderFooterView+ZHHExtend.h>
 #import <ZHHAnneKit/UITextField+ZHHCustomView.h>
 #import <ZHHAnneKit/UITextField+ZHHExtend.h>
 #import <ZHHAnneKit/UITextField+ZHHSelect.h>
@@ -125,6 +126,7 @@
 #import "UITabBar+ZHHExtend.h"
 #import "UITableView+ZHHExtend.h"
 #import "UITableView+ZHHiOS7Style.h"
+#import "UITableViewHeaderFooterView+ZHHExtend.h"
 #import "UITextField+ZHHCustomView.h"
 #import "UITextField+ZHHExtend.h"
 #import "UITextField+ZHHSelect.h"

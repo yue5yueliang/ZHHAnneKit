@@ -1,8 +1,8 @@
 {
   "name": "ZHHAnneKit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "summary": "项目常用的拓展方法,方便自己开发.",
-  "description": "TODO: Add long description of the pod here.",
+  "description": "项目中常用到的一些分类及工具类,方便自己开发.",
   "homepage": "https://github.com/yue5yueliang/ZHHAnneKit",
   "license": {
     "type": "MIT",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/yue5yueliang/ZHHAnneKit.git",
-    "tag": "0.0.1"
+    "tag": "0.0.2"
   },
   "platforms": {
     "ios": "10.0"
