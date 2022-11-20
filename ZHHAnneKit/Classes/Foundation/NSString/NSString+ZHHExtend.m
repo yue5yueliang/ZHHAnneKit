@@ -34,6 +34,7 @@
         return self;
     }
 }
+
 #pragma mark 身份证号掩码,只保留第一位和最后一位
 - (NSString *)idNumberMask {
     if(self.length > 15){

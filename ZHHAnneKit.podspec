@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   s.summary          = '项目常用的拓展方法,方便自己开发.'
 
 # This description is used to generate tags and improve search results.

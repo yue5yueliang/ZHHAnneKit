@@ -10,7 +10,7 @@
 
 @implementation UIColor (ZHHGradient)
 /// 渐变颜色
-+ (UIColor *)zhh_gradientColorWithColors:(NSArray *)colors gradientType:(ZHHGradietColorType)type size:(CGSize)size{
++ (UIColor *)zhh_colorGradientWithColors:(NSArray *)colors type:(ZHHGradietColorType)type size:(CGSize)size{
     NSMutableArray *temps = [NSMutableArray array];
     for(UIColor *c in colors){
         [temps addObject:(id)c.CGColor];
@@ -51,7 +51,7 @@
 }
 
 /// 获取颜色的均值
-+ (UIColor *)zhh_averageColors:(NSArray<UIColor*>*)colors{
++ (UIColor *)zhh_colorsAverage:(NSArray<UIColor*>*)colors{
     if (!colors || colors.count == 0)  return nil;
     CGFloat reds = 0.0f;
     CGFloat greens = 0.0f;
@@ -152,7 +152,7 @@
     return [UIColor colorWithPatternImage:image];
 }
 
-- (UIColor *)zhh_gradientAcrossToColor:(UIColor *)color width:(CGFloat)width{
+- (UIColor *)zhh_gradientHorizontalToColor:(UIColor *)color width:(CGFloat)width{
     CGSize size = CGSizeMake(width, 1);
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();

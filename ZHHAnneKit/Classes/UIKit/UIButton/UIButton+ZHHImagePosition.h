@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIImage+ZHHExtend.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,8 +22,6 @@ typedef NS_ENUM(NSInteger, ZHHImagePosition) {
 };
 
 @interface UIButton (ZHHImagePosition)
-/// 自定义button属性
-@property (nonatomic, copy) NSString *zhh_buttonID;
 - (void)zhh_setButtonImageWithURL:(NSString *)imageURL;
 
 /**
@@ -36,15 +33,4 @@ typedef NS_ENUM(NSInteger, ZHHImagePosition) {
 - (void)zhh_setButtonTitleWithImagePosition:(ZHHImagePosition)postion spacing:(CGFloat)spacing;
 @end
 
-@interface UIButton (Gradient)
-//[self.button3 gradientButtonWithSize:CGSizeMake(300, 44) colorArray:@[(id)RGB(253, 175, 55),(id)RGB(91, 7, 7)] percentageArray:@[@(0.3),@(1)] gradientType:GradientFromTopToBottom];
-/**
- *  根据给定的颜色，设置按钮的颜色
- *  @param size         这里要求手动设置下生成图片的大小，防止coder使用第三方layout,没有设置大小
- *  @param colorArr     渐变颜色的数组
- *  @param percentArr   渐变颜色的占比数组
- *  @param type         渐变色的类型
- */
-- (UIButton *)zhh_gradientButtonWithSize:(CGSize)size colorArr:(NSArray *)colorArr percentArr:(NSArray *)percentArr gradientType:(ZHHGradientType)type;
-@end
 NS_ASSUME_NONNULL_END

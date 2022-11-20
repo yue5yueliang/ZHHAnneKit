@@ -11,7 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIButton (ZHHExtend)
-@property (nonatomic, copy) NSString *education;
+/// 自定义button属性
+@property (nonatomic, copy) NSString *zhh_identifier;
 /**
  *  创建普通按钮
  *  @param title         标题

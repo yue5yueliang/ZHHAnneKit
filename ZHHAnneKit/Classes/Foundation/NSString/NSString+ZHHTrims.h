@@ -36,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString *)zhh_trimmingWhitespaceAndNewlines;
 /// 去掉最后一个字符串如", ."
-+ (NSString *_Nullable)zhh_removeTheLastOneStr:(NSString *_Nullable)string;
-/// 移除结尾的子字符串
+- (NSString *)zhh_removeLastString;
+/// 去掉结尾指定的子字符串
 - (NSString *)zhh_removeLastSubString:(NSString *)string;
 @end
 

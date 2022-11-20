@@ -7,18 +7,8 @@
 //
 
 #import "UIButton+ZHHImagePosition.h"
-#import <objc/runtime.h>
-
-static char * const kButtonUserID = "kButtonUserID";
 
 @implementation UIButton (ZHHImagePosition)
-- (NSObject *)zhh_buttonID {
-    return objc_getAssociatedObject(self, &kButtonUserID);
-}
-
-- (void)setZhh_buttonID:(NSObject *)value {
-    objc_setAssociatedObject(self, &kButtonUserID, value, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
 
 - (void)zhh_setButtonImageWithURL:(NSString *)imageURL {
     NSURL *url = [NSURL URLWithString:imageURL];
@@ -80,15 +70,5 @@ static char * const kButtonUserID = "kButtonUserID";
         default:
             break;
     }
-}
-@end
-
-@implementation UIButton (Gradient)
-- (UIButton *)zhh_gradientButtonWithSize:(CGSize)size colorArr:(NSArray *)colorArr percentArr:(NSArray *)percentArr gradientType:(ZHHGradientType)type{
-    UIImage *image = [[UIImage alloc] zhh_imageGradientWithSize:size colorArr:colorArr percentArr:percentArr gradientType:type];
-    
-    [self setBackgroundImage:image forState:UIControlStateNormal];
-    
-    return self;
 }
 @end

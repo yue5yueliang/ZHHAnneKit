@@ -14,57 +14,6 @@
 static NSTimeInterval const ZHHThumbnailImageTime = 10.0f;
 
 @implementation UIImage (ZHHExtend)
-- (UIImage *)zhh_imageGradientWithSize:(CGSize)imageSize colorArr:(NSArray *)colorArr percentArr:(NSArray *)percentArr gradientType:(ZHHGradientType)gradientType {
-    NSAssert(percentArr.count <= 5, @"输入颜色数量过多，如果需求数量过大，请修改locations[]数组的个数");
-    
-    NSMutableArray *ar = [NSMutableArray array];
-    for(UIColor *c in colorArr) {
-        [ar addObject:(id)c.CGColor];
-    }
-    
-    //    NSUInteger capacity = percents.count;
-    //    CGFloat locations[capacity];
-    CGFloat locations[5];
-    for (int i = 0; i < percentArr.count; i++) {
-        locations[i] = [percentArr[i] floatValue];
-    }
-    
-    
-    UIGraphicsBeginImageContextWithOptions(imageSize, YES, 1);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(context);
-    CGColorSpaceRef colorSpace = CGColorGetColorSpace([[colorArr lastObject] CGColor]);
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFArrayRef)ar, locations);
-    CGPoint start;
-    CGPoint end;
-    switch (gradientType) {
-        case ZHHGradientFromTopToBottom:
-            start = CGPointMake(imageSize.width/2, 0.0);
-            end = CGPointMake(imageSize.width/2, imageSize.height);
-            break;
-        case ZHHGradientFromLeftToRight:
-            start = CGPointMake(0.0, imageSize.height/2);
-            end = CGPointMake(imageSize.width, imageSize.height/2);
-            break;
-        case ZHHGradientFromLeftTopToRightBottom:
-            start = CGPointMake(0.0, 0.0);
-            end = CGPointMake(imageSize.width, imageSize.height);
-            break;
-        case ZHHGradientFromLeftBottomToRightTop:
-            start = CGPointMake(0.0, imageSize.height);
-            end = CGPointMake(imageSize.width, 0.0);
-            break;
-        default:
-            break;
-    }
-    CGContextDrawLinearGradient(context, gradient, start, end, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    CGGradientRelease(gradient);
-    CGContextRestoreGState(context);
-    CGColorSpaceRelease(colorSpace);
-    UIGraphicsEndImageContext();
-    return image;
-}
 
 + (UIImage *)zhh_originImageWithName:(NSString *)imageName {
     return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

@@ -21,10 +21,10 @@ typedef NS_ENUM(NSUInteger,ZHHGradietColorType) {
 /// @param colors 渐变颜色数组
 /// @param type 渐变类型
 /// @param size 渐变颜色大小
-+ (UIColor *)zhh_gradientColorWithColors:(NSArray *)colors gradientType:(ZHHGradietColorType)type size:(CGSize)size;
++ (UIColor *)zhh_colorGradientWithColors:(NSArray *)colors type:(ZHHGradietColorType)type size:(CGSize)size;
 
 /// 获取颜色的平均值
-+ (UIColor *)zhh_averageColors:(NSArray<UIColor*> *)colors;
++ (UIColor *)zhh_colorsAverage:(NSArray<UIColor*> *)colors;
 
 /// 获取图片上指定点的颜色
 + (UIColor *)zhh_colorAtImage:(UIImage *)image point:(CGPoint)point;
@@ -47,7 +47,7 @@ typedef NS_ENUM(NSUInteger,ZHHGradietColorType) {
 /// @param color end color
 /// @param width gradient color width
 /// @return returns the horizontal gradient color
-- (UIColor *)zhh_gradientAcrossToColor:(UIColor *)color width:(CGFloat)width;
+- (UIColor *)zhh_gradientHorizontalToColor:(UIColor *)color width:(CGFloat)width;
 
 /// 生成带边框的渐变色图片
 /// @param colors gradient color array

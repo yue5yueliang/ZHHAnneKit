@@ -19,6 +19,7 @@
 #import <ZHHAnneKit/UIButton+ZHHCountDown.h>
 #import <ZHHAnneKit/UIButton+ZHHEmitter.h>
 #import <ZHHAnneKit/UIButton+ZHHExtend.h>
+#import <ZHHAnneKit/UIButton+ZHHGradient.h>
 #import <ZHHAnneKit/UIButton+ZHHImagePosition.h>
 #import <ZHHAnneKit/UIButton+ZHHIndicator.h>
 #import <ZHHAnneKit/UIButton+ZHHTouchAreaInsets.h>
@@ -35,6 +36,7 @@
 #import <ZHHAnneKit/UIImage+ZHHCompress.h>
 #import <ZHHAnneKit/UIImage+ZHHCut.h>
 #import <ZHHAnneKit/UIImage+ZHHFileName.h>
+#import <ZHHAnneKit/UIImage+ZHHGradient.h>
 #import <ZHHAnneKit/UIImage+ZHHExtend.h>
 #import <ZHHAnneKit/UIImage+ZHHMask.h>
 #import <ZHHAnneKit/UIImage+ZHHMerge.h>
@@ -69,6 +71,7 @@
 #import <ZHHAnneKit/UIView+ZHHExtend.h>
 #import <ZHHAnneKit/UIView+ZHHFind.h>
 #import <ZHHAnneKit/UIView+ZHHFrame.h>
+#import <ZHHAnneKit/UIView+ZHHGradient.h>
 #import <ZHHAnneKit/UIView+ZHHRectCorner.h>
 #import <ZHHAnneKit/UIView+ZHHScreenshot.h>
 #import <ZHHAnneKit/UIView+ZHHShake.h>
@@ -87,6 +90,7 @@
 #import "UIButton+ZHHCountDown.h"
 #import "UIButton+ZHHEmitter.h"
 #import "UIButton+ZHHExtend.h"
+#import "UIButton+ZHHGradient.h"
 #import "UIButton+ZHHImagePosition.h"
 #import "UIButton+ZHHIndicator.h"
 #import "UIButton+ZHHTouchAreaInsets.h"
@@ -103,6 +107,7 @@
 #import "UIImage+ZHHCompress.h"
 #import "UIImage+ZHHCut.h"
 #import "UIImage+ZHHFileName.h"
+#import "UIImage+ZHHGradient.h"
 #import "UIImage+ZHHExtend.h"
 #import "UIImage+ZHHMask.h"
 #import "UIImage+ZHHMerge.h"
@@ -137,6 +142,7 @@
 #import "UIView+ZHHExtend.h"
 #import "UIView+ZHHFind.h"
 #import "UIView+ZHHFrame.h"
+#import "UIView+ZHHGradient.h"
 #import "UIView+ZHHRectCorner.h"
 #import "UIView+ZHHScreenshot.h"
 #import "UIView+ZHHShake.h"
