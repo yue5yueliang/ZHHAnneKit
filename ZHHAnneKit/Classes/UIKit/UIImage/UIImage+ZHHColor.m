@@ -27,6 +27,30 @@
     UIGraphicsEndImageContext();
     return image;
 }
+
++ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)radius {
+    if (CGSizeEqualToSize(size, CGSizeZero)) {
+        size = CGSizeMake(1, 1);
+    }
+    
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, 0, [UIScreen mainScreen].scale);
+    [color set];
+    UIRectFill(rect);
+    UIImage *colorImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIGraphicsBeginImageContextWithOptions(size, 0, [UIScreen mainScreen].scale);
+    
+    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius] addClip];
+    [colorImage drawInRect:rect];
+    
+    colorImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return colorImage;
+}
+
 /// 改变图片颜色
 - (UIImage *)zhh_changeImageColor:(UIColor *)color{
     UIGraphicsBeginImageContext(CGSizeMake(self.size.width*2, self.size.height*2));
@@ -45,6 +69,7 @@
     UIGraphicsEndImageContext();
     return destImage;
 }
+
 /// 改变图片内部像素颜色
 - (UIImage *)zhh_changeImagePixelColor:(UIColor *)color{
     CGFloat red = 0, green = 0, blue = 0, a;

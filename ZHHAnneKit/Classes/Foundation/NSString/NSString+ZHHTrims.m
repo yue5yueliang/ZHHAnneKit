@@ -67,4 +67,47 @@
     }
     return result;
 }
+
+- (NSString *)zhh_formatBrowse {
+    NSInteger count = self.integerValue;
+    if(count < 10000) {
+        return [NSString stringWithFormat:@"%ld",(long)count];
+    }else if(count < 100000000) {
+        return [NSString stringWithFormat:@"%.1fw",count/10000.0f];
+    }else {
+        return [NSString stringWithFormat:@"%.1f亿",count/100000000.0f];
+    }
+}
+
+/// 将点金额(分)兑换成元
+- (NSString *)zhh_formatYuan{
+    return [NSString stringWithFormat:@"%.2f",self.floatValue / 100.f];
+}
+
+/**
+ *  过滤器/ 将.2f格式化的字符串，去除末尾0(小数点后超过3位自动四舍五入)
+ */
+- (NSString *)zhh_formatAmount{
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setPositiveFormat:@"0.00"];
+    NSString *numberStr = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:self.floatValue]];
+    if (numberStr.length > 1) {
+        if ([numberStr componentsSeparatedByString:@"."].count == 2) {
+            NSString *last = [numberStr componentsSeparatedByString:@"."].lastObject;
+            if ([last isEqualToString:@"00"]) {
+                numberStr = [numberStr substringToIndex:numberStr.length - (last.length + 1)];
+                return numberStr;
+            }else{
+                if ([[last substringFromIndex:last.length -1] isEqualToString:@"0"]) {
+                    numberStr = [numberStr substringToIndex:numberStr.length - 1];
+                    return numberStr;
+                }
+            }
+        }
+        return numberStr;
+    }else{
+        return nil;
+    }
+}
+
 @end

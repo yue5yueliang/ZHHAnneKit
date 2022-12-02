@@ -17,10 +17,22 @@ NS_ASSUME_NONNULL_BEGIN
 *  @return 返回创建的image
 */
 + (UIImage *)zhh_imageWithColor:(UIColor *)color;
-/// 生成彩色图片
-/// @param color Generate image color, support gradient color
-/// @param size image size
+
+/// 根据颜色生成指定size纯色图片
+/// @param color 颜色
+/// @param size  图片大小
 + (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size;
+
+/// 根据颜色生成指定size纯色图片
+/// @param color  颜色
+/// @param size   图片大小
+/// @param radius 圆角
++ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)radius;
+
+/// UIImage加圆角
+/// @param image 图片
+/// @param cornerRadius 圆角
++ (UIImage *)zhh_imageWithImage:(UIImage *)image cornerRadius:(CGFloat)cornerRadius;
 
 /// 更改图片的背景色
 /// @param color target color

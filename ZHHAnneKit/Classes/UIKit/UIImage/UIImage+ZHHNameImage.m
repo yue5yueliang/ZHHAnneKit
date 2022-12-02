@@ -8,6 +8,7 @@
 
 #import "UIImage+ZHHNameImage.h"
 #import "UIColor+ZHHHex.h"
+#import "UIImage+ZHHColor.h"
 
 @implementation UIImage (ZHHNameImage)
 + (UIImage *)zhh_createTextImageWithString:(NSString *)string imageSize:(CGSize)size {
@@ -103,29 +104,6 @@
     
     return newImage;
     
-}
-
-+ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)radius {
-    if (CGSizeEqualToSize(size, CGSizeZero)) {
-        size = CGSizeMake(1, 1);
-    }
-    
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    UIGraphicsBeginImageContextWithOptions(rect.size, 0, [UIScreen mainScreen].scale);
-    [color set];
-    UIRectFill(rect);
-    UIImage *colorImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    UIGraphicsBeginImageContextWithOptions(size, 0, [UIScreen mainScreen].scale);
-    
-    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius] addClip];
-    [colorImage drawInRect:rect];
-    
-    colorImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return colorImage;
 }
 
 + (id)zhh_colorWithHexString:(NSString*)hexColor alpha:(CGFloat)alpha {

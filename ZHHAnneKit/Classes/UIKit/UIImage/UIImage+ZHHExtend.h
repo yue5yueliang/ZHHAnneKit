@@ -37,6 +37,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 通过传入一个图片对象获取一张缩略图
 + (UIImage *)zhh_getThumbnailImageWithImageObj:(id)imageObj;
+
+/**
+ *  设置图片的圆角大小的新图像.
+ *  @param radius       每个角椭圆的半径.
+ */
+- (UIImage *)zhh_imageByRoundCornerRadius:(CGFloat)radius;
+
+/**
+ *  设置图片的圆角大小的新图像.
+ *  @param radius       每个角椭圆的半径.
+ *  @param borderWidth  插入边框线宽度.
+ *  @param borderColor  边框描边颜色。Nil表示颜色清晰.
+ */
+- (UIImage *)zhh_imageByRoundCornerRadius:(CGFloat)radius
+                              borderWidth:(CGFloat)borderWidth
+                              borderColor:(nullable UIColor *)borderColor;
+
+/**
+ *  设置图片的圆角大小的新图像.
+ *  @param radius       每个角椭圆的半径.
+ *  @param corners      标识您想要角圆的位置.
+ *  @param borderWidth  插入边框线宽度.
+ *  @param borderColor  边框描边颜色。Nil表示颜色清晰.
+ *  @param borderLineJoin 边界线连接在一起
+ */
+- (UIImage *)zhh_imageByRoundCornerRadius:(CGFloat)radius
+                                  corners:(UIRectCorner)corners
+                              borderWidth:(CGFloat)borderWidth
+                              borderColor:(nullable UIColor *)borderColor
+                           borderLineJoin:(CGLineJoin)borderLineJoin;
 @end
 
 NS_ASSUME_NONNULL_END
