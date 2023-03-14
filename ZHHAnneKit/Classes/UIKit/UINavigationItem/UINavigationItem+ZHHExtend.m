@@ -11,13 +11,13 @@
 
 @interface UIButton (UINavigationItemButtonExtension)
 
-- (void)navigationAddAction:(void(^)(UIButton * kButton))block;
+- (void)navigationAddAction:(void(^)(UIButton * sender))block;
 
 @end
 
 @implementation UIButton (UINavigationItemButtonExtension)
 
-- (void)navigationAddAction:(void(^)(UIButton * kButton))block{
+- (void)navigationAddAction:(void(^)(UIButton * sender))block{
     SEL selector = NSSelectorFromString(@"kNavigationItemButtonAction");
     objc_setAssociatedObject(self, selector, block, OBJC_ASSOCIATION_COPY_NONATOMIC);
     [self addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];

@@ -30,9 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)radius;
 
 /// UIImage加圆角
-/// @param image 图片
 /// @param cornerRadius 圆角
-+ (UIImage *)zhh_imageWithImage:(UIImage *)image cornerRadius:(CGFloat)cornerRadius;
+- (UIImage *)zhh_imageWithCornerRadius:(CGFloat)cornerRadius;
+
+/// UIImage加圆角
+/// @param size 图片宽高
+/// @param cornerRadius 圆角
+- (UIImage *)zhh_imageWithSize:(CGSize)size cornerRadius:(CGFloat)cornerRadius;
 
 /// 更改图片的背景色
 /// @param color target color

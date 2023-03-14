@@ -51,6 +51,35 @@
     return colorImage;
 }
 
+/// UIImage加圆角
+/// @param cornerRadius 圆角
+- (UIImage *)zhh_imageWithCornerRadius:(CGFloat)cornerRadius{
+    return [self zhh_imageWithSize:self.size cornerRadius:cornerRadius];
+}
+
+/// UIImage加圆角
+/// @param size 图片宽高
+/// @param cornerRadius 圆角
+- (UIImage *)zhh_imageWithSize:(CGSize)size cornerRadius:(CGFloat)cornerRadius{
+    CGRect rect = (CGRect){0.f, 0.f, size};
+    
+    // 创建一个基于位图的上下文（context）,并将其设置为当前上下文(context) size图片大小，opaque是否透明，scale缩放比列
+    UIGraphicsBeginImageContextWithOptions(size, NO, UIScreen.mainScreen.scale);
+    // 添加路径 UIGraphicsGetCurrentContext(); 设置绘图的上下文 使用贝塞尔曲线设置路径
+    CGContextAddPath(UIGraphicsGetCurrentContext(),[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:cornerRadius].CGPath);
+
+    // context裁剪路径,后续操作的路径
+    CGContextClip(UIGraphicsGetCurrentContext());
+    [self drawInRect:rect];
+
+    // 获取修改之后的image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    // 最后移除栈顶的基于当前位图的图形上下文。
+    UIGraphicsEndImageContext();
+
+    return image;
+}
+
 /// 改变图片颜色
 - (UIImage *)zhh_changeImageColor:(UIColor *)color{
     UIGraphicsBeginImageContext(CGSizeMake(self.size.width*2, self.size.height*2));

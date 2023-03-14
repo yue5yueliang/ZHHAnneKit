@@ -9,17 +9,17 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^ZHHTouchedButtonBlock)(UIButton * kButton);
+typedef void(^ZHHTouchedButtonBlock)(UIButton * sender);
 
 IB_DESIGNABLE
 @interface UIButton (ZHHButtonBlock)
 /// Add click event, default UIControlEventTouchUpInside
 /// 添加点击事件，默认 UIControlEventTouchUpInside
-- (void)zhh_addActionHandler:(void(^)(UIButton * kButton))block;
+- (void)zhh_addActionHandler:(void(^)(UIButton * sender))block;
 
 /// Add event, does not support multiple enumeration forms
 /// 添加事件，不支持多个枚举表单
-- (void)zhh_addActionHandler:(void(^)(UIButton * kButton))block forControlEvents:(UIControlEvents)controlEvents;
+- (void)zhh_addActionHandler:(void(^)(UIButton * sender))block forControlEvents:(UIControlEvents)controlEvents;
 @end
 
 NS_ASSUME_NONNULL_END

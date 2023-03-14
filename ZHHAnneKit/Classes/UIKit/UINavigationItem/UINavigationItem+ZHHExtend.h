@@ -26,13 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
                                      titleColor:(UIColor *)color
                                           image:(UIImage *)image
                                       tintColor:(UIColor *)tintColor
-                                    buttonBlock:(void(^)(UIButton * kButton))block
-                                 barButtonBlock:(void(^)(UIButton * kButton))withBlock;
+                                    buttonBlock:(void(^)(UIButton * sender))block
+                                 barButtonBlock:(void(^)(UIButton * sender))withBlock;
 
 #pragma mark - chain parameter
 
 @property (nonatomic, strong, readonly) UINavigationItem *(^kAddBarButtonItemInfo)
-(void(^)(ZHHNavigationItemInfo *info), void(^)(UIButton * kButton));
+(void(^)(ZHHNavigationItemInfo *info), void(^)(UIButton * sender));
 @property (nonatomic, strong, readonly) UINavigationItem *(^kAddLeftBarButtonItem)(UIBarButtonItem *);
 @property (nonatomic, strong, readonly) UINavigationItem *(^kAddRightBarButtonItem)(UIBarButtonItem *);
 @end
