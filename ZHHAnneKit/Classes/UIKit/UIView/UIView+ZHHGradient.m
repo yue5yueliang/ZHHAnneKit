@@ -77,11 +77,3 @@
 }
 
 @end
-
-@implementation UILabel (Gradient)
-
-+ (Class)layerClass {
-    return [CAGradientLayer class];
-}
-
-@end

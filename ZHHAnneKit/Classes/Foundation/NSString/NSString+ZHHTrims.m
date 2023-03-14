@@ -69,13 +69,27 @@
 }
 
 - (NSString *)zhh_formatBrowse {
-    NSInteger count = self.integerValue;
-    if(count < 10000) {
-        return [NSString stringWithFormat:@"%ld",(long)count];
-    }else if(count < 100000000) {
-        return [NSString stringWithFormat:@"%.1fw",count/10000.0f];
-    }else {
-        return [NSString stringWithFormat:@"%.1f亿",count/100000000.0f];
+    long long count = self.integerValue;
+    if(count >= 100000000L) {
+        if(count % 100000000L != 0) {
+            double value = (double)count / 100000000L;
+            return [NSString stringWithFormat:@"%.1f亿", value];
+        } else
+            return [NSString stringWithFormat:@"%lld亿", count / 100000000L];
+    } else if(count >= (10000*1000)) {
+        if(count % 10000*1000 != 0) {
+            double value = (double)count / (10000*1000);
+            return [NSString stringWithFormat:@"%.1f千万", value];
+        } else
+            return [NSString stringWithFormat:@"%lld千万", count / (10000*1000)];
+    } else if(count >= 10000) {
+        if(count % 10000 != 0) {
+            double value = (double)count / 10000;
+            return [NSString stringWithFormat:@"%.1f万", value];
+        } else
+            return [NSString stringWithFormat:@"%lld万", count / 10000];
+    } else {
+        return [NSString stringWithFormat:@"%lld", count];
     }
 }
 

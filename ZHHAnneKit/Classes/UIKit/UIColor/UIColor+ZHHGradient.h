@@ -22,7 +22,10 @@ typedef NS_ENUM(NSUInteger,ZHHGradietColorType) {
 /// @param type 渐变类型
 /// @param size 渐变颜色大小
 + (UIColor *)zhh_colorGradientWithColors:(NSArray *)colors type:(ZHHGradietColorType)type size:(CGSize)size;
-
+/// 渐变颜色
+/// [UIColor zhh_gradientColor:UIColor.redColor,UIColor.orangeColor,UIColor.yellowColor,nil]
+/// (CGSizeMake(label.frame.size.width, 1))
++ (UIColor*(^)(CGSize))zhh_gradientColor:(UIColor*)color,...;
 /// 获取颜色的平均值
 + (UIColor *)zhh_colorsAverage:(NSArray<UIColor*> *)colors;
 

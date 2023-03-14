@@ -50,6 +50,29 @@
     return [UIColor colorWithPatternImage:image];
 }
 
+/// 渐变颜色
+- (UIColor*(^)(CGSize))zhh_gradientColor:(UIColor*)color,...{
+    NSMutableArray * colors = [NSMutableArray arrayWithObjects:(id)color.CGColor,nil];
+    va_list args;UIColor * arg;
+    va_start(args, color);
+    while ((arg = va_arg(args, UIColor *))) {
+        [colors addObject:(id)arg.CGColor];
+    }
+    va_end(args);
+    return ^UIColor*(CGSize size){
+        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
+        CGGradientRef gradient = CGGradientCreateWithColors(colorspace, (__bridge CFArrayRef)colors, NULL);
+        CGContextDrawLinearGradient(context, gradient, CGPointZero, CGPointMake(size.width, size.height), 0);
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        CGGradientRelease(gradient);
+        CGColorSpaceRelease(colorspace);
+        UIGraphicsEndImageContext();
+        return [UIColor colorWithPatternImage:image];
+    };
+}
+
 /// 获取颜色的均值
 + (UIColor *)zhh_colorsAverage:(NSArray<UIColor*>*)colors{
     if (!colors || colors.count == 0)  return nil;
