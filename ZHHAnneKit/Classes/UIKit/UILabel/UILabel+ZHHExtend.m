@@ -7,6 +7,7 @@
 //
 
 #import "UILabel+ZHHExtend.h"
+#import "UIView+ZHHFrame.h"
 
 @implementation UILabel (ZHHExtend)
 + (instancetype)zhh_labelWithColor:(UIColor *)color font:(UIFont *)font {
@@ -21,6 +22,38 @@
     label.textAlignment = alignment;
     [label sizeToFit];
     return label;
+}
+
+- (CGFloat)zhh_labelTextWidth {
+    return [UILabel zhh_labelTextWidthWithText:self.text height:self.zhh_height font:self.font];
+}
+
+- (CGFloat)zhh_labelTextHeight {
+    return [UILabel zhh_labelTextHeightWithText:self.text width:self.zhh_width font:self.font];
+}
+
++ (CGFloat)zhh_labelTextWidthWithText:(NSString *)text height:(CGFloat)height font:(UIFont *)font {
+    CGSize newSize = [text boundingRectWithSize:CGSizeMake(MAXFLOAT, height)
+                                        options:NSStringDrawingUsesLineFragmentOrigin
+                                     attributes:@{NSFontAttributeName:font}
+                                        context:nil].size;
+    return newSize.width;
+}
+
++ (CGFloat)zhh_labelTextWidthWithText:(NSString *)text height:(CGFloat)height fontSize:(CGFloat)fontSize {
+    return [UILabel zhh_labelTextWidthWithText:text height:height font:[UIFont systemFontOfSize:fontSize]];
+}
+
++ (CGFloat)zhh_labelTextHeightWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font {
+    CGSize newSize = [text boundingRectWithSize:CGSizeMake(width, MAXFLOAT)
+                                        options:NSStringDrawingUsesLineFragmentOrigin
+                                     attributes:@{NSFontAttributeName:font}
+                                        context:nil].size;
+    return newSize.height;
+}
+
++ (CGFloat)zhh_labelTextHeightWithText:(NSString *)text width:(CGFloat)width fontSize:(CGFloat)fontSize  {
+    return [UILabel zhh_labelTextHeightWithText:text width:width font:[UIFont systemFontOfSize:fontSize]];
 }
 
 /// 获取宽度

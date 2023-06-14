@@ -31,6 +31,21 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return UILabel
  */
 + (instancetype)zhh_labelWithColor:(UIColor *)color font:(UIFont *)font alignment:(NSTextAlignment)alignment;
+/**
+ *  获取文本内容的宽度，获取宽度前先给label高度
+ */
+- (CGFloat)zhh_labelTextWidth;
+
+/**
+ * 获取文本内容的高度，获取高度前先给label宽度
+ */
+- (CGFloat)zhh_labelTextHeight;
+
++ (CGFloat)zhh_labelTextWidthWithText:(NSString *)text height:(CGFloat)height font:(UIFont *)font;
++ (CGFloat)zhh_labelTextWidthWithText:(NSString *)text height:(CGFloat)height fontSize:(CGFloat)fontSize;
++ (CGFloat)zhh_labelTextHeightWithText:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
++ (CGFloat)zhh_labelTextHeightWithText:(NSString *)text width:(CGFloat)width fontSize:(CGFloat)fontSize;
+
 /// 获取宽度
 - (CGFloat)zhh_calculateWidth;
 /// 获取高度

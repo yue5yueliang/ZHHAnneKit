@@ -142,6 +142,7 @@
 #import "UIView+ZHHVisuals.h"
 #import "UIViewController+ZHHExtend.h"
 #import "UIViewController+ZHHFullScreen.h"
+#import "UIViewController+ZHHRotation.h"
 #import "UIViewController+ZHHStatusBarStyle.h"
 #import "UIWindow+ZHHHierarchy.h"
 

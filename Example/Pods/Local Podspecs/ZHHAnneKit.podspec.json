@@ -1,6 +1,6 @@
 {
   "name": "ZHHAnneKit",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "summary": "项目常用的拓展方法,方便自己开发.",
   "description": "项目中常用到的一些分类及工具类,方便自己开发.",
   "homepage": "https://github.com/yue5yueliang/ZHHAnneKit",
@@ -13,10 +13,10 @@
   },
   "source": {
     "git": "https://github.com/yue5yueliang/ZHHAnneKit.git",
-    "tag": "0.0.2"
+    "tag": "0.0.4"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "12.0"
   },
   "public_header_files": "ZHHAnneKit/Classes/ZHHAnneKit.h",
   "source_files": "ZHHAnneKit/Classes/ZHHAnneKit.h",

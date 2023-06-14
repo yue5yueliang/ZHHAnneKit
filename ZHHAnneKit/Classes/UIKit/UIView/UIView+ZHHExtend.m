@@ -57,12 +57,20 @@
 }
 
 - (void)zhh_setCornerRadiusWithRectCorners:(UIRectCorner)corners radius:(CGFloat)radius{
-    UIBezierPath*maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(radius, radius)];//圆角大小
-    CAShapeLayer *layer = [CAShapeLayer layer];
-    layer.frame = self.bounds;
-    layer.path = maskPath.CGPath;
-    self.layer.mask = layer;
-    self.layer.masksToBounds = YES;
+#ifdef __IPHONE_11_0
+    if (@available(iOS 11.0, *)) {
+        self.layer.cornerRadius = radius;
+        self.layer.maskedCorners = (CACornerMask)corners;
+#else
+    if ((NO)) {
+#endif
+    } else {
+        UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(radius, radius)];
+        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+        maskLayer.frame = self.bounds;
+        maskLayer.path = path.CGPath;
+        self.layer.mask = maskLayer;
+    }
 }
 
 - (void)zhh_setViewBackgroundImage:(UIImage *_Nonnull)image{

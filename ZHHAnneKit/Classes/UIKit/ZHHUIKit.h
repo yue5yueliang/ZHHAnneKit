@@ -78,6 +78,7 @@
 #import <ZHHAnneKit/UIView+ZHHVisuals.h>
 #import <ZHHAnneKit/UIViewController+ZHHFullScreen.h>
 #import <ZHHAnneKit/UIViewController+ZHHStatusBarStyle.h>
+#import <ZHHAnneKit/UIViewController+ZHHRotation.h>
 #import <ZHHAnneKit/UIViewController+ZHHExtend.h>
 #import <ZHHAnneKit/UIWindow+ZHHHierarchy.h>
 #else
@@ -148,6 +149,7 @@
 #import "UIView+ZHHShake.h"
 #import "UIView+ZHHVisuals.h"
 #import "UIViewController+ZHHFullScreen.h"
+#import "UIViewController+ZHHRotation.h"
 #import "UIViewController+ZHHStatusBarStyle.h"
 #import "UIViewController+ZHHExtend.h"
 #import "UIWindow+ZHHHierarchy.h"

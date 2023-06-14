@@ -90,6 +90,9 @@
     header.zhh_tableView = tableView;
     header.zhh_section = section;
     header.textLabel.text = @"测试";
+    UIView *headerView = [UIView new];
+    headerView.backgroundColor = UIColor.zhh_randomColor;
+    header.backgroundView = headerView;
     return header;
 }
 

@@ -11,7 +11,7 @@
 #import <dlfcn.h>
 
 @implementation NSData (ZHHGzip)
-static void *zhh_libzOpen() {
+static void *zhh_libzOpen(void) {
     static void *libz;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
