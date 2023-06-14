@@ -130,6 +130,7 @@ Pod::Spec.new do |s|
         end
         uikit.subspec 'UILabel' do |label|
             label.source_files = 'ZHHAnneKit/Classes/UIKit/UILabel/*.{h,m}'
+            label.dependency 'ZHHAnneKit/UIKit/UIView'
         end
         uikit.subspec 'UINavigationBar' do |navigationbar|
             navigationbar.source_files = 'ZHHAnneKit/Classes/UIKit/UINavigationBar/*.{h,m}'
