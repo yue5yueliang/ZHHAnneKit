@@ -47,7 +47,7 @@
 
 /// 倒序排列
 - (NSArray * _Nonnull)zhh_reverseArray {
-    return [[self reverseObjectEnumerator] allObjects];;
+    return [[self reverseObjectEnumerator] allObjects];
 }
 
 /// 移动对象元素位置

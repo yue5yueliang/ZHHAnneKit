@@ -87,7 +87,7 @@
 #pragma mark - associated
 
 - (NSInteger)layoutType{
-    return [objc_getAssociatedObject(self, @selector(layoutType)) integerValue];;
+    return [objc_getAssociatedObject(self, @selector(layoutType)) integerValue];
 }
 - (void)setLayoutType:(NSInteger)layoutType{
     objc_setAssociatedObject(self, @selector(layoutType), @(layoutType), OBJC_ASSOCIATION_ASSIGN);

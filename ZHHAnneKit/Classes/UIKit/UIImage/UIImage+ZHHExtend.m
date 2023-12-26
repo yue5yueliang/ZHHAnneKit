@@ -73,7 +73,7 @@ static NSTimeInterval const ZHHThumbnailImageTime = 10.0f;
 
 /// 根据图片名返回一张能够自由拉伸的图片 (从中间拉伸)
 + (UIImage *)zhh_resizableImage:(NSString *)imageName {
-    return [self zhh_resizableImage:imageName xPos:0.5 yPos:0.5];;
+    return [self zhh_resizableImage:imageName xPos:0.5 yPos:0.5];
 }
 
 /// 根据图片名返回一张能够自由拉伸的图片

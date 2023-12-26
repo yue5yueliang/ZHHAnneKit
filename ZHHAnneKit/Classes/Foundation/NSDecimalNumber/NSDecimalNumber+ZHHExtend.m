@@ -23,7 +23,7 @@
 
 + (NSString *)zhh_stringWithDouble:(double)doubles unit:(NSString *)unit{
     NSDecimalNumber *decimalNumber = [NSDecimalNumber zhh_decimalNumberWithDouble:doubles];
-    return [NSString stringWithFormat:@"%@%@",unit,decimalNumber];;
+    return [NSString stringWithFormat:@"%@%@",unit,decimalNumber];
 }
 
 + (NSDecimalNumber *)zhh_decimalNumberWithDouble:(double)doubles {
