@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.0.5'
+  s.version          = '0.0.6'
   s.summary          = '项目常用的拓展方法,方便自己开发.'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/yue5yueliang/ZHHAnneKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
 
   s.public_header_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
   s.source_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
