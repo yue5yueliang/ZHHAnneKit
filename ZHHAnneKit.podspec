@@ -46,10 +46,10 @@ Pod::Spec.new do |s|
     uikit.frameworks = 'UIKit'
 
     %w[
-      UIApplication UIBarButtonItem UIButton UIColor UIControl UIDevice UIFont
-      UIImage UIImageView UILabel UINavigationController UINavigationItem UIScreen
-      UISlider UISplitViewController UITabBar UITableView UITextField UITextView
-      UIView UIViewController UIWindow
+      UIApplication UIBarButtonItem UIButton UIColor UIControl UIImage
+      UIImageView UILabel UINavigationController UINavigationItem UISlider
+      UISplitViewController UITableView UITextField UITextView UIView UIViewController
+      UIWindow
     ].each do |subspec_name|
       uikit.subspec subspec_name do |subspec|
         subspec.source_files = "ZHHAnneKit/Classes/UIKit/#{subspec_name}/*.{h,m}"
@@ -67,7 +67,7 @@ Pod::Spec.new do |s|
     end
 
     uikit.subspec 'UIDevice' do |device|
-      device.dependency 'ZHHAnneKit/Foundation/NSString'
+      device.dependency 'ZHHAnneKit/ZHHCommonTools'
     end
 
     uikit.subspec 'UIImage' do |image|
