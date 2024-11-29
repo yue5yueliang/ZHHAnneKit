@@ -11,68 +11,37 @@
 @implementation UIView (ZHHShake)
 /// 将视图摇动默认次数
 - (void)zhh_shake {
-    [self _zhh_shake:10 direction:1 currentTimes:0 withDelta:5 speed:0.03 shakeDirection:ZHHShakeDirectionHorizontal completion:nil];
+    [self zhh_shake:10 withDelta:5 speed:0.03 shakeDirection:ZHHShakeDirectionHorizontal completion:nil];
 }
 
-/** 摇动的UIView
- *
- * 将视图摇晃给定次数
- *
- * @param times 震动次数
- * @param delta 震动的宽度
- */
+/// 摇动的UIView
 - (void)zhh_shake:(int)times withDelta:(CGFloat)delta {
-    [self _zhh_shake:times direction:1 currentTimes:0 withDelta:delta speed:0.03 shakeDirection:ZHHShakeDirectionHorizontal completion:nil];
+    [self zhh_shake:times withDelta:delta speed:0.03 shakeDirection:ZHHShakeDirectionHorizontal completion:nil];
 }
 
-/** 摇动的UIView
- *
- * 将视图摇晃给定次数
- *
- * @param times 震动次数
- * @param delta 震动的宽度
- * @param handler 抖动序列结束时要执行的块对象
- */
+/// 摇动的UIView，并在完成时执行回调
 - (void)zhh_shake:(int)times withDelta:(CGFloat)delta completion:(void(^)(void))handler {
-    [self _zhh_shake:times direction:1 currentTimes:0 withDelta:delta speed:0.03 shakeDirection:ZHHShakeDirectionHorizontal completion:handler];
+    [self zhh_shake:times withDelta:delta speed:0.03 shakeDirection:ZHHShakeDirectionHorizontal completion:handler];
 }
 
-/** 以自定义速度震动UIView
- *
- * 以给定速度振动视图给定次数
- *
- * @param times 震动次数
- * @param delta 震动的宽度
- * @param interval 一次震动的持续时间
- */
+/// 以自定义速度震动UIView
 - (void)zhh_shake:(int)times withDelta:(CGFloat)delta speed:(NSTimeInterval)interval {
-    [self _zhh_shake:times direction:1 currentTimes:0 withDelta:delta speed:interval shakeDirection:ZHHShakeDirectionHorizontal completion:nil];
+    [self zhh_shake:times withDelta:delta speed:interval shakeDirection:ZHHShakeDirectionHorizontal completion:nil];
 }
 
-/** 以自定义速度震动UIView
- *
- * 以给定速度振动视图给定次数
- *
- * @param times 震动次数
- * @param delta 震动的宽度
- * @param interval 一次震动的持续时间
- * @param handler 抖动序列结束时要执行的块对象
- */
+/// 以自定义速度震动UIView，并在完成时执行回调
 - (void)zhh_shake:(int)times withDelta:(CGFloat)delta speed:(NSTimeInterval)interval completion:(void(^)(void))handler {
-    [self _zhh_shake:times direction:1 currentTimes:0 withDelta:delta speed:interval shakeDirection:ZHHShakeDirectionHorizontal completion:handler];
+    [self zhh_shake:times withDelta:delta speed:interval shakeDirection:ZHHShakeDirectionHorizontal completion:handler];
 }
 
-/** 以自定义速度震动UIView
- *
- * 以给定速度振动视图给定次数
- *
- * @param times 震动次数
- * @param delta 震动的宽度
- * @param interval 一次震动的持续时间
- * @param shakeDirection 震动方向
- */
+/// 以自定义速度震动UIView，并指定方向
 - (void)zhh_shake:(int)times withDelta:(CGFloat)delta speed:(NSTimeInterval)interval shakeDirection:(ZHHShakeDirection)shakeDirection {
-    [self _zhh_shake:times direction:1 currentTimes:0 withDelta:delta speed:interval shakeDirection:shakeDirection completion:nil];
+    [self zhh_shake:times withDelta:delta speed:interval shakeDirection:shakeDirection completion:nil];
+}
+
+/// 以自定义速度震动UIView，并指定方向，完成时执行回调
+- (void)zhh_shake:(int)times withDelta:(CGFloat)delta speed:(NSTimeInterval)interval shakeDirection:(ZHHShakeDirection)shakeDirection completion:(void (^)(void))completion {
+    [self zhh_shake:times currentTimes:0 withDelta:delta speed:interval shakeDirection:shakeDirection completion:completion];
 }
 
 /** 以自定义速度震动UIView
@@ -85,31 +54,35 @@
  * @param shakeDirection    震动方向
  * @param completion 当视图完成震动时调用
  */
-- (void)zhh_shake:(int)times withDelta:(CGFloat)delta speed:(NSTimeInterval)interval shakeDirection:(ZHHShakeDirection)shakeDirection completion:(void (^)(void))completion {
-    [self _zhh_shake:times direction:1 currentTimes:0 withDelta:delta speed:interval shakeDirection:shakeDirection completion:completion];
-}
-
-- (void)_zhh_shake:(int)times direction:(int)direction currentTimes:(int)current withDelta:(CGFloat)delta speed:(NSTimeInterval)interval shakeDirection:(ZHHShakeDirection)shakeDirection completion:(void (^)(void))completionHandler {
+- (void)zhh_shake:(int)times currentTimes:(int)current withDelta:(CGFloat)delta speed:(NSTimeInterval)interval shakeDirection:(ZHHShakeDirection)shakeDirection completion:(void (^ _Nullable)(void))completion {
+    
+    // 确保动画执行在主线程
+    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:interval animations:^{
-        self.layer.affineTransform = (shakeDirection == ZHHShakeDirectionHorizontal) ? CGAffineTransformMakeTranslation(delta * direction, 0) : CGAffineTransformMakeTranslation(0, delta * direction);
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        // 设置摇晃方向和距离
+        CGAffineTransform transform;
+        if (shakeDirection == ZHHShakeDirectionHorizontal) {
+            transform = CGAffineTransformMakeTranslation(delta * (current % 2 == 0 ? 1 : -1), 0);
+        } else {
+            transform = CGAffineTransformMakeTranslation(0, delta * (current % 2 == 0 ? 1 : -1));
+        }
+        strongSelf.layer.affineTransform = transform;
     } completion:^(BOOL finished) {
-        if(current >= times) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (current >= times) {
+            // 恢复初始状态
             [UIView animateWithDuration:interval animations:^{
-                self.layer.affineTransform = CGAffineTransformIdentity;
+                strongSelf.layer.affineTransform = CGAffineTransformIdentity;
             } completion:^(BOOL finished){
-                if (completionHandler != nil) {
-                    completionHandler();
+                if (completion != nil) {
+                    completion();
                 }
             }];
-            return;
+        } else {
+            // 递归调用，继续摇晃
+            [strongSelf zhh_shake:times currentTimes:current + 1 withDelta:delta speed:interval shakeDirection:shakeDirection completion:completion];
         }
-        [self _zhh_shake:(times - 1)
-           direction:direction * -1
-        currentTimes:current + 1
-           withDelta:delta
-               speed:interval
-      shakeDirection:shakeDirection
-          completion:completionHandler];
     }];
 }
 @end

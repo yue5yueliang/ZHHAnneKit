@@ -9,66 +9,70 @@
 #import "UIImage+ZHHCompress.h"
 
 @implementation UIImage (ZHHCompress)
-+ (UIImage*)zhh_resizableHalfImage:(NSString *)name {
-    UIImage *normal = [UIImage imageNamed:name];
-    
-    CGFloat imageW = normal.size.width * 0.5;
-    CGFloat imageH = normal.size.height * 0.5;
-    return [normal resizableImageWithCapInsets:UIEdgeInsetsMake(imageH, imageW, imageH, imageW)];
-}
 
-
-+ (NSData *)zhh_compressImage:(UIImage *)image toMaxLength:(NSInteger)maxLength maxWidth:(NSInteger)maxWidth{
+/// 压缩图片到指定大小和最大宽度
+/// @param image 原始图片
+/// @param maxLength 目标文件大小（字节）
+/// @param maxWidth 最大宽度（px）
+/// @return 压缩后的图片数据
++ (NSData *)zhh_compressImage:(UIImage *)image toMaxLength:(NSInteger)maxLength maxWidth:(NSInteger)maxWidth {
+    // 参数检查
     NSAssert(maxLength > 0, @"图片的大小必须大于 0");
-    NSAssert(maxWidth > 0, @"图片的最大边长必须大于 0");
+    NSAssert(maxWidth > 0, @"图片的最大宽度必须大于 0");
     
-    CGSize newSize = [self zhh_scaleImage:image withLength:maxWidth];
-    UIImage *newImage = [self zhh_resizeImage:image withNewSize:newSize];
+    // 按最大宽度等比缩放
+    CGSize scaledSize = [self zhh_scaledSizeForImage:image withMaxLength:maxWidth];
+    UIImage *scaledImage = [self zhh_resizedImage:image toSize:scaledSize];
     
-    CGFloat compress = 0.9f;
-    NSData *data = UIImageJPEGRepresentation(newImage, compress);
+    // 初始压缩比例
+    CGFloat compression = 0.9f;
+    NSData *imageData = UIImageJPEGRepresentation(scaledImage, compression);
     
-    while (data.length > maxLength && compress > 0.01) {
-        compress -= 0.02f;
-        
-        data = UIImageJPEGRepresentation(newImage, compress);
+    // 循环调整压缩比例，直到达到目标文件大小或最小压缩比例
+    while (imageData.length > maxLength && compression > 0.01f) {
+        compression -= 0.02f;
+        imageData = UIImageJPEGRepresentation(scaledImage, compression);
     }
-    return data;
+    
+    return imageData;
 }
 
-+ (UIImage *)zhh_resizeImage:(UIImage *) image withNewSize:(CGSize) newSize{
-    
-    UIGraphicsBeginImageContext(newSize);
+/// 调整图片大小
+/// @param image 原始图片
+/// @param newSize 新的目标尺寸
+/// @return 调整大小后的图片
++ (UIImage *)zhh_resizedImage:(UIImage *)image toSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, [UIScreen mainScreen].scale);
     [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    return newImage;
+    return resizedImage;
 }
 
-+ (CGSize)zhh_scaleImage:(UIImage *) image withLength:(CGFloat) imageLength{
-    
-    CGFloat newWidth = 0.0f;
-    CGFloat newHeight = 0.0f;
-    CGFloat width = image.size.width;
-    CGFloat height = image.size.height;
-    if (width > imageLength || height > imageLength){
-        if (width > height) {
-            newWidth = imageLength;
-            newHeight = newWidth * height / width;
-        }else if(height > width){
-            newHeight = imageLength;
-            newWidth = newHeight * width / height;
-        }else{
-            newWidth = imageLength;
-            newHeight = imageLength;
+/// 计算按比例缩放的目标尺寸
+/// @param image 原始图片
+/// @param maxLength 最大边长
+/// @return 按比例缩放后的尺寸
++ (CGSize)zhh_scaledSizeForImage:(UIImage *)image withMaxLength:(CGFloat)maxLength {
+    CGFloat originalWidth = image.size.width;
+    CGFloat originalHeight = image.size.height;
+    CGFloat targetWidth = 0.0f;
+    CGFloat targetHeight = 0.0f;
+
+    if (originalWidth > maxLength || originalHeight > maxLength) {
+        if (originalWidth > originalHeight) {
+            targetWidth = maxLength;
+            targetHeight = targetWidth * originalHeight / originalWidth;
+        } else {
+            targetHeight = maxLength;
+            targetWidth = targetHeight * originalWidth / originalHeight;
         }
-        
-    }else{
-        return CGSizeMake(width, height);
+    } else {
+        // 如果图片小于目标尺寸，则不缩放
+        targetWidth = originalWidth;
+        targetHeight = originalHeight;
     }
     
-    return CGSizeMake(newWidth, newHeight);
+    return CGSizeMake(targetWidth, targetHeight);
 }
 @end

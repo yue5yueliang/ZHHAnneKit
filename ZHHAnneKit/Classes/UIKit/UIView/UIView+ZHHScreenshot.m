@@ -7,17 +7,16 @@
 //
 
 #import "UIView+ZHHScreenshot.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation UIView (ZHHScreenshot)
-/**
- *  @brief  view截图
- *
- *  @return 截图
- */
+
+/// @brief  截取当前view的截图
+/// @return 截图
 - (UIImage *)zhh_screenshot {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, [UIScreen mainScreen].scale);
-    if( [self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+    
+    // 根据iOS版本，选择合适的绘制方法
+    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
         [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
     } else {
         [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -28,56 +27,49 @@
     return screenshot;
 }
 
-/**
- *  @author Jakey
- *
- *  @brief  截图一个view中所有视图 包括旋转缩放效果
- *
- *  @param maxWidth 限制缩放的最大宽度 保持默认传0
- *
- *  @return 截图
- */
-- (UIImage *)zhh_screenshot:(CGFloat)maxWidth{
-    CGAffineTransform oldTransform = self.transform;
-    CGAffineTransform scaleTransform = CGAffineTransformIdentity;
-    
-//    if (!isnan(scale)) {
-//        CGAffineTransform transformScale = CGAffineTransformMakeScale(scale, scale);
-//        scaleTransform = CGAffineTransformConcat(oldTransform, transformScale);
-//    }
-    if (!isnan(maxWidth) && maxWidth>0) {
-        CGFloat maxScale = maxWidth/CGRectGetWidth(self.frame);
-        CGAffineTransform transformScale = CGAffineTransformMakeScale(maxScale, maxScale);
-        scaleTransform = CGAffineTransformConcat(oldTransform, transformScale);
-        
-    }
-    if(!CGAffineTransformEqualToTransform(scaleTransform, CGAffineTransformIdentity)){
-        self.transform = scaleTransform;
+/// @brief  截图当前view，包括旋转、缩放等效果
+/// @param maxWidth 限制缩放的最大宽度，如果不需要限制，传0
+/// @return 截图
+- (UIImage *)zhh_screenshotWithMaxWidth:(CGFloat)maxWidth {
+    // 如果不需要缩放，直接返回普通截图
+    if (maxWidth <= 0 || CGRectGetWidth(self.frame) <= maxWidth) {
+        return [self zhh_screenshot];
     }
     
-    CGRect actureFrame = self.frame; //已经变换过后的frame
-    CGRect actureBounds= self.bounds;//CGRectApplyAffineTransform();
+    CGAffineTransform originalTransform = self.transform;
+    CGFloat scaleFactor = maxWidth / CGRectGetWidth(self.frame);
+    CGAffineTransform scaleTransform = CGAffineTransformMakeScale(scaleFactor, scaleFactor);
+    self.transform = scaleTransform; // 缩放视图
     
-    //begin
-    UIGraphicsBeginImageContextWithOptions(actureFrame.size, NO, 0.0);
+    // 获取变换后的实际尺寸
+    CGRect actualFrame = self.frame;
+    CGRect actualBounds = self.bounds;
+    
+    // 开始绘制截图
+    UIGraphicsBeginImageContextWithOptions(actualFrame.size, NO, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
-    //    CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1, -1);
-    CGContextTranslateCTM(context,actureFrame.size.width/2, actureFrame.size.height/2);
+    
+    // 应用视图的transform
+    CGContextTranslateCTM(context, actualFrame.size.width / 2, actualFrame.size.height / 2);
     CGContextConcatCTM(context, self.transform);
+    
+    // 考虑锚点位置
     CGPoint anchorPoint = self.layer.anchorPoint;
-    CGContextTranslateCTM(context,
-                          -actureBounds.size.width * anchorPoint.x,
-                          -actureBounds.size.height * anchorPoint.y);
-    if([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+    CGContextTranslateCTM(context, -actualBounds.size.width * anchorPoint.x, -actualBounds.size.height * anchorPoint.y);
+    
+    // 绘制视图内容
+    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
         [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
     } else {
         [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     }
+    
     UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    //end
-    self.transform = oldTransform;
+    
+    // 恢复原始的transform
+    self.transform = originalTransform;
     
     return screenshot;
 }

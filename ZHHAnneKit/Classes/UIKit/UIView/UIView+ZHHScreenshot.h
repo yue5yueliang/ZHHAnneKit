@@ -11,23 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (ZHHScreenshot)
-/**
- *  @brief  view截图
- *
- *  @return 截图
- */
+/// @brief  截取当前view的截图
+/// @return 截图
 - (UIImage *)zhh_screenshot;
 
-/**
- *  @author Jakey
- *
- *  @brief  截图一个view中所有视图 包括旋转缩放效果
- *
- *  @param maxWidth 限制缩放的最大宽度 保持默认传0
- *
- *  @return 截图
- */
-- (UIImage *)zhh_screenshot:(CGFloat)maxWidth;
+/// @brief  截图当前view，包括旋转、缩放等效果
+/// @param maxWidth 限制缩放的最大宽度，如果不需要限制，传0
+/// @return 截图
+- (UIImage *)zhh_screenshotWithMaxWidth:(CGFloat)maxWidth;
 @end
 
 NS_ASSUME_NONNULL_END

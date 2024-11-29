@@ -1,6 +1,6 @@
 //
 //  UIView+ZHHFrame.m
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/2.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -9,7 +9,8 @@
 #import "UIView+ZHHFrame.h"
 
 @implementation UIView (ZHHFrame)
-- (void)setZhh_x:(CGFloat)zhh_x{
+
+- (void)setZhh_x:(CGFloat)zhh_x {
     CGRect frame = self.frame;
     frame.origin.x = zhh_x;
     self.frame = frame;
@@ -39,7 +40,7 @@
     return self.frame.size.width;
 }
 
-- (void)setZhh_height:(CGFloat)zhh_height{
+- (void)setZhh_height:(CGFloat)zhh_height {
     CGRect frame = self.frame;
     frame.size.height = zhh_height;
     self.frame = frame;
@@ -49,17 +50,15 @@
     return self.frame.size.height;
 }
 
-- (CGFloat)zhh_maxY{
+- (CGFloat)zhh_maxY {
     return self.frame.origin.y + self.frame.size.height;
 }
 
-- (CGFloat)zhh_maxX{
+- (CGFloat)zhh_maxX {
     return self.frame.origin.x + self.frame.size.width;
 }
 
 - (void)setZhh_size:(CGSize)zhh_size {
-    //    self.width = size.width;
-    //    self.height = size.height;
     CGRect frame = self.frame;
     frame.size = zhh_size;
     self.frame = frame;
@@ -79,19 +78,19 @@
     return self.frame.origin;
 }
 
-- (void)setZhh_originY:(CGFloat)zhh_originY{
+- (void)setZhh_originY:(CGFloat)zhh_originY {
     self.frame = CGRectMake(self.frame.origin.x, zhh_originY, self.frame.size.width, self.frame.size.height);
 }
 
-- (CGFloat)zhh_originY{
+- (CGFloat)zhh_originY {
     return self.frame.origin.y;
 }
 
-- (void)setZhh_originX:(CGFloat)zhh_originX{
+- (void)setZhh_originX:(CGFloat)zhh_originX {
     self.frame = CGRectMake(zhh_originX, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
 }
 
-- (CGFloat)zhh_originX{
+- (CGFloat)zhh_originX {
     return self.frame.origin.x;
 }
 
@@ -158,17 +157,17 @@
 - (void)setZhh_viewOrigin:(CGPoint)zhh_viewOrigin {
     CGRect frame = self.frame;
     frame.origin = zhh_viewOrigin;
-    self.frame   = frame;
+    self.frame = frame;
 }
 
 - (CGPoint)zhh_viewOrigin {
     return self.frame.origin;
 }
 
-- (void)setZhh_viewSize:(CGSize)zhh_viewSize{
+- (void)setZhh_viewSize:(CGSize)zhh_viewSize {
     CGRect frame = self.frame;
-    frame.size   = zhh_viewSize;
-    self.frame   = frame;
+    frame.size = zhh_viewSize;
+    self.frame = frame;
 }
 
 - (CGSize)zhh_viewSize {
@@ -186,4 +185,5 @@
 - (CGPoint)zhh_middlePoint {
     return CGPointMake(CGRectGetWidth(self.bounds) / 2.f, CGRectGetHeight(self.bounds) / 2.f);
 }
+
 @end

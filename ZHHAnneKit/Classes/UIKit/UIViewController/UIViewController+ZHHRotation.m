@@ -1,13 +1,13 @@
 //
-//  UIViewController+ZHHRotation.m
+//  UIViewController+ZHHCommon.m
 //  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2023/3/17.
 //
 
-#import "UIViewController+ZHHRotation.h"
+#import "UIViewController+ZHHCommon.h"
 
-@implementation UIViewController (ZHHRotation)
+@implementation UIViewController (ZHHCommon)
 
 - (BOOL)zhh_swichToNewOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
@@ -58,7 +58,7 @@
 @end
 
 // UINavigationController
-@implementation UINavigationController (HXRotation)
+@implementation UINavigationController (ZHHCommon)
 
 - (BOOL)shouldAutorotate {
     return [[self.viewControllers lastObject] shouldAutorotate];
@@ -80,7 +80,7 @@
 @end
 
 // UITabBarController
-@implementation UITabBarController (HXRotation)
+@implementation UITabBarController (ZHHCommon)
 
 - (BOOL)shouldAutorotate {
     return [self.selectedViewController shouldAutorotate];

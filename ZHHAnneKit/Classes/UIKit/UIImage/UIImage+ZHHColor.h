@@ -62,32 +62,23 @@ NS_ASSUME_NONNULL_BEGIN
 /// 根据指定的图片颜色和图片大小获取指定的Image
 + (UIImage *)zhh_getImageWithColor:(UIColor *)color size:(CGSize)size;
 
-/**
- *  @brief  取图片某一点的颜色
- *  @param point 某一点
- *  @return 颜色
- */
+/// @brief  取图片某一点的颜色
+/// @param point 某一点
+/// @return 颜色
 - (UIColor *)zhh_colorAtPoint:(CGPoint )point;
 
-//more accurate method ,colorAtPixel 1x1 pixel
-/**
- *  @brief  取某一像素的颜色
- *  @param point 一像素
- *  @return 颜色
- */
+/// @brief  取某一像素的颜色
+/// @param point 一像素
+/// @return 颜色
 - (UIColor *)zhh_colorAtPixel:(CGPoint)point;
 
-/**
- *  @brief  返回该图片是否有透明度通道
- *  @return 是否有透明度通道
- */
+/// @brief  返回该图片是否有透明度通道
+/// @return 是否有透明度通道
 - (BOOL)zhh_hasAlphaChannel;
 
-/**
- *  @brief  获得灰度图
- *  @param sourceImage 图片
- *  @return 获得灰度图片
- */
+/// @brief  获得灰度图
+/// @param sourceImage 图片
+/// @return 获得灰度图片
 + (UIImage*)zhh_covertToGrayImageFromImage:(UIImage*)sourceImage;
 @end
 

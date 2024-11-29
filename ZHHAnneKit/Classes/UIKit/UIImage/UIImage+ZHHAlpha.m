@@ -14,88 +14,112 @@
 @end
 
 @implementation UIImage (ZHHAlpha)
-/**
- *  @brief  是否有alpha通道
- *
- *  @return 是否有alpha通道
- */
+/// @brief 检查图片是否包含 Alpha 通道
+/// 此方法用于判断图片是否支持透明背景，主要通过图片的 Alpha 通道信息进行检测。
+/// @return YES 表示图片包含 Alpha 通道，NO 表示图片不包含 Alpha 通道。
 - (BOOL)zhh_hasAlpha {
-    CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage);
-    return (alpha == kCGImageAlphaFirst ||
-            alpha == kCGImageAlphaLast ||
-            alpha == kCGImageAlphaPremultipliedFirst ||
-            alpha == kCGImageAlphaPremultipliedLast);
+    // 获取图片的 Alpha 通道信息
+    CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(self.CGImage);
+    // 检查 Alpha 通道类型是否为支持透明的类型
+    return (alphaInfo == kCGImageAlphaFirst || alphaInfo == kCGImageAlphaLast || alphaInfo == kCGImageAlphaPremultipliedFirst || alphaInfo == kCGImageAlphaPremultipliedLast);
 }
-/**
- *  @brief  如果没有alpha通道 增加alpha通道
- *
- *  @return 如果没有alpha通道 增加alpha通道
- */
+
+/// @brief 为图片添加 Alpha 通道
+/// 如果图片本身不包含 Alpha 通道，则创建一个新的 UIImage 实例并添加 Alpha 通道。
+/// 如果图片已包含 Alpha 通道，则直接返回自身。
+/// @return 包含 Alpha 通道的 UIImage 实例。
 - (UIImage *)zhh_imageWithAlpha {
+    // 如果图片已包含 Alpha 通道，直接返回原图
     if ([self zhh_hasAlpha]) {
         return self;
     }
     
+    // 获取图片的原始 CGImage 引用
     CGImageRef imageRef = self.CGImage;
     size_t width = CGImageGetWidth(imageRef);
     size_t height = CGImageGetHeight(imageRef);
     
-    // The bitsPerComponent and bitmapInfo values are hard-coded to prevent an "unsupported parameter combination" error
+    // 创建支持 Alpha 通道的新位图上下文
+    // 配置 8 bits/通道，预乘 Alpha 格式
     CGContextRef offscreenContext = CGBitmapContextCreate(NULL,
                                                           width,
                                                           height,
-                                                          8,
-                                                          0,
-                                                          CGImageGetColorSpace(imageRef),
+                                                          8, // bits per component
+                                                          0, // 自动计算每行字节数
+                                                          CGImageGetColorSpace(imageRef), // 保留原始色彩空间
                                                           kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
+    if (!offscreenContext) {
+        NSLog(@"创建位图上下文失败！");
+        return nil;
+    }
     
-    // Draw the image into the context and retrieve the new image, which will now have an alpha layer
+    // 将原始图片绘制到新上下文中
     CGContextDrawImage(offscreenContext, CGRectMake(0, 0, width, height), imageRef);
+    
+    // 从上下文中提取新的 CGImage，其中已包含 Alpha 通道
     CGImageRef imageRefWithAlpha = CGBitmapContextCreateImage(offscreenContext);
+    if (!imageRefWithAlpha) {
+        CGContextRelease(offscreenContext);
+        NSLog(@"创建包含 Alpha 通道的图片失败！");
+        return nil;
+    }
+    
+    // 将 CGImage 转换为 UIImage
     UIImage *imageWithAlpha = [UIImage imageWithCGImage:imageRefWithAlpha];
     
-    // Clean up
+    // 释放上下文和临时图片
     CGContextRelease(offscreenContext);
     CGImageRelease(imageRefWithAlpha);
     
     return imageWithAlpha;
 }
 
-// Returns a copy of the image with a transparent border of the given size added around its edges.
-// If the image has no alpha layer, one will be added to it.
-/**
- *  @brief  增加透明边框
- *
- *  @param borderSize 边框尺寸
- *
- *  @return 增加透明边框后的图片
- */
+/// 此方法会在图片的四周添加指定尺寸的透明边框。如果图片本身不包含 Alpha 通道，则会自动添加 Alpha 通道。
+/// @param borderSize 边框的宽度（单位：像素）。
+/// @return 添加透明边框后的 UIImage 实例。
 - (UIImage *)zhh_transparentBorderImage:(NSUInteger)borderSize {
-    // If the image does not have an alpha layer, add one
+    // 确保边框尺寸有效
+    if (borderSize == 0) {
+        return self;
+    }
+    
+    // 如果图片没有 Alpha 通道，先添加 Alpha 通道
     UIImage *image = [self zhh_imageWithAlpha];
     
-    CGRect newRect = CGRectMake(0, 0, image.size.width + borderSize * 2, image.size.height + borderSize * 2);
+    // 计算新图片的尺寸，包含透明边框
+    CGRect newRect = CGRectMake(0, 0,
+                                image.size.width + borderSize * 2,
+                                image.size.height + borderSize * 2);
     
-    // Build a context that's the same dimensions as the new size
+    // 创建与新尺寸匹配的位图上下文
     CGContextRef bitmap = CGBitmapContextCreate(NULL,
                                                 newRect.size.width,
                                                 newRect.size.height,
-                                                CGImageGetBitsPerComponent(self.CGImage),
+                                                CGImageGetBitsPerComponent(image.CGImage),
                                                 0,
-                                                CGImageGetColorSpace(self.CGImage),
-                                                CGImageGetBitmapInfo(self.CGImage));
+                                                CGImageGetColorSpace(image.CGImage),
+                                                CGImageGetBitmapInfo(image.CGImage));
     
-    // Draw the image in the center of the context, leaving a gap around the edges
+    if (!bitmap) {
+        NSLog(@"创建位图上下文失败！");
+        return nil;
+    }
+    
+    // 将原图片绘制到上下文中心位置
     CGRect imageLocation = CGRectMake(borderSize, borderSize, image.size.width, image.size.height);
-    CGContextDrawImage(bitmap, imageLocation, self.CGImage);
+    CGContextDrawImage(bitmap, imageLocation, image.CGImage);
+    
+    // 从上下文中提取新图片，带有透明边框
     CGImageRef borderImageRef = CGBitmapContextCreateImage(bitmap);
     
-    // Create a mask to make the border transparent, and combine it with the image
+    // 创建一个用于透明边框的遮罩
     CGImageRef maskImageRef = [self zhh_newBorderMask:borderSize size:newRect.size];
+    
+    // 使用遮罩将边框设为透明
     CGImageRef transparentBorderImageRef = CGImageCreateWithMask(borderImageRef, maskImageRef);
     UIImage *transparentBorderImage = [UIImage imageWithCGImage:transparentBorderImageRef];
     
-    // Clean up
+    // 清理资源
     CGContextRelease(bitmap);
     CGImageRelease(borderImageRef);
     CGImageRelease(maskImageRef);
@@ -103,134 +127,158 @@
     
     return transparentBorderImage;
 }
+
 /**
- *  @brief  裁切含透明图片为最小大小
+ * @brief 裁剪图片的透明边缘，只保留非透明内容的最小矩形。
  *
- *  @return 裁切后的图片
+ * @return 裁剪后的 UIImage 实例。如果图片无法裁剪或数据无效，则返回 nil。
  */
-- (UIImage *)zhh_trimmedBetterSize {
-    
+- (UIImage *)zhh_trimmedToMinimalSize {
     CGImageRef inImage = self.CGImage;
-    CFDataRef m_DataRef;
-    m_DataRef = CGDataProviderCopyData(CGImageGetDataProvider(inImage));
+    if (!inImage) {
+        NSLog(@"图片资源无效");
+        return nil;
+    }
     
-    UInt8 * m_PixelBuf = (UInt8 *) CFDataGetBytePtr(m_DataRef);
+    CFDataRef imageData = CGDataProviderCopyData(CGImageGetDataProvider(inImage));
+    if (!imageData) {
+        NSLog(@"无法获取图片数据");
+        return nil;
+    }
     
-//    size_t width = CGImageGetWidth(inImage);
-//    size_t height = CGImageGetHeight(inImage);
-    CGFloat width = CGImageGetWidth(inImage);
-    CGFloat height = CGImageGetHeight(inImage);
-    CGPoint top,left,right,bottom;
+    const UInt8 *pixelData = CFDataGetBytePtr(imageData);
+    size_t width = CGImageGetWidth(inImage);
+    size_t height = CGImageGetHeight(inImage);
     
-    BOOL breakOut = NO;
-    for (int x = 0;breakOut==NO && x < width; x++) {
-        for (int y = 0; y < height; y++) {
-            int loc = x + (y * width);
-            loc *= 4;
-            if (m_PixelBuf[loc + 3] != 0) {
-                left = CGPointMake(x, y);
-                breakOut = YES;
+    // 用于记录非透明区域的边界点
+    NSInteger top = -1, left = -1, right = -1, bottom = -1;
+    BOOL found = NO;
+    
+    // 找到顶部边界
+    for (size_t y = 0; y < height && !found; y++) {
+        for (size_t x = 0; x < width; x++) {
+            size_t loc = (x + y * width) * 4;
+            if (pixelData[loc + 3] != 0) { // 检查Alpha通道
+                top = y;
+                found = YES;
                 break;
             }
         }
     }
     
-    breakOut = NO;
-    for (int y = 0;breakOut==NO && y < height; y++) {
-        
-        for (int x = 0; x < width; x++) {
-            
-            int loc = x + (y * width);
-            loc *= 4;
-            if (m_PixelBuf[loc + 3] != 0) {
-                top = CGPointMake(x, y);
-                breakOut = YES;
+    // 找到底部边界
+    found = NO;
+    for (size_t y = height; y > 0 && !found; y--) {
+        for (size_t x = 0; x < width; x++) {
+            size_t loc = (x + (y - 1) * width) * 4;
+            if (pixelData[loc + 3] != 0) {
+                bottom = y - 1;
+                found = YES;
                 break;
             }
-            
         }
     }
     
-    breakOut = NO;
-    for (int y = height-1;breakOut==NO && y >= 0; y--) {
-        
-        for (int x = width-1; x >= 0; x--) {
-            
-            int loc = x + (y * width);
-            loc *= 4;
-            if (m_PixelBuf[loc + 3] != 0) {
-                bottom = CGPointMake(x, y);
-                breakOut = YES;
+    // 找到左边界
+    found = NO;
+    for (size_t x = 0; x < width && !found; x++) {
+        for (size_t y = 0; y < height; y++) {
+            size_t loc = (x + y * width) * 4;
+            if (pixelData[loc + 3] != 0) {
+                left = x;
+                found = YES;
                 break;
             }
-            
         }
     }
     
-    breakOut = NO;
-    for (int x = width-1;breakOut==NO && x >= 0; x--) {
-        
-        for (int y = height-1; y >= 0; y--) {
-            
-            int loc = x + (y * width);
-            loc *= 4;
-            if (m_PixelBuf[loc + 3] != 0) {
-                right = CGPointMake(x, y);
-                breakOut = YES;
+    // 找到右边界
+    found = NO;
+    for (size_t x = width; x > 0 && !found; x--) {
+        for (size_t y = 0; y < height; y++) {
+            size_t loc = ((x - 1) + y * width) * 4;
+            if (pixelData[loc + 3] != 0) {
+                right = x - 1;
+                found = YES;
                 break;
             }
-            
         }
     }
     
+    // 释放图像数据
+    CFRelease(imageData);
     
+    // 检查裁剪范围是否合法
+    if (top == -1 || left == -1 || right == -1 || bottom == -1) {
+        NSLog(@"未找到非透明区域");
+        return nil;
+    }
+    
+    // 计算裁剪区域
     CGFloat scale = self.scale;
+    CGRect cropRect = CGRectMake(left / scale, top / scale,
+                                 (right - left + 1) / scale,
+                                 (bottom - top + 1) / scale);
     
-    CGRect cropRect = CGRectMake(left.x / scale, top.y/scale, (right.x - left.x)/scale, (bottom.y - top.y) / scale);
-    UIGraphicsBeginImageContextWithOptions( cropRect.size,
-                                           NO,
-                                           scale);
-    [self drawAtPoint:CGPointMake(-cropRect.origin.x, -cropRect.origin.y)
-            blendMode:kCGBlendModeCopy
-                alpha:1.];
-    UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    CFRelease(m_DataRef);
+    // 裁剪图片
+    CGImageRef croppedImageRef = CGImageCreateWithImageInRect(inImage, cropRect);
+    if (!croppedImageRef) {
+        NSLog(@"裁剪图片失败");
+        return nil;
+    }
+    
+    UIImage *croppedImage = [UIImage imageWithCGImage:croppedImageRef scale:scale orientation:self.imageOrientation];
+    CGImageRelease(croppedImageRef);
+    
     return croppedImage;
 }
-#pragma mark -
-#pragma mark Private helper methods
 
-// Creates a mask that makes the outer edges transparent and everything else opaque
-// The size must include the entire mask (opaque part + transparent border)
-// The caller is responsible for releasing the returned reference by calling CGImageRelease
+#pragma mark - Private Helper Methods
+
+/**
+ * @brief 创建一个边框遮罩，使外边框部分透明，内部完全不透明。
+ *
+ * @param borderSize 边框的尺寸。
+ * @param size 遮罩整体的尺寸（包括边框和内容区域）。
+ *
+ * @return 创建好的遮罩 CGImageRef，需要由调用者负责调用 CGImageRelease 释放。
+ */
 - (CGImageRef)zhh_newBorderMask:(NSUInteger)borderSize size:(CGSize)size {
+    // 创建灰度色彩空间
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     
-    // Build a context that's the same dimensions as the new size
+    // 创建上下文，与指定的尺寸和色彩空间匹配
     CGContextRef maskContext = CGBitmapContextCreate(NULL,
-                                                     size.width,
-                                                     size.height,
-                                                     8, // 8-bit grayscale
-                                                     0,
-                                                     colorSpace,
+                                                     size.width,       // 宽度
+                                                     size.height,      // 高度
+                                                     8,                // 每个组件8位（灰度）
+                                                     0,                // 自动计算每行字节数
+                                                     colorSpace,       // 灰度色彩空间
                                                      kCGBitmapByteOrderDefault | kCGImageAlphaNone);
     
-    // Start with a mask that's entirely transparent
+    if (!maskContext) {
+        CGColorSpaceRelease(colorSpace);
+        return NULL; // 如果上下文创建失败，直接返回 NULL
+    }
+    
+    // 填充整个上下文为黑色（完全透明）
     CGContextSetFillColorWithColor(maskContext, [UIColor blackColor].CGColor);
     CGContextFillRect(maskContext, CGRectMake(0, 0, size.width, size.height));
     
-    // Make the inner part (within the border) opaque
+    // 在中心部分填充白色（完全不透明）
     CGContextSetFillColorWithColor(maskContext, [UIColor whiteColor].CGColor);
-    CGContextFillRect(maskContext, CGRectMake(borderSize, borderSize, size.width - borderSize * 2, size.height - borderSize * 2));
+    CGContextFillRect(maskContext, CGRectMake(borderSize,
+                                              borderSize,
+                                              size.width - borderSize * 2,
+                                              size.height - borderSize * 2));
     
-    // Get an image of the context
+    // 从上下文生成遮罩图片
     CGImageRef maskImageRef = CGBitmapContextCreateImage(maskContext);
     
-    // Clean up
+    // 清理内存
     CGContextRelease(maskContext);
     CGColorSpaceRelease(colorSpace);
     
-    return maskImageRef;
+    return maskImageRef; // 返回生成的遮罩
 }
 @end

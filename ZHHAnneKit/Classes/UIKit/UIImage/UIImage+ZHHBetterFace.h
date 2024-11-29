@@ -18,7 +18,12 @@ typedef NS_ENUM(NSUInteger, ZHHAccuracy) {
 };
 
 @interface UIImage (ZHHBetterFace)
-- (UIImage *)zhh_betterFaceImageForSize:(CGSize)size accuracy:(ZHHAccuracy)accurary;
+
+/// 聚焦人脸区域并生成目标尺寸的图片
+/// @param targetSize 目标图片尺寸
+/// @param accuracy 人脸检测精度（高或低）
+/// @return 聚焦人脸的裁剪图片，未检测到人脸时返回 nil
+- (UIImage *)zhh_focusedImageOnFacesWithTargetSize:(CGSize)targetSize accuracy:(ZHHAccuracy)accuracy;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,6 +1,6 @@
 //
 //  UIButton+ZHHIndicator.m
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/4.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -10,102 +10,119 @@
 #import <objc/runtime.h>
 
 @implementation UIButton (Indicator)
-#pragma mark - 指示器
-static NSString *kIndicatorLastTitle = nil;
-- (void)zhh_beginSubmitting:(NSString *)title{
-    [self zhh_endSubmitting];
-    kSubmitting = true;
-    kIndicatorLastTitle = self.titleLabel.text;
-    self.enabled = NO;
+#pragma mark - 指示器管理
+- (void)zhh_beginSubmitting:(NSString *)title {
+    if (self.zhh_submitting) return; // 防止重复调用
+
+    self.zhh_submitting = YES;
+    self.zhh_originalTitle = self.titleLabel.text; // 保存原始标题
+    self.enabled = NO; // 禁用按钮
     [self setTitle:@"" forState:UIControlStateNormal];
-    
-    self.indicatorType = self.indicatorType?:UIActivityIndicatorViewStyleWhite;
-    self.indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.indicatorType];
-    [self addSubview:self.indicatorView];
-    
-    self.indicatorSpace = self.indicatorSpace?:5;
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    CGFloat sp = w / 2.;
-    if (![title isEqualToString:@""]) {
-        self.indicatorLabel = [[UILabel alloc] init];
-        self.indicatorLabel.text = title;
-        self.indicatorLabel.font = self.titleLabel.font;
-        self.indicatorLabel.textColor = self.titleLabel.textColor;
-        [self addSubview:self.indicatorLabel];
-        
-        CGSize size = [title boundingRectWithSize:CGSizeMake(MAXFLOAT,0.0)
-                                          options:NSStringDrawingUsesLineFragmentOrigin
-                                       attributes:@{NSFontAttributeName:self.titleLabel.font}
-                                          context:nil].size;
-        sp = ((w - self.indicatorSpace - size.width) * .5) ?: 0.0;
-        self.indicatorLabel.frame = CGRectMake(sp + self.indicatorSpace + self.indicatorView.frame.size.width/2, 0, size.width, h);
+
+    // 设置指示器
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.zhh_indicatorType ?: UIActivityIndicatorViewStyleMedium];
+    self.zhh_indicatorView = indicator;
+    [self addSubview:indicator];
+
+    // 配置加载文字
+    if (title.length > 0) {
+        UILabel *label = [[UILabel alloc] init];
+        label.text = title;
+        label.font = self.titleLabel.font;
+        label.textColor = self.titleLabel.textColor;
+        self.zhh_indicatorLabel = label;
+        [self addSubview:label];
     }
-    
-    self.indicatorView.center = CGPointMake(sp, h/2);
-    [self.indicatorView startAnimating];
+
+    [self zhh_updateIndicatorLayout];
+    [indicator startAnimating];
 }
 
 - (void)zhh_endSubmitting {
-    [self zhh_hideIndicator];
-    self.indicatorView = nil;
-    self.indicatorLabel = nil;
-}
+    if (!self.zhh_submitting) return;
 
-- (void)zhh_showIndicator {
-    if (self.indicatorView && self.indicatorView.superview == nil) {
-        [self addSubview:self.indicatorView];
-        [self.indicatorView startAnimating];
-    }
-    if (self.indicatorLabel && self.indicatorLabel.superview == nil) {
-        [self addSubview:self.indicatorLabel];
-        [self setTitle:@"" forState:UIControlStateNormal];
-    }
-}
-
-- (void)zhh_hideIndicator {
-    kSubmitting = false;
+    self.zhh_submitting = NO;
     self.enabled = YES;
-    
-    [self.indicatorView removeFromSuperview];
-    [self.indicatorLabel removeFromSuperview];
-    
-    if (self.indicatorLabel) {
-        [self setTitle:kIndicatorLastTitle forState:UIControlStateNormal];
-    }
-    if (self.indicatorView) {
-        [self.indicatorView stopAnimating];
-        [self setTitle:kIndicatorLastTitle forState:UIControlStateNormal];
-    }
+
+    // 恢复原始状态
+    [self setTitle:self.zhh_originalTitle forState:UIControlStateNormal];
+    [self.zhh_indicatorView stopAnimating];
+    [self.zhh_indicatorView removeFromSuperview];
+    [self.zhh_indicatorLabel removeFromSuperview];
+
+    self.zhh_indicatorView = nil;
+    self.zhh_indicatorLabel = nil;
 }
 
-#pragma mark - associated
-static bool kSubmitting = false;
-- (bool)submitting{
-    return kSubmitting;
+#pragma mark - 布局更新
+
+- (void)zhh_updateIndicatorLayout {
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+
+    CGFloat spacing = self.zhh_indicatorSpace ?: 5.0;
+    CGFloat indicatorWidth = self.zhh_indicatorView.frame.size.width;
+    CGFloat contentWidth = indicatorWidth;
+
+    if (self.zhh_indicatorLabel) {
+        CGSize labelSize = [self.zhh_indicatorLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, height)];
+        self.zhh_indicatorLabel.frame = CGRectMake(0, 0, labelSize.width, height);
+        contentWidth += spacing + labelSize.width;
+    }
+
+    CGFloat startX = (width - contentWidth) / 2.0;
+
+    self.zhh_indicatorView.center = CGPointMake(startX + indicatorWidth / 2.0, height / 2.0);
+    self.zhh_indicatorLabel.frame = CGRectMake(CGRectGetMaxX(self.zhh_indicatorView.frame) + spacing, 0, self.zhh_indicatorLabel.frame.size.width, height);
 }
-- (CGFloat)indicatorSpace{
-    return [objc_getAssociatedObject(self, @selector(indicatorSpace)) floatValue];
+
+#pragma mark - Associated Properties
+
+- (BOOL)zhh_submitting {
+    return [objc_getAssociatedObject(self, @selector(zhh_submitting)) boolValue];
 }
-- (void)setIndicatorSpace:(CGFloat)indicatorSpace{
-    objc_setAssociatedObject(self, @selector(indicatorSpace), @(indicatorSpace), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+- (void)setZhh_submitting:(BOOL)submitting {
+    objc_setAssociatedObject(self, @selector(zhh_submitting), @(submitting), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-- (UIActivityIndicatorViewStyle)indicatorType{
-    return (UIActivityIndicatorViewStyle)[objc_getAssociatedObject(self, @selector(indicatorType)) intValue];
+
+- (NSString *)zhh_originalTitle {
+    return objc_getAssociatedObject(self, @selector(zhh_originalTitle));
 }
-- (void)setIndicatorType:(UIActivityIndicatorViewStyle)indicatorType{
-    objc_setAssociatedObject(self, @selector(indicatorType), @(indicatorType), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+- (void)setZhh_originalTitle:(NSString *)originalTitle {
+    objc_setAssociatedObject(self, @selector(zhh_originalTitle), originalTitle, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
-- (UIActivityIndicatorView*)indicatorView{
-    return objc_getAssociatedObject(self, @selector(indicatorView));
+
+- (UIActivityIndicatorView *)zhh_indicatorView {
+    return objc_getAssociatedObject(self, @selector(zhh_indicatorView));
 }
-- (void)setIndicatorView:(UIActivityIndicatorView*)indicatorView{
-    objc_setAssociatedObject(self, @selector(indicatorView), indicatorView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+- (void)setZhh_indicatorView:(UIActivityIndicatorView *)indicatorView {
+    objc_setAssociatedObject(self, @selector(zhh_indicatorView), indicatorView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-- (UILabel *)indicatorLabel{
-    return objc_getAssociatedObject(self, @selector(indicatorLabel));
+
+- (UILabel *)zhh_indicatorLabel {
+    return objc_getAssociatedObject(self, @selector(zhh_indicatorLabel));
 }
-- (void)setIndicatorLabel:(UILabel *)indicatorLabel{
-    objc_setAssociatedObject(self, @selector(indicatorLabel), indicatorLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+- (void)setZhh_indicatorLabel:(UILabel *)indicatorLabel {
+    objc_setAssociatedObject(self, @selector(zhh_indicatorLabel), indicatorLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIActivityIndicatorViewStyle)zhh_indicatorType {
+    return (UIActivityIndicatorViewStyle)[objc_getAssociatedObject(self, @selector(zhh_indicatorType)) intValue];
+}
+
+- (void)setZhh_indicatorType:(UIActivityIndicatorViewStyle)indicatorType {
+    objc_setAssociatedObject(self, @selector(zhh_indicatorType), @(indicatorType), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)zhh_indicatorSpace {
+    return [objc_getAssociatedObject(self, @selector(zhh_indicatorSpace)) floatValue];
+}
+
+- (void)setZhh_indicatorSpace:(CGFloat)indicatorSpace {
+    objc_setAssociatedObject(self, @selector(zhh_indicatorSpace), @(indicatorSpace), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 @end

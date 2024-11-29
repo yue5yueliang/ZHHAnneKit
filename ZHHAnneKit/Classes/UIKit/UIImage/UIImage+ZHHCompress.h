@@ -15,38 +15,26 @@
  */
 NS_ASSUME_NONNULL_BEGIN
 @interface UIImage (ZHHCompress)
-/**
- *  压缩上传图片到指定字节
- *
- *  @param image     压缩的图片
- *  @param maxLength 压缩后最大字节大小
- *
- *  @return 压缩后图片的二进制
- */
-+ (NSData *)zhh_compressImage:(UIImage *)image toMaxLength:(NSInteger) maxLength maxWidth:(NSInteger)maxWidth;
 
-/**
- *  获得指定size的图片
- *
- *  @param image   原始图片
- *  @param newSize 指定的size
- *
- *  @return 调整后的图片
- */
-+ (UIImage *)zhh_resizeImage:(UIImage *) image withNewSize:(CGSize) newSize;
+/// 压缩图片到指定大小和最大宽度
+/// @param image 原始图片
+/// @param maxLength 目标文件大小（字节）
+/// @param maxWidth 最大宽度（px）
+/// @return 压缩后的图片数据
++ (NSData *)zhh_compressImage:(UIImage *)image toMaxLength:(NSInteger)maxLength maxWidth:(NSInteger)maxWidth;
 
-/**
- *  通过指定图片最长边，获得等比例的图片size
- *
- *  @param image       原始图片
- *  @param imageLength 图片允许的最长宽度（高度）
- *
- *  @return 获得等比例的size
- */
-+ (CGSize)zhh_scaleImage:(UIImage *) image withLength:(CGFloat) imageLength;
+/// 调整图片大小
+/// @param image 原始图片
+/// @param newSize 新的目标尺寸
+/// @return 调整大小后的图片
++ (UIImage *)zhh_resizedImage:(UIImage *)image toSize:(CGSize)newSize;
 
+/// 计算按比例缩放的目标尺寸
+/// @param image 原始图片
+/// @param maxLength 最大边长
+/// @return 按比例缩放后的尺寸
++ (CGSize)zhh_scaledSizeForImage:(UIImage *)image withMaxLength:(CGFloat)maxLength;
 
-+ (UIImage*)zhh_resizableHalfImage:(NSString *)name;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -13,35 +13,20 @@ NS_ASSUME_NONNULL_BEGIN
  *  用于向图像添加alpha层的辅助方法
  */
 @interface UIImage (ZHHAlpha)
-/**
- *  @brief  是否有alpha通道
- *
- *  @return 是否有alpha通道
- */
-- (BOOL)zhh_hasAlpha;
-/**
- *  @brief  如果没有alpha通道 增加alpha通道
- *
- *  @return 如果没有alpha通道 增加alpha通道
- */
+/// @brief 检查图片是否包含 Alpha 通道
+/// 此方法用于判断图片是否支持透明背景，主要通过图片的 Alpha 通道信息进行检测。
+/// @return YES 表示图片包含 Alpha 通道，NO 表示图片不包含 Alpha 通道。
+- (BOOL)zhh_hasAlpha ;
+/// @brief 为图片添加 Alpha 通道
+/// 如果图片本身不包含 Alpha 通道，则创建一个新的 UIImage 实例并添加 Alpha 通道。
+/// 如果图片已包含 Alpha 通道，则直接返回自身。
+/// @return 包含 Alpha 通道的 UIImage 实例。
 - (UIImage *)zhh_imageWithAlpha;
-/**
- *  @brief  增加透明边框
- *
- *  @param borderSize 边框尺寸
- *
- *  @return 增加透明边框后的图片
- */
+/// 此方法会在图片的四周添加指定尺寸的透明边框。如果图片本身不包含 Alpha 通道，则会自动添加 Alpha 通道。
+/// @param borderSize 边框的宽度（单位：像素）。
+/// @return 添加透明边框后的 UIImage 实例。
 - (UIImage *)zhh_transparentBorderImage:(NSUInteger)borderSize;
 
-
-//http://stackoverflow.com/questions/6521987/crop-uiimage-to-alpha?answertab=oldest#tab-top
-/**
- *  @brief  裁切含透明图片为最小大小
- *
- *  @return 裁切后的图片
- */
-- (UIImage *)zhh_trimmedBetterSize;
 @end
 
 NS_ASSUME_NONNULL_END

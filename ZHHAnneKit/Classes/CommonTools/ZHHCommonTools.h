@@ -8,134 +8,174 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, ZHHFeedbackType) {
+    ZHHFeedbackTypeLight = 0,       // 轻度点击反馈
+    ZHHFeedbackTypeMedium = 1,     // 中度点击反馈
+    ZHHFeedbackTypeHeavy = 2,      // 重度点击反馈
+    ZHHFeedbackTypeSelection = 3   // 选择切换反馈
+};
+
 @interface ZHHCommonTools : NSObject
-/// 获取一像素的大小
+/// 获取设备上一像素的逻辑值
 + (CGFloat)zhh_pixelOne;
 /// 随机生成16位字符串(数字和字母混合)
 + (NSString *)zhh_random16Text;
-/** 随机数生成(比如:0~100之间的随机数) */
+/// 随机数生成(比如:0~100之间的随机数)
+/// @param from 随机数的最小值（包含）
+/// @param to 随机数的最大值（包含）
+/// @return 返回一个[from, to]区间的随机整数
 + (NSInteger)zhh_randomNumber:(NSInteger)from to:(NSInteger)to;
-/** 表情符号的判断 */
-+ (BOOL)zhh_stringContainsEmoji:(NSString *)string;
 
-#pragma mark ------------ json或字符串的解析 ----------------------------
-/** json格式字典转字符串格式 */
-+ (NSString *)zhh_jsonTextWithJSONObject:(NSDictionary *)object;
-/** json格式数组转为 字符串*/
-+ (NSString *)zhh_jsonTextWithJSONArray:(NSArray *)jsonArray;
-/** 字符串格式转json */
-+ (id)zhh_jsonObjectWithJSONText:(NSString *)jsonText;
-
-#pragma mark ------------ 字符串相关格式处理 ----------------------------
-/** 以逗号隔开每三位数 */
-+ (NSString *)zhh_separatorNumberByComma:(NSInteger)number;
-/** 如银行卡字符串格式化 每四位一个空格*/
-+ (NSString *)zhh_bankcardNumberFormat:(NSString *)textContent;
 /**
- *   把身份证和手机号中间替换成星号的做法
+ * 将时间字符串格式化为相对时间描述
  *
- *   @param replaceText 当前文字
- *   @param index       开始索引
- *   @param length      星号个数
- *   @return 返回已经处理的文字
- */
-+ (NSString *)zhh_replaceAsteriskWithText:(NSString *)replaceText index:(NSInteger)index length:(NSInteger)length;
-/** 处理空字符串为空的显示 */
-+ (NSString *)zhh_showTextNull:(NSString *)parameter;
-/** 对字典(Key-Value)排序 不区分大小写 */
-+ (NSString *)zhh_sortedDictionaryByCaseConversion:(NSMutableDictionary *)dictionary;
-/**
- *  字符串转星期几
+ * 与当前时间比较：
+ * 1) 1分钟以内 显示：刚刚
+ * 2) 1小时以内 显示：x分钟前
+ * 3) 24小时以内 显示：x小时前
+ * 4) 48小时以内 显示：昨天 09:30
+ * 5) 7天内 显示：x天前
+ * 6) 30天内 显示：x周前
+ * 7) 6个月 显示：x个月前
+ * 8) 同一年但超过6个月 显示：MM月dd日 HH:mm
+ * 9) 不同年 显示：yyyy-MM-dd HH:mm
  *
- *  @param currentDate 当前日期(2019-04-30)
- *  @return 返回星期-到星期天中的某一天
+ * @param dateString 要格式化的时间字符串，例如 @"2016-04-04 20:21:22"
+ * @param formatter 时间字符串的格式，例如 @"yyyy-MM-dd HH:mm:ss"
+ * @return 格式化后的时间字符串
  */
-+ (NSString *)zhh_weekdayStringFromDate:(NSString*)currentDate;
-+ (NSString *)zhh_dateWeekWithDateString:(NSString *)dateString;
++ (NSString *)zhh_formateDate:(NSString *)dateString formatter:(NSString *)formatter;
 
-#pragma mark ------------ 富文本相关的处理 ----------------------------
+/// 将 JSON 格式的对象（NSArray 或 NSDictionary）转换为字符串
+/// @param object 需要转换为 JSON 字符串的字典或数组
+/// @return 返回 JSON 格式的字符串，如果转换失败则返回 nil
++ (NSString *)zhh_jsonStringWithObject:(id)object;
+/// JSON字符串转换为对象（NSArray 或 NSDictionary）
+/// @param jsonString 需要转换的 JSON 字符串
+/// @return 返回解析后的对象（NSArray 或 NSDictionary），如果解析失败则返回 nil
++ (id)zhh_jsonObjectWithString:(NSString *)jsonString;
+
+/// 根据图片名将图片保存到Documents目录下的ImageFile文件夹中
+/// @param imageName 图片文件名
+/// @return 返回图片保存的完整路径
++ (NSString *)zhh_saveImagePathWithName:(NSString *)imageName;
+
+/// 计算两点之间的距离（单位：米）
+/// @param startCoordinate 起点的经纬度
+/// @param endCoordinate   终点的经纬度
+/// @return 返回两点之间的距离，单位为米
++ (double)zhh_distanceBetweenCoordinates:(CLLocationCoordinate2D)startCoordinate endCoordinate:(CLLocationCoordinate2D)endCoordinate;
+
+/// 检查设备的定位服务是否可用
+/// @return YES 表示定位服务可用，NO 表示不可用
++ (BOOL)zhh_isLocationServiceEnabled;
+
+/// 打开设置页面，引导用户开启定位服务
++ (void)zhh_openLocationSettings;
 /**
- *  通过富文本添加图标
- *  @param textStr  当前文字
- *  @param imageArr 需要设置的图标
- *  @param span     间距
- *  @param font     字体
- *  @return 返回已经设置好的富文本
- */
-+ (NSAttributedString *)zhh_imageWithText:(NSString *)textStr imageArr:(NSArray<UIImage *> *)imageArr span:(CGFloat)span font:(UIFont *)font;
-/**
- *  替换文本字符串
+ *  @brief  触发系统震动反馈
  *
- *  @param currentText 当前的字符串
- *  @param parameter1 需要替换的字符串
- *  @param parameter2 需要替换成的字符串
- */
-+ (NSString *)zhh_replaceText:(NSString *)currentText parameter1:(NSString *)parameter1 parameter2:(NSString *)parameter2;
-/**
- *  富文本设置文字颜色
+ *  @param  type 反馈类型，枚举值 `ZHHFeedbackType`：
+ *          - `ZHHFeedbackTypeLight`: 轻度点击反馈，适合轻微的操作提示。
+ *          - `ZHHFeedbackTypeMedium`: 中度点击反馈，适合重要操作的确认提示。
+ *          - `ZHHFeedbackTypeHeavy`: 重度点击反馈，适合非常重要的操作确认或警告提示。
+ *          - `ZHHFeedbackTypeSelection`: 选择切换反馈，适合表单选项、切换按钮的反馈。
  *
- *  @param color        文字颜色
- *  @param currentText  当前的字符串
- *  @param startIndex   开始下标
- *  @param endIndex     结束下标
+ *  @discussion 该方法基于 Haptic Feedback 生成不同的触觉反馈，适用于支持 Haptic Engine 的设备。
  */
-+ (NSMutableAttributedString *)zhh_mutableAttributedWithColor:(UIColor *)color currentText:(NSString *)currentText startIndex:(NSInteger)startIndex endIndex:(NSInteger)endIndex;
++ (void)zhh_triggerFeedbackWithType:(ZHHFeedbackType)type;
+
+/// @brief 生成随机汉字
+/// @param count 生成的汉字数量
+/// @return 随机生成的汉字字符串
++ (NSString *)zhh_randomChineseWithCount:(NSInteger)count;
+
+/// 生成一个新的 UUID 字符串
+/// @return 一个新的 UUID，格式类似于 "D1178E50-2A4D-4F1F-9BD3-F6AAB00E06B1"
++ (NSString *)zhh_uuid;
+
+/// 获取App Store版本号和详情信息
+/// @param appid App Store 的 AppID
+/// @param details 获取的详情信息回调
+/// @return App Store 的版本号（若获取失败，返回本地版本号）
++ (NSString *)zhh_getAppStoreVersionWithAppid:(NSString *)appid details:(void (^)(NSDictionary *details))details;
+
+/// 对比版本号
+/// @param version 要比较的目标版本号
+/// @return 如果目标版本号比当前版本号高，返回 YES；否则返回 NO
++ (BOOL)zhh_comparisonVersion:(NSString *)version;
+
+/// 跳转到指定 URL
+/// @param URL 支持 NSString 或 NSURL 类型
++ (void)zhh_openURL:(id)URL;
+
+/// 跳转到 App Store
+/// @param appid App 的唯一标识符
++ (void)zhh_skipToAppStoreWithAppid:(NSString *)appid;
+
+/// 使用系统浏览器 Safari 打开指定 URL
+/// @param urlString 要打开的 URL
++ (void)zhh_skipToSafariWithURLString:(NSString *)urlString;
+
+/// 使用系统邮件客户端
+/// @param email 收件人邮箱地址
++ (void)zhh_skipToMailWithEmail:(NSString *)email;
+/// 切换扬声器模式
+/// @param loudspeaker 是否切换为扬声器模式
++ (void)zhh_changeLoudspeaker:(BOOL)loudspeaker;
+
+/// 切换手电筒状态
+/// @param light 是否开启手电筒
++ (void)zhh_changeFlashlight:(BOOL)light;
+
+/// 检查是否开启代理，防止Charles抓包
+/// @param url 可选的测试URL，默认为 https://www.baidu.com
+/// @return 是否开启代理
++ (BOOL)zhh_checkOpenProxy:(NSString * _Nullable)url;
+
+/// 系统自带分享图片
+/// @param image 要分享的图片
+/// @param complete 分享完成的回调（成功或失败）
+/// @return 返回创建的 UIActivityViewController 实例
++ (UIActivityViewController *)zhh_shareSystemImage:(UIImage *)image complete:(void(^)(BOOL))complete;
+
+/// 生成启动图
+/// @param portrait 是否竖屏
+/// @param dark 是否暗黑模式
+/// @return 返回生成的启动图
++ (UIImage *)zhh_launchImageWithPortrait:(BOOL)portrait dark:(BOOL)dark;
+
+/// 生成启动图
+/// @param name LaunchScreen.storyboard 文件的名称
+/// @param portrait 是否竖屏
+/// @param dark 是否暗黑模式
+/// @return 返回生成的启动图
++ (UIImage *)zhh_launchImageWithStoryboard:(NSString *)name portrait:(BOOL)portrait dark:(BOOL)dark;
+
 /**
- *  富文本设置文字颜色
+ * @brief 强制改变设备屏幕方向
  *
- *  @param text 当前的字符串
- *  @param width 需要展示的宽度
- *  @param font 字体
- *  @param lineSpacing 行间距
+ * @discussion 该方法通过修改 `UIDevice` 的 `orientation` 属性，强制改变屏幕的显示方向。
+ *             适用于某些场景需要临时强制设置设备的横竖屏方向，例如播放全屏视频或某些固定方向的内容。
+ *
+ * @param interfaceOrientation 要强制设置的屏幕方向，枚举类型 `UIInterfaceOrientation`。
+ *                              例如：`UIInterfaceOrientationPortrait` 表示竖屏，
+ *                                   `UIInterfaceOrientationLandscapeLeft` 表示横屏（左侧）。
+ *
+ * @note 使用该方法时，请确保视图控制器的 `supportedInterfaceOrientations` 和
+ *       `shouldAutorotate` 方法能够正确配合旋转方向，否则可能会导致意外行为。
+ * @warning 该方法使用了 KVC 技术修改私有属性，可能存在潜在的审核风险，请谨慎使用。
  */
-+ (NSMutableAttributedString *)zhh_setupShowMoreTextLabel:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing;
-/**
- *  根据文字内容动态计算UILabel宽高
- *  @param maxWidth label宽度
- *  @param font  字体
- *  @param lineSpacing  行间距
- *  @param text  内容
- */
-+ (CGSize)zhh_boundingRectWithWidth:(CGFloat)maxWidth font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing text:(NSString *)text;
-/**
- *  NSString转换成NSMutableAttributedString
- *  @param text  内容
- *  @param lineSpacing  行间距
- *  @param font  字体
- */
-+ (NSMutableAttributedString *)zhh_attributedStringWithText:(NSString *)text font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing;
-/** 解析成html的富文本 */
-+ (NSAttributedString *)zhh_attributedStringWithMaxWidth:(CGFloat)maxWidth htmlText:(NSString *)htmlText;
++ (void)zhh_forceDeviceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 
-#pragma mark ------------ 图片存储相关的处理 ----------------------------
-/** 据图片名将图片保存到ImageFile文件夹中 */
-+ (NSString *)zhh_imageSavedPath:(NSString *)imageName;
-
-/** 获取当前的windows */
-+ (UIViewController *)zhh_currentWindow;
-
-/** 获取当前的ViewController */
-+ (UIViewController *)zhh_currentVC;
-
-/** 点击获取验证码 */
-+ (void)zhh_startCountDown:(UIButton *)sender;
-
-/*
- * 计算经纬度两者之间的距离
- * @param start 开始的经纬度
- * @param end 结束的经纬度
- */
-+ (double)zhh_calculateBetweenDistanceStart:(CLLocationCoordinate2D)start end:(CLLocationCoordinate2D)end;
-
-/// 判断定位功能是否可用
-+ (BOOL)zhh_checkLoactionAvailable;
-/// 跳转到设置界面设置定位权限
-+ (void)zhh_regionFlowCallBlock;
-/// 点震动反馈（UIFeedbackGenerator）和系统震动
-+ (void)zhh_systemFeedbackGeneratorType:(NSInteger)type;
+/// @brief 检测是否支持横屏显示
+/// 检查应用的 `Info.plist` 中是否配置支持横屏方向。
+/// @return 是否支持横屏，`YES` 表示支持，`NO` 表示不支持。
++ (BOOL)zhh_supportHorizontalScreen;
 @end
 
 NS_ASSUME_NONNULL_END

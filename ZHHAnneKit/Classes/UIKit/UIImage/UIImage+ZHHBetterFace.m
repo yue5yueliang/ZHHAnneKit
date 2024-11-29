@@ -7,87 +7,119 @@
 //
 
 #import "UIImage+ZHHBetterFace.h"
+#import <CoreImage/CoreImage.h>
 
-#define GOLDEN_RATIO (0.618)
+#define GOLDEN_RATIO 0.618
 
 @implementation UIImage (ZHHBetterFace)
-- (UIImage *)zhh_betterFaceImageForSize:(CGSize)size accuracy:(ZHHAccuracy)accurary {
-    NSArray *features = [UIImage _zhh_faceFeaturesInImage:self accuracy:accurary];
-    if ([features count]==0) {
-        NSLog(@"no faces");
+/// 聚焦人脸区域并生成目标尺寸的图片
+/// @param targetSize 目标图片尺寸
+/// @param accuracy 人脸检测精度（高或低）
+/// @return 聚焦人脸的裁剪图片，未检测到人脸时返回 nil
+- (UIImage *)zhh_focusedImageOnFacesWithTargetSize:(CGSize)targetSize accuracy:(ZHHAccuracy)accuracy {
+    // 检测人脸特征
+    NSArray<CIFaceFeature *> *features = [UIImage zhh_detectFaceFeaturesInImage:self accuracy:accuracy];
+    
+    if (features.count == 0) {
+        NSLog(@"[BetterFace] No faces detected");
         return nil;
     } else {
-        NSLog(@"succeed %lu faces", (unsigned long)[features count]);
-        return [self _zhh_subImageForFaceFeatures:features size:size];
+        NSLog(@"[BetterFace] Detected %lu face(s)", (unsigned long)features.count);
+        // 根据人脸特征裁剪图片
+        return [self zhh_croppedImageForFaceFeatures:features targetSize:targetSize];
     }
 }
 
-- (UIImage *)_zhh_subImageForFaceFeatures:(NSArray *)faceFeatures size:(CGSize)size {
-    CGRect fixedRect = CGRectMake(MAXFLOAT, MAXFLOAT, 0, 0);
-    CGFloat rightBorder = 0, bottomBorder = 0;
-    for (CIFaceFeature *faceFeature in faceFeatures){
-        CGRect oneRect = faceFeature.bounds;
-        oneRect.origin.y = size.height - oneRect.origin.y - oneRect.size.height;
+/// 根据人脸特征裁剪图片
+/// @param faceFeatures 检测到的人脸特征数组
+/// @param targetSize 目标图片尺寸
+/// @return 裁剪后的人脸聚焦图片
+- (UIImage *)zhh_croppedImageForFaceFeatures:(NSArray<CIFaceFeature *> *)faceFeatures targetSize:(CGSize)targetSize {
+    CGRect facesBoundingBox = CGRectMake(MAXFLOAT, MAXFLOAT, 0, 0);
+    CGFloat rightBoundary = 0, bottomBoundary = 0;
+    CGSize originalSize = self.size;
+    
+    // 遍历所有人脸特征，确定包含所有人脸的最小矩形
+    for (CIFaceFeature *faceFeature in faceFeatures) {
+        CGRect faceRect = faceFeature.bounds;
+        // 修正坐标系，将人脸矩形翻转为图片坐标
+        faceRect.origin.y = originalSize.height - faceRect.origin.y - faceRect.size.height;
         
-        fixedRect.origin.x = MIN(oneRect.origin.x, fixedRect.origin.x);
-        fixedRect.origin.y = MIN(oneRect.origin.y, fixedRect.origin.y);
-        
-        rightBorder = MAX(oneRect.origin.x + oneRect.size.width, rightBorder);
-        bottomBorder = MAX(oneRect.origin.y + oneRect.size.height, bottomBorder);
+        // 更新包含所有人脸的矩形边界
+        facesBoundingBox.origin.x = MIN(faceRect.origin.x, facesBoundingBox.origin.x);
+        facesBoundingBox.origin.y = MIN(faceRect.origin.y, facesBoundingBox.origin.y);
+        rightBoundary = MAX(faceRect.origin.x + faceRect.size.width, rightBoundary);
+        bottomBoundary = MAX(faceRect.origin.y + faceRect.size.height, bottomBoundary);
     }
     
-    fixedRect.size.width = rightBorder - fixedRect.origin.x;
-    fixedRect.size.height = bottomBorder - fixedRect.origin.y;
+    facesBoundingBox.size.width = rightBoundary - facesBoundingBox.origin.x;
+    facesBoundingBox.size.height = bottomBoundary - facesBoundingBox.origin.y;
     
-    CGPoint fixedCenter = CGPointMake(fixedRect.origin.x + fixedRect.size.width / 2.0,
-                                      fixedRect.origin.y + fixedRect.size.height / 2.0);
+    // 确定中心点
+    CGPoint faceCenter = CGPointMake(CGRectGetMidX(facesBoundingBox), CGRectGetMidY(facesBoundingBox));
     CGPoint offset = CGPointZero;
-    CGSize finalSize = size;
-    if (size.width / size.height > self.size.width / self.size.height) {
-        //move horizonal
-        finalSize.height = self.size.height;
-        finalSize.width = size.width/size.height * finalSize.height;
-        fixedCenter.x = finalSize.width / size.width * fixedCenter.x;
-        fixedCenter.y = finalSize.width / size.width * fixedCenter.y;
+    CGSize finalSize = originalSize;
+    
+    // 根据目标宽高比裁剪图片
+    if (originalSize.width / originalSize.height > targetSize.width / targetSize.height) {
+        // 水平方向移动
+        finalSize.height = targetSize.height;
+        finalSize.width = originalSize.width / originalSize.height * finalSize.height;
         
-        offset.x = fixedCenter.x - self.size.width * 0.5;
-        if (offset.x < 0) {
-            offset.x = 0;
-        } else if (offset.x + self.size.width > finalSize.width) {
-            offset.x = finalSize.width - self.size.width;
-        }
-        offset.x = - offset.x;
+        // 缩放 faceCenter
+        faceCenter.x = finalSize.width / originalSize.width * faceCenter.x;
+        faceCenter.y = finalSize.width / originalSize.width * faceCenter.y;
+        
+        // 计算水平偏移
+        offset.x = faceCenter.x - targetSize.width * 0.5;
+        offset.x = MAX(0, MIN(offset.x, finalSize.width - targetSize.width));
+        finalSize.width = targetSize.width; // 宽度调整为目标宽度
     } else {
-        //move vertical
-        finalSize.width = self.size.width;
-        finalSize.height = size.height/size.width * finalSize.width;
-        fixedCenter.x = finalSize.width / size.width * fixedCenter.x;
-        fixedCenter.y = finalSize.width / size.width * fixedCenter.y;
+        // 垂直方向移动
+        finalSize.width = targetSize.width;
+        finalSize.height = originalSize.height / originalSize.width * finalSize.width;
         
-        offset.y = fixedCenter.y - self.size.height * (1-GOLDEN_RATIO);
-        if (offset.y < 0) {
-            offset.y = 0;
-        } else if (offset.y + self.size.height > finalSize.height){
-            offset.y = finalSize.height = self.size.height;
-        }
-        offset.y = - offset.y;
+        // 缩放 faceCenter
+        faceCenter.x = finalSize.width / originalSize.width * faceCenter.x;
+        faceCenter.y = finalSize.width / originalSize.width * faceCenter.y;
+        
+        // 计算垂直偏移
+        offset.y = faceCenter.y - targetSize.height * (1 - GOLDEN_RATIO);
+        offset.y = MAX(0, MIN(offset.y, finalSize.height - targetSize.height));
+        finalSize.height = targetSize.height; // 高度调整为目标高度
     }
     
-    CGRect finalRect = CGRectApplyAffineTransform(CGRectMake(offset.x, offset.y, finalSize.width, finalSize.height),
-                                                  CGAffineTransformMakeScale(self.scale, self.scale));
-    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], finalRect);
-    UIImage *subImage = [UIImage imageWithCGImage:imageRef scale:self.scale orientation:self.imageOrientation];
+    // 计算最终裁剪矩形
+    CGFloat scale = originalSize.width / finalSize.width;
+    CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+    CGRect finalRect = CGRectApplyAffineTransform(CGRectMake(offset.x, offset.y, finalSize.width, finalSize.height), transform);
+    
+    // 裁剪图片
+    CGImageRef imageRef = CGImageCreateWithImageInRect(self.CGImage, finalRect);
+    UIImage *croppedImage = [UIImage imageWithCGImage:imageRef scale:self.scale orientation:self.imageOrientation];
     CGImageRelease(imageRef);
     
-    return subImage;
+    return croppedImage;
 }
 
-#pragma mark - Util
-+ (NSArray *)_zhh_faceFeaturesInImage:(UIImage *)image accuracy:(ZHHAccuracy)accurary{
+#pragma mark - 工具方法
+
+/// 检测图片中的人脸特征
+/// @param image 待检测的图片
+/// @param accuracy 检测精度（高或低）
+/// @return 检测到的人脸特征数组
++ (NSArray<CIFaceFeature *> *)zhh_detectFaceFeaturesInImage:(UIImage *)image accuracy:(ZHHAccuracy)accuracy {
     CIImage *ciImage = [CIImage imageWithCGImage:image.CGImage];
-    NSString *accuraryStr = (accurary == ZHHAccuracyLow) ? CIDetectorAccuracyLow : CIDetectorAccuracyHigh;
-    CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil
-                                              options:@{CIDetectorAccuracy: accuraryStr}];
-    return [detector featuresInImage:ciImage];
+    NSString *accuracyOption = (accuracy == ZHHAccuracyLow) ? CIDetectorAccuracyLow : CIDetectorAccuracyHigh;
+    CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeFace
+                                              context:nil
+                                              options:@{CIDetectorAccuracy: accuracyOption}];
+    NSArray<CIFeature *> *features = [detector featuresInImage:ciImage];
+    
+    // 过滤非 CIFaceFeature 类型的对象
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(CIFeature *feature, NSDictionary *bindings) {
+        return [feature isKindOfClass:[CIFaceFeature class]];
+    }];
+    return (NSArray<CIFaceFeature *> *)[features filteredArrayUsingPredicate:predicate];
 }
 @end

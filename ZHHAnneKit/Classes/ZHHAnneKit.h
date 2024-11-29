@@ -1,6 +1,6 @@
 //
 //  ZHHAnneKit.h
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/11.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -11,22 +11,26 @@
 
 
 #if __has_include(<ZHHAnneKit/ZHHAnneKit.h>)
+
 FOUNDATION_EXPORT double ZHHAnneKitVersionNumber;
 //! Project version string for ZHHAnneKit.
 FOUNDATION_EXPORT const unsigned char ZHHAnneKitVersionString[];
-// In this header, you should import all the public headers of your framework using statements like #import <ZHHAnneKit/PublicHeader.h>
-// 在这个头中，您应该导入框架的所有公共头
-// 使用#import<ZHHAnneKit/ZHHAnneKit.h>等语句
-// 或@import-ZHHAnneKits;
+
+// 在这个头文件中导入框架的所有公共头文件
+// 使用 #import <ZHHAnneKit/ZHH*.h> 来导入公共头文件
 #import <ZHHAnneKit/ZHHUIKit.h>
 #import <ZHHAnneKit/ZHHCommonKit.h>
 #import <ZHHAnneKit/ZHHQuartzCore.h>
 #import <ZHHAnneKit/ZHHFoundation.h>
+
 #else
+
+// 如果不能使用框架导入，则使用本地路径的导入方式
 #import "ZHHUIKit.h"
 #import "ZHHCommonKit.h"
 #import "ZHHQuartzCore.h"
 #import "ZHHFoundation.h"
+
 #endif
 
 #endif /* ZHHAnneKit_h */

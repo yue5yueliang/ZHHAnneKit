@@ -1,6 +1,6 @@
 //
 //  UIDevice+ZHHHardware.m
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/2.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -9,7 +9,7 @@
 #import "UIDevice+ZHHHardware.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <AVFoundation/AVFoundation.h>
-#import "NSString+ZHHExtend.h"
+#import "ZHHCommonTools.h"
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 #include <net/if.h>
@@ -22,71 +22,140 @@
 @implementation UIDevice (ZHHHardware)
 @dynamic zhh_appVersion,zhh_appName,zhh_appIcon,zhh_deviceID;
 
+// 获取应用程序的版本号（线程安全，值只初始化一次）
 + (NSString *)zhh_appVersion{
+    // 静态变量保存版本号
     static NSString * version;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        // 从 info.plist 文件中读取应用程序的显示版本号
         version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     });
     return version;
 }
 
+// 获取应用程序的显示名称（线程安全，值只初始化一次）
 + (NSString *)zhh_appName{
+    // 静态变量保存应用名称
     static NSString * name;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        // 从 info.plist 文件中读取应用程序的显示名称
         name = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+        // 如果 CFBundleDisplayName 不存在，尝试使用 CFBundleName
+        if (!name) {
+            name = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+        }
     });
     return name;
 }
 
-+ (NSString *)zhh_deviceID{
-    static NSString * identifier;
+// 获取设备唯一标识符（identifierForVendor），线程安全且值只初始化一次
++ (NSString *)zhh_deviceID {
+    static NSString *identifier;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        identifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        // 获取设备的 identifierForVendor 并转化为 UUID 字符串
+        NSUUID *uuid = [[UIDevice currentDevice] identifierForVendor];
+        identifier = uuid ? [uuid UUIDString] : @"UnknownDeviceID"; // 如果为 nil，返回占位值
     });
     return identifier;
 }
 
-+ (UIImage *)zhh_appIcon{
-    static UIImage * image;
++ (UIImage *)zhh_appIcon {
+    static UIImage *image;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *iconFilename = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIconFile"];
-        NSString *name = [iconFilename stringByDeletingPathExtension];
-        image = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:name ofType:[iconFilename pathExtension]]];
+        // 优先从 CFBundleIcons 中获取图标
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+        NSDictionary *iconsDict = infoDict[@"CFBundleIcons"];
+        NSDictionary *primaryIconsDict = iconsDict[@"CFBundlePrimaryIcon"];
+        NSArray *iconFiles = primaryIconsDict[@"CFBundleIconFiles"];
+        
+        // 获取图标文件名（优先取最后一个，通常是最大尺寸图标）
+        NSString *iconFilename = iconFiles.lastObject ?: infoDict[@"CFBundleIconFile"];
+        if (iconFilename) {
+            image = [UIImage imageNamed:iconFilename];
+        }
+        
+        // 如果获取不到图标，则返回空并记录日志
+        if (!image) {
+            NSLog(@"[zhh_appIcon] Failed to load app icon.");
+        }
     });
     return image;
 }
 
 @dynamic zhh_build;
-- (NSInteger)zhh_build{
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
-    return [app_build integerValue];
+// 获取应用程序的 Build 版本号（字符串形式）
+- (NSString *)zhh_build {
+    static NSString *buildVersion = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // 从 Info.plist 中读取 CFBundleVersion
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        buildVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
+        
+        // 如果 CFBundleVersion 未定义，提供默认值并记录日志
+        if (!buildVersion) {
+            buildVersion = @"Unknown";
+            NSLog(@"[zhh_build] CFBundleVersion is missing in Info.plist.");
+        }
+    });
+    return buildVersion;
 }
 
 @dynamic zhh_identifier;
-- (NSString *)zhh_identifier{
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString * bundleIdentifier = [infoDictionary objectForKey:@"CFBundleIdentifier"];
+// 获取应用程序的 Bundle Identifier
+- (NSString *)zhh_identifier {
+    static NSString *bundleIdentifier = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // 从 Info.plist 中读取 CFBundleIdentifier
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        bundleIdentifier = [infoDictionary objectForKey:@"CFBundleIdentifier"];
+        
+        // 如果 CFBundleIdentifier 未定义，提供默认值并记录日志
+        if (!bundleIdentifier) {
+            bundleIdentifier = @"Unknown";
+            NSLog(@"[zhh_identifier] CFBundleIdentifier is missing in Info.plist.");
+        }
+    });
     return bundleIdentifier;
 }
 
 @dynamic zhh_currentLanguage;
-- (NSString *)zhh_currentLanguage{
-    NSArray *languages = [NSLocale preferredLanguages];
-    NSString *currentLanguage = [languages firstObject];
-    return [NSString stringWithString:currentLanguage];
+// 获取当前应用程序的首选语言
+- (NSString *)zhh_currentLanguage {
+    static NSString *currentLanguage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // 获取设备的首选语言列表
+        NSArray *languages = [NSLocale preferredLanguages];
+        // 获取第一个首选语言
+        currentLanguage = [languages firstObject];
+        
+        // 如果没有获取到语言，返回默认语言 "en"
+        if (!currentLanguage) {
+            currentLanguage = @"en";
+            NSLog(@"[zhh_currentLanguage] No preferred language found, defaulting to 'en'.");
+        }
+    });
+    return currentLanguage;
 }
 
 @dynamic zhh_deviceModel;
-- (NSString *)zhh_deviceModel{
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    NSString *deviceString = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-    return [NSString stringWithString:deviceString];
+// 获取设备型号
+- (NSString *)zhh_deviceModel {
+    static NSString *deviceModel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        struct utsname systemInfo;
+        uname(&systemInfo);
+        // 获取设备型号信息
+        deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    });
+    return deviceModel;
 }
 
 
@@ -95,13 +164,27 @@
     UIImage *lauchImage = nil;
     NSString *viewOrientation = nil;
     CGSize viewSize = [UIScreen mainScreen].bounds.size;
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    // 获取当前界面方向（兼容 iOS 13+）
+    UIInterfaceOrientation orientation = UIInterfaceOrientationUnknown;
+    NSSet<UIScene *> *connectedScenes = [UIApplication sharedApplication].connectedScenes;
+    for (UIScene *scene in connectedScenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            orientation = windowScene.interfaceOrientation;
+            break;
+        }
+    }
+    
+    // 确定方向是横向还是纵向
     if (orientation == UIInterfaceOrientationLandscapeLeft ||
         orientation == UIInterfaceOrientationLandscapeRight){
         viewOrientation = @"Landscape";
     } else {
         viewOrientation = @"Portrait";
     }
+    
+    // 查找对应的启动图
     NSArray *imagesDictionary = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"UILaunchImages"];
     for (NSDictionary *dict in imagesDictionary){
         CGSize imageSize = CGSizeFromString(dict[@"UILaunchImageSize"]);
@@ -140,14 +223,14 @@
     return version;
 }
 
-/// 设备是否为iPad/iPad mini.
+/// 判断设备是否为 iPad 或 iPad Mini
 - (BOOL)zhh_isPad {
-    static dispatch_once_t one;
-    static BOOL pad;
-    dispatch_once(&one, ^{
-        pad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    static dispatch_once_t onceToken;
+    static BOOL isPad;
+    dispatch_once(&onceToken, ^{
+        isPad = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
     });
-    return pad;
+    return isPad;
 }
 
 /// 设备是否是模拟器.
@@ -181,7 +264,7 @@
         return YES;
     }
     
-    NSString *path = [NSString stringWithFormat:@"/private/%@", [NSString zhh_stringWithUUID]];
+    NSString *path = [NSString stringWithFormat:@"/private/%@", [ZHHCommonTools zhh_uuid]];
     if ([@"test" writeToFile : path atomically : YES encoding : NSUTF8StringEncoding error : NULL]) {
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
         return YES;

@@ -1,6 +1,6 @@
 //
 //  UIImage+ZHHQRCode.h
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/2.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -11,52 +11,59 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIImage (ZHHQRCode)
-/// 将字符串转换为条形码
-/// @param content QR code content
-/// @return returns the QR code image
-+ (UIImage *)zhh_barCodeImageWithContent:(NSString *)content;
+#pragma mark - 二维码生成
 
-/// 生成二维码
-/// @param content QR code content
-/// @param size QR code size
-/// @return returns the QR code image
-+ (UIImage *)zhh_QRCodeImageWithContent:(NSString *)content codeImageSize:(CGFloat)size;
+/// 生成二维码滤镜
+/// @param content 二维码内容字符串
+/// @return 生成的二维码 CIImage 对象
++ (CIImage *)zhh_generateQRCodeCIImageWithContent:(NSString *)content;
 
-/// 生成指定颜色的二维码
-/// @param content QR code content
-/// @param size QR code size
-/// @param color QR code color
-/// @return returns the QR code image
-+ (UIImage *)zhh_QRCodeImageWithContent:(NSString *)content codeImageSize:(CGFloat)size color:(UIColor *)color;
+/// 生成指定尺寸的二维码图片
+/// @param content 二维码内容字符串
+/// @param size 生成的二维码图片尺寸
+/// @return 生成的二维码 UIImage 对象
++ (UIImage *)zhh_generateQRCodeImageWithContent:(NSString *)content size:(CGFloat)size;
 
-/// 生成条形码
-/// @param content barcode content
-/// @param size barcode size
-/// @return returns the barcode image
-+ (UIImage *)zhh_barcodeImageWithContent:(NSString *)content codeImageSize:(CGFloat)size;
+/// 生成指定尺寸和颜色的二维码图片
+/// @param content 二维码内容字符串
+/// @param size 生成的二维码图片尺寸
+/// @param color 自定义颜色
+/// @return 生成的二维码 UIImage 对象
++ (UIImage *)zhh_generateQRCodeImageWithContent:(NSString *)content size:(CGFloat)size color:(UIColor *)color;
 
-/// 生成指定颜色的条形码
-/// @param content barcode content
-/// @param size barcode size
-/// @param color barcode color
-/// @return returns the barcode image
-+ (UIImage *)zhh_barcodeImageWithContent:(NSString *)content codeImageSize:(CGFloat)size color:(UIColor *)color;
+#pragma mark - 条形码生成
 
-/// 异步生成二维码
-/// @param codeImage Generate QR code callback
-/// @param content QR code content
-/// @param size QR code size
-extern void kQRCodeImage(void(^codeImage)(UIImage * image), NSString * content, CGFloat size);
+/// 生成条形码滤镜
+/// @param content 条形码内容字符串
+/// @return 生成的条形码 CIImage 对象
++ (CIImage *)zhh_generateBarcodeCIImageWithContent:(NSString *)content;
 
-/// 异步生成指定的彩色QR码
-/// @param codeImage Generate QR code callback
-/// @param content QR code content
-/// @param size QR code size
-/// @param color QR code color
-extern void kQRCodeImageFromColor(void(^codeImage)(UIImage * image),
-                                  NSString * content,
-                                  CGFloat size,
-                                  UIColor * color);
+/// 生成指定尺寸的条形码图片
+/// @param content 条形码内容字符串
+/// @param size 生成的条形码图片尺寸
+/// @return 生成的条形码 UIImage 对象
++ (UIImage *)zhh_generateBarcodeImageWithContent:(NSString *)content size:(CGFloat)size;
+
+/// 生成指定尺寸和颜色的条形码图片
+/// @param content 条形码内容字符串
+/// @param size 生成的条形码图片尺寸
+/// @param color 自定义颜色
+/// @return 生成的条形码 UIImage 对象
++ (UIImage *)zhh_generateBarcodeImageWithContent:(NSString *)content size:(CGFloat)size color:(UIColor *)color;
+
+#pragma mark - 私有方法
+
+/// 将 CIImage 转换为指定尺寸的高清 UIImage
+/// @param image 输入的 CIImage
+/// @param size 输出的图片尺寸
+/// @return 转换后的高清 UIImage 对象
++ (UIImage *)zhh_createHDImageFromCIImage:(CIImage *)image size:(CGFloat)size;
+
+/// 修改图片像素颜色
+/// @param image 输入的 UIImage
+/// @param color 替换的颜色
+/// @return 修改颜色后的 UIImage
++ (UIImage *)zhh_changeImagePixelColor:(UIImage *)image color:(UIColor *)color;
 @end
 
 NS_ASSUME_NONNULL_END

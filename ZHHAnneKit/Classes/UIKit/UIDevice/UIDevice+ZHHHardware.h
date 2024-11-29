@@ -1,6 +1,6 @@
 //
 //  UIDevice+ZHHHardware.h
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/2.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// @name App Information
 ///=============================================================================
 @interface UIDevice (ZHHHardware)
-/// 获取App应用版本号
+/// 获取应用程序的版本号
 @property (nonatomic,strong,class) NSString *zhh_appVersion;
-/// 获取App应用名称
+/// 获取应用程序的显示名称
 @property (nonatomic,strong,class) NSString *zhh_appName;
-/// 获取设备ID
+/// 获取设备唯一标识符（identifierForVendor）
 @property (nonatomic,strong,class) NSString *zhh_deviceID;
 /// 获取应用程序图标
 @property (nonatomic,strong,class) UIImage *zhh_appIcon;
@@ -27,9 +27,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong,class) UIImage *zhh_launchImage;
 /// 判断当前系统是否有摄像头
 @property (nonatomic,assign,class) BOOL zhh_hasCamera;
+/// 获取应用程序的 Build 版本号（字符串形式）
 @property (nonatomic,strong,class) NSString *zhh_build;
+/// 获取应用程序的 Bundle Identifier
 @property (nonatomic,strong,class) NSString *zhh_identifier;
+/// 获取当前应用程序的首选语言
 @property (nonatomic,strong,class) NSString *zhh_currentLanguage;
+/// 获取设备型号（如:iPhone13,4）
 @property (nonatomic,strong,class) NSString *zhh_deviceModel;
 @end
 
@@ -40,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///=============================================================================
 /// 设备系统版本(如13.5.1)
 @property (nullable, nonatomic, readonly) NSString *zhh_systemVersion;
-/// 设备是否为iPad/iPad mini.
+/// 判断设备是否为 iPad 或 iPad Mini
 @property (nonatomic, readonly) BOOL zhh_isPad;
 /// 设备是否是模拟器.
 @property (nonatomic, readonly) BOOL zhh_isSimulator;

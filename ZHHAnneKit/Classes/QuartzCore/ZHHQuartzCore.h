@@ -10,11 +10,11 @@
 #define ZHHQuartzCore_h
 
 #if __has_include(<ZHHAnneKit/ZHHQuartzCore.h>)
-#import <ZHHAnneKit/CALayer+ZHHExtend.h>
-#import <ZHHAnneKit/CATransaction+ZHHAnimateWithDuration.h>
+#import <ZHHAnneKit/CALayer+ZHHUtilities.h>
+#import <ZHHAnneKit/CATransaction+ZHHUtilities.h>
 #else
-#import "CALayer+ZHHExtend.h"
-#import "CATransaction+ZHHAnimateWithDuration.h"
+#import "CALayer+ZHHUtilities.h"
+#import "CATransaction+ZHHUtilities.h"
 #endif
 
 #endif /* ZHHQuartzCore_h */

@@ -1,6 +1,6 @@
 //
 //  UIButton+ZHHContentLayout.h
-//  ZHHAnneKitExample
+//  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/11.
 //  Copyright © 2022 桃色三岁. All rights reserved.
@@ -10,37 +10,40 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 图文混排布局样式
 typedef NS_ENUM(NSInteger, ZHHButtonContentLayoutStyle) {
-    ZHHButtonContentLayoutStyleNormal = 0,       // 内容居中-图左文右
-    ZHHButtonContentLayoutStyleCenterImageRight, // 内容居中-图右文左
-    ZHHButtonContentLayoutStyleCenterImageTop,   // 内容居中-图上文下
-    ZHHButtonContentLayoutStyleCenterImageBottom,// 内容居中-图下文上
-    ZHHButtonContentLayoutStyleLeftImageLeft,    // 内容居左-图左文右
-    ZHHButtonContentLayoutStyleLeftImageRight,   // 内容居左-图右文左
-    ZHHButtonContentLayoutStyleRightImageLeft,   // 内容居右-图左文右
-    ZHHButtonContentLayoutStyleRightImageRight,  // 内容居右-图右文左
+    ZHHButtonContentLayoutStyleNormal,              ///< 图左文右，居中显示
+    ZHHButtonContentLayoutStyleCenterImageRight,    ///< 图右文左，居中显示
+    ZHHButtonContentLayoutStyleCenterImageTop,      ///< 图上文下，居中显示
+    ZHHButtonContentLayoutStyleCenterImageBottom,   ///< 图下文上，居中显示
+    ZHHButtonContentLayoutStyleLeftImageLeft,       ///< 图左文右，整体靠左
+    ZHHButtonContentLayoutStyleLeftImageRight,      ///< 文左图右，整体靠左
+    ZHHButtonContentLayoutStyleRightImageLeft,      ///< 图左文右，整体靠右
+    ZHHButtonContentLayoutStyleRightImageRight      ///< 文左图右，整体靠右
 };
+
 
 IB_DESIGNABLE
 @interface UIButton (ZHHContentLayout)
-/// Graphic style
-@property (nonatomic, assign) IBInspectable NSInteger layoutType;
-/// Picture and text spacing, the default is 0px
-@property (nonatomic, assign) IBInspectable CGFloat padding;
-/// The spacing between the graphic and text borders, the default is 5px
-@property (nonatomic, assign) IBInspectable CGFloat periphery;
 
-/// Set graphics and text mixing, the default border spacing between graphics and text is 5px
-/// @param layoutStyle Graphic and text mixed style
-/// @param padding Image and text spacing
+/// 图文布局类型
+@property (nonatomic, assign) ZHHButtonContentLayoutStyle zhh_layoutType;
+/// 图文间距
+@property (nonatomic, assign) CGFloat zhh_padding;
+/// 图文边界间距
+@property (nonatomic, assign) CGFloat zhh_periphery;
+
+/// 设置按钮的图文混排布局
+/// @param layoutStyle 图文混排样式
+/// @param padding 图文间距
+/// @param periphery 图文边界间距
+- (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle padding:(CGFloat)padding periphery:(CGFloat)periphery;
+
+/// 设置按钮的图文混排布局（带默认边界间距）
+/// @param layoutStyle 图文混排样式
+/// @param padding 图文间距
 - (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle padding:(CGFloat)padding;
 
-/// Set image and text mixing
-/// FIXME: There is a problem with this writing that it will break the automatic layout of the button
-/// @param layoutStyle Graphic and text mixed style
-/// @param padding Image and text spacing
-/// @param periphery The distance between the graphic borders
-- (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle padding:(CGFloat)padding periphery:(CGFloat)periphery;
 @end
 
 NS_ASSUME_NONNULL_END
