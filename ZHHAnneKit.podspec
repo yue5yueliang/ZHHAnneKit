@@ -61,7 +61,7 @@ Pod::Spec.new do |s|
     end
 
     uikit.subspec 'UIDevice' do |device|
-      device.dependency 'ZHHAnneKit/ZHHCommonTools'
+      device.dependency 'ZHHAnneKit/CommonTools'
     end
 
     uikit.subspec 'UIImage' do |image|

@@ -50,16 +50,13 @@ PODS:
     - ZHHAnneKit/UIKit/UIColor (= 0.0.7)
     - ZHHAnneKit/UIKit/UIControl (= 0.0.7)
     - ZHHAnneKit/UIKit/UIDevice (= 0.0.7)
-    - ZHHAnneKit/UIKit/UIFont (= 0.0.7)
     - ZHHAnneKit/UIKit/UIImage (= 0.0.7)
     - ZHHAnneKit/UIKit/UIImageView (= 0.0.7)
     - ZHHAnneKit/UIKit/UILabel (= 0.0.7)
     - ZHHAnneKit/UIKit/UINavigationController (= 0.0.7)
     - ZHHAnneKit/UIKit/UINavigationItem (= 0.0.7)
-    - ZHHAnneKit/UIKit/UIScreen (= 0.0.7)
     - ZHHAnneKit/UIKit/UISlider (= 0.0.7)
     - ZHHAnneKit/UIKit/UISplitViewController (= 0.0.7)
-    - ZHHAnneKit/UIKit/UITabBar (= 0.0.7)
     - ZHHAnneKit/UIKit/UITableView (= 0.0.7)
     - ZHHAnneKit/UIKit/UITextField (= 0.0.7)
     - ZHHAnneKit/UIKit/UITextView (= 0.0.7)
@@ -71,17 +68,15 @@ PODS:
   - ZHHAnneKit/UIKit/UIButton (0.0.7)
   - ZHHAnneKit/UIKit/UIColor (0.0.7)
   - ZHHAnneKit/UIKit/UIControl (0.0.7)
-  - ZHHAnneKit/UIKit/UIDevice (0.0.7)
-  - ZHHAnneKit/UIKit/UIFont (0.0.7)
+  - ZHHAnneKit/UIKit/UIDevice (0.0.7):
+    - ZHHAnneKit/CommonTools
   - ZHHAnneKit/UIKit/UIImage (0.0.7)
   - ZHHAnneKit/UIKit/UIImageView (0.0.7)
   - ZHHAnneKit/UIKit/UILabel (0.0.7)
   - ZHHAnneKit/UIKit/UINavigationController (0.0.7)
   - ZHHAnneKit/UIKit/UINavigationItem (0.0.7)
-  - ZHHAnneKit/UIKit/UIScreen (0.0.7)
   - ZHHAnneKit/UIKit/UISlider (0.0.7)
   - ZHHAnneKit/UIKit/UISplitViewController (0.0.7)
-  - ZHHAnneKit/UIKit/UITabBar (0.0.7)
   - ZHHAnneKit/UIKit/UITableView (0.0.7)
   - ZHHAnneKit/UIKit/UITextField (0.0.7)
   - ZHHAnneKit/UIKit/UITextView (0.0.7)
@@ -97,7 +92,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZHHAnneKit: 65006b995f3bfa97035d4ba8e3a1fe23547cfc05
+  ZHHAnneKit: 5f628e71a683bf008c6ea653b56c636eaf40b707
 
 PODFILE CHECKSUM: ec420e4b32b5884adfe9f94cf1e94d4bb7d51e3d
 
