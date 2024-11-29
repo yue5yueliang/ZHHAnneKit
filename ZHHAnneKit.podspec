@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
 
   # 公共头文件
-  s.public_header_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
-  s.source_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
+  s.public_header_files = 'ZHHAnneKit/Classes/**/*.h'
+  s.source_files = 'ZHHAnneKit/Classes/**/*.{h,m}'
 
   ### Foundation 子模块 ###
   s.subspec 'Foundation' do |foundation|
