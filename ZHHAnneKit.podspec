@@ -39,10 +39,9 @@ Pod::Spec.new do |s|
     uikit.frameworks = 'UIKit'
 
     %w[
-      UIApplication UIBarButtonItem UIButton UIColor UIControl UIImage
-      UIImageView UILabel UINavigationController UINavigationItem UISlider
-      UISplitViewController UITableView UITextField UITextView UIView UIViewController
-      UIWindow
+      UIApplication UIColor UIControl UIImageView UILabel UINavigationController
+      UINavigationItem UISlider UISplitViewController UITableView UITextField
+      UITextView UIView UIViewController UIWindow
     ].each do |subspec_name|
       uikit.subspec subspec_name do |subspec|
         subspec.public_header_files = "ZHHAnneKit/Classes/UIKit/#{subspec_name}/*.h"
@@ -52,19 +51,27 @@ Pod::Spec.new do |s|
 
     # 特定依赖关系
     uikit.subspec 'UIBarButtonItem' do |barbuttonitem|
-      barbuttonitem.dependency 'ZHHAnneKit/UIKit/UIColor'
-      barbuttonitem.dependency 'ZHHAnneKit/UIKit/UIView'
+      barbuttonitem.public_header_files = "ZHHAnneKit/Classes/UIKit/UIBarButtonItem/*.h"
+      barbuttonitem.source_files = "ZHHAnneKit/Classes/UIKit/UIBarButtonItem/*.{h,m}"
+      barbuttonitem.dependency 'ZHHAnneKit/UIKit/UIColor' # 引入 UIColor+ZHHUtilities.h 的依赖
+      barbuttonitem.dependency 'ZHHAnneKit/UIKit/UIView'  # 引入 UIView+ZHHFrame.h 的依赖
     end
 
     uikit.subspec 'UIButton' do |button|
-      button.dependency 'ZHHAnneKit/UIKit/UIImage'
+      button.public_header_files = "ZHHAnneKit/Classes/UIKit/UIButton/*.h" # 公开的头文件路径
+      button.source_files = "ZHHAnneKit/Classes/UIKit/UIButton/*.{h,m}"    # 源文件路径
+      button.dependency 'ZHHAnneKit/UIKit/UIImage'  # 声明对 UIImage 模块的依赖
     end
 
     uikit.subspec 'UIDevice' do |device|
+      device.public_header_files = "ZHHAnneKit/Classes/UIKit/UIDevice/*.h" # 公开的头文件路径
+      device.source_files = "ZHHAnneKit/Classes/UIKit/UIDevice/*.{h,m}"    # 源文件路径
       device.dependency 'ZHHAnneKit/CommonTools'
     end
 
     uikit.subspec 'UIImage' do |image|
+      image.public_header_files = "ZHHAnneKit/Classes/UIKit/UIImage/*.h" # 公开的头文件路径
+      image.source_files = "ZHHAnneKit/Classes/UIKit/UIImage/*.{h,m}"    # 源文件路径
       image.dependency 'ZHHAnneKit/UIKit/UIColor'
     end
   end
