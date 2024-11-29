@@ -1,11 +1,3 @@
-#
-# Be sure to run `pod lib lint ZHHAnneKit.podspec` to ensure this is a
-# valid spec before submitting.
-#
-# For more information on Podspec syntax, visit:
-# https://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
   s.version          = '0.0.7'
@@ -23,10 +15,10 @@ Pod::Spec.new do |s|
   s.public_header_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
   s.source_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
 
-  ### Foundation Subspecs ###
+  ### Foundation 子模块 ###
   s.subspec 'Foundation' do |foundation|
-    foundation.public_header_files = 'ZHHAnneKit/Classes/Foundation/ZHHFoundation.h'
-    foundation.source_files = 'ZHHAnneKit/Classes/Foundation/ZHHFoundation.h'
+    foundation.public_header_files = 'ZHHAnneKit/Classes/Foundation/**/*.h'
+    foundation.source_files = 'ZHHAnneKit/Classes/Foundation/**/*.{h,m}'
 
     %w[
       NSArray NSAttributedString NSBundle NSData NSDate NSDecimalNumber NSDictionary
@@ -34,15 +26,16 @@ Pod::Spec.new do |s|
       NSNumber NSObject NSString NSTimer
     ].each do |subspec_name|
       foundation.subspec subspec_name do |subspec|
+        subspec.public_header_files = "ZHHAnneKit/Classes/Foundation/#{subspec_name}/*.h"
         subspec.source_files = "ZHHAnneKit/Classes/Foundation/#{subspec_name}/*.{h,m}"
       end
     end
   end
 
-  ### UIKit Subspecs ###
+  ### UIKit 子模块 ###
   s.subspec 'UIKit' do |uikit|
-    uikit.public_header_files = 'ZHHAnneKit/Classes/UIKit/ZHHUIKit.h'
-    uikit.source_files = 'ZHHAnneKit/Classes/UIKit/ZHHUIKit.h'
+    uikit.public_header_files = 'ZHHAnneKit/Classes/UIKit/**/*.h'
+    uikit.source_files = 'ZHHAnneKit/Classes/UIKit/**/*.{h,m}'
     uikit.frameworks = 'UIKit'
 
     %w[
@@ -52,6 +45,7 @@ Pod::Spec.new do |s|
       UIWindow
     ].each do |subspec_name|
       uikit.subspec subspec_name do |subspec|
+        subspec.public_header_files = "ZHHAnneKit/Classes/UIKit/#{subspec_name}/*.h"
         subspec.source_files = "ZHHAnneKit/Classes/UIKit/#{subspec_name}/*.{h,m}"
       end
     end
@@ -75,20 +69,22 @@ Pod::Spec.new do |s|
     end
   end
 
-  ### QuartzCore Subspecs ###
+  ### QuartzCore 子模块 ###
   s.subspec 'QuartzCore' do |quartzcore|
-    quartzcore.public_header_files = 'ZHHAnneKit/Classes/QuartzCore/ZHHQuartzCore.h'
-    quartzcore.source_files = 'ZHHAnneKit/Classes/QuartzCore/ZHHQuartzCore.h'
+    quartzcore.public_header_files = 'ZHHAnneKit/Classes/QuartzCore/**/*.h'
+    quartzcore.source_files = 'ZHHAnneKit/Classes/QuartzCore/**/*.{h,m}'
 
     %w[CALayer CATransaction].each do |subspec_name|
       quartzcore.subspec subspec_name do |subspec|
+        subspec.public_header_files = "ZHHAnneKit/Classes/QuartzCore/#{subspec_name}/*.h"
         subspec.source_files = "ZHHAnneKit/Classes/QuartzCore/#{subspec_name}/*.{h,m}"
       end
     end
   end
 
-  ### CommonTools Subspec ###
+  ### CommonTools 子模块 ###
   s.subspec 'CommonTools' do |commontools|
+    commontools.public_header_files = 'ZHHAnneKit/Classes/CommonTools/**/*.h'
     commontools.source_files = 'ZHHAnneKit/Classes/CommonTools/**/*.{h,m}'
   end
 end
