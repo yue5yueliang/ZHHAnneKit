@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.0.8'
+  s.version          = '0.0.9'
   s.summary          = '一套实用的分类与工具库，提升开发效率。'
   s.description      = <<-DESC
   ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation 和 UIKit 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。
@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
 
   # 公共头文件
-#  s.public_header_files = 'ZHHAnneKit/Classes/**/*.h'
-#  s.source_files = 'ZHHAnneKit/Classes/**/*.{h,m}'
+  s.public_header_files = 'ZHHAnneKit/Classes/**/*.h'
+  s.source_files = 'ZHHAnneKit/Classes/**/*.{h,m}'
 
   ### Foundation 子模块 ###
   s.subspec 'Foundation' do |foundation|

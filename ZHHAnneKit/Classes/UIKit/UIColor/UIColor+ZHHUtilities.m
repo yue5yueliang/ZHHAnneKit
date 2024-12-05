@@ -34,21 +34,6 @@
     return @"#000000";
 }
 
-- (uint32_t)zhh_rgbValue {
-    CGFloat r = 0, g = 0, b = 0, a = 0;
-    
-    // 通过 UIColor 的方法获取 RGBA 的分量值（0.0 - 1.0）
-    [self getRed:&r green:&g blue:&b alpha:&a];
-    
-    // 将每个分量值从 0.0 - 1.0 转换为 0 - 255 的范围
-    uint8_t red = r * 255;
-    uint8_t green = g * 255;
-    uint8_t blue = b * 255;
-    
-    // 按照 24 位 RGB 格式，将红色值放在高 8 位，绿色值放在中间 8 位，蓝色值放在低 8 位
-    return (red << 16) + (green << 8) + blue;
-}
-
 /// 从 16 进制整数生成 UIColor（默认透明度为 1.0）
 /// @param hexColor 16 进制颜色值（如 0xFF5733）
 /// @param alpha 透明度（可选），范围 [0, 1]
@@ -163,6 +148,43 @@
 /// @return 转换后的 UIColor
 + (instancetype)zhh_colorWithRed:(uint8_t)red green:(uint8_t)green blue:(uint8_t)blue alpha:(CGFloat)alpha {
     return [UIColor colorWithRed:red / 255.0 green:green / 255.0 blue:blue / 255.0 alpha:alpha];
+}
+
+/// 获取 UIColor 对象的 RGB 整数值（0xRRGGBB）
+- (uint32_t)zhh_rgbValue {
+    CGFloat r = 0, g = 0, b = 0, a = 0;
+    
+    // 通过 UIColor 的方法获取 RGBA 的分量值（0.0 - 1.0）
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    
+    // 将每个分量值从 0.0 - 1.0 转换为 0 - 255 的范围
+    uint8_t red = r * 255;
+    uint8_t green = g * 255;
+    uint8_t blue = b * 255;
+    
+    // 按照 24 位 RGB 格式，将红色值放在高 8 位，绿色值放在中间 8 位，蓝色值放在低 8 位
+    return (red << 16) + (green << 8) + blue;
+}
+
+/// 从 UIColor 获取 RGB 值并打印
+/// @param color 输入的 UIColor 对象
++ (void)zhh_rgbValueFromUIColor:(UIColor *)color {
+    if (!color) {
+        NSLog(@"无法获取颜色值，因为输入的颜色为空");
+        return;
+    }
+
+    // 使用 Core Graphics 提取颜色的 RGBA 组件
+    CGFloat r = 0, g = 0, b = 0, a = 0;
+    if ([color getRed:&r green:&g blue:&b alpha:&a]) {
+        // 转换为 0-255 的整数 RGB 值
+        NSInteger redValue = r * 255;
+        NSInteger greenValue = g * 255;
+        NSInteger blueValue = b * 255;
+        NSLog(@"--- 红色值: %ld, 绿色值: %ld, 蓝色值: %ld ---", (long)redValue, (long)greenValue, (long)blueValue);
+    } else {
+        NSLog(@"无法获取 RGB 值，请确保输入的颜色是通过 RGB 模型创建的");
+    }
 }
 
 /// 生成随机颜色

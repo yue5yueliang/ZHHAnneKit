@@ -26,9 +26,6 @@ typedef NS_ENUM(NSUInteger,ZHHGradietDirectionType) {
 /// @return 十六进制颜色字符串，格式为 #RRGGBB
 - (NSString *)zhh_hexString;
 
-/// 获取 UIColor 对象的 RGB 整数值（0xRRGGBB）
-- (uint32_t)zhh_rgbValue;
-
 /// 从 16 进制整数生成 UIColor（默认透明度为 1.0）
 /// @param hexColor 16 进制颜色值（如 0xFF5733）
 /// @param alpha 透明度（可选），范围 [0, 1]
@@ -70,6 +67,13 @@ typedef NS_ENUM(NSUInteger,ZHHGradietDirectionType) {
 /// @param alpha 透明度，范围 [0, 1]
 /// @return 转换后的 UIColor
 + (instancetype)zhh_colorWithRed:(uint8_t)red green:(uint8_t)green blue:(uint8_t)blue alpha:(CGFloat)alpha;
+
+/// 获取 UIColor 对象的 RGB 整数值（0xRRGGBB）
+- (uint32_t)zhh_rgbValue;
+
+/// 从 UIColor 获取 RGB 值并打印
+/// @param color 输入的 UIColor 对象
++ (void)zhh_rgbValueFromUIColor:(UIColor *)color;
 
 /// 生成随机颜色
 /// @param alpha 透明度，范围 [0, 1]，默认值为 1
