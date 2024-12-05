@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param size 目标尺寸，图片会调整到此大小的画布上
 /// @param backgroundColor 背景颜色，为 nil 时背景透明
 /// @return 调整后的图片，或在特定情况下返回原图片
-- (UIImage *)resizeImageToSize:(CGSize)size backgroundColor:(UIColor *)backgroundColor;
+- (UIImage *)zhh_resizeImageToSize:(CGSize)size backgroundColor:(UIColor *)backgroundColor;
 @end
 
 NS_ASSUME_NONNULL_END
