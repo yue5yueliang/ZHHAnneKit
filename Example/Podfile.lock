@@ -64,13 +64,17 @@ PODS:
     - ZHHAnneKit/UIKit/UIViewController (= 0.0.7)
     - ZHHAnneKit/UIKit/UIWindow (= 0.0.7)
   - ZHHAnneKit/UIKit/UIApplication (0.0.7)
-  - ZHHAnneKit/UIKit/UIBarButtonItem (0.0.7)
-  - ZHHAnneKit/UIKit/UIButton (0.0.7)
+  - ZHHAnneKit/UIKit/UIBarButtonItem (0.0.7):
+    - ZHHAnneKit/UIKit/UIColor
+    - ZHHAnneKit/UIKit/UIView
+  - ZHHAnneKit/UIKit/UIButton (0.0.7):
+    - ZHHAnneKit/UIKit/UIImage
   - ZHHAnneKit/UIKit/UIColor (0.0.7)
   - ZHHAnneKit/UIKit/UIControl (0.0.7)
   - ZHHAnneKit/UIKit/UIDevice (0.0.7):
     - ZHHAnneKit/CommonTools
-  - ZHHAnneKit/UIKit/UIImage (0.0.7)
+  - ZHHAnneKit/UIKit/UIImage (0.0.7):
+    - ZHHAnneKit/UIKit/UIColor
   - ZHHAnneKit/UIKit/UIImageView (0.0.7)
   - ZHHAnneKit/UIKit/UILabel (0.0.7)
   - ZHHAnneKit/UIKit/UINavigationController (0.0.7)
@@ -92,8 +96,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZHHAnneKit: 5f628e71a683bf008c6ea653b56c636eaf40b707
+  ZHHAnneKit: 99e9c2fa0e379246753fa29c82515d0a8b035883
 
 PODFILE CHECKSUM: ec420e4b32b5884adfe9f94cf1e94d4bb7d51e3d
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

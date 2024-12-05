@@ -18,6 +18,7 @@
 #import <ZHHAnneKit/UIButton+ZHHIndicator.h>
 #import <ZHHAnneKit/UIButton+ZHHUtilities.h>
 
+#import <ZHHAnneKit/UICollectionView+ZHHUtilities.h>
 #import <ZHHAnneKit/UIColor+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UIDevice+ZHHUtilities.h>
@@ -44,6 +45,7 @@
 #import <ZHHAnneKit/UISplitViewController+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UITableView+ZHHUtilities.h>
+#import <ZHHAnneKit/UITableViewCell+ZHHUtilities.h>
 #import <ZHHAnneKit/UITableViewHeaderFooterView+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UITextField+ZHHCommon.h>
@@ -72,6 +74,7 @@
 #import "UIButton+ZHHIndicator.h"
 #import "UIButton+ZHHUtilities.h"
 
+#import "UICollectionView+ZHHUtilities.h"
 #import "UIColor+ZHHUtilities.h"
 
 #import "UIDevice+ZHHUtilities.h"
@@ -98,6 +101,7 @@
 #import "UISplitViewController+ZHHUtilities.h"
 
 #import "UITableView+ZHHUtilities.h"
+#import "UITableViewCell+ZHHUtilities.h"
 #import "UITableViewHeaderFooterView+ZHHUtilities.h"
 
 #import "UITextField+ZHHCommon.h"

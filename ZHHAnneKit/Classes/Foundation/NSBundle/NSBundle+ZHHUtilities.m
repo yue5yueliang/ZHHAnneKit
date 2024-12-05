@@ -66,22 +66,6 @@
     return content;
 }
 
-+ (NSDictionary *)zhh_jsonFileNamed:(NSString *)fileName {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
-    if (!filePath) return nil;
-
-    NSData *jsonData = [NSData dataWithContentsOfFile:filePath];
-    if (!jsonData) return nil;
-
-    NSError *error = nil;
-    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-    if (error) {
-        NSLog(@"Error parsing JSON file %@.json: %@", fileName, error.localizedDescription);
-        return nil;
-    }
-    return jsonDict;
-}
-
 + (NSString *)zhh_filePathNamed:(NSString *)fileName ofType:(NSString *)type {
     return [[NSBundle mainBundle] pathForResource:fileName ofType:type];
 }

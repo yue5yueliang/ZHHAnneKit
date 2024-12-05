@@ -312,4 +312,47 @@
     return (CGSizeMake(w, h));
 }
 
+/// 动态调整图片尺寸并指定背景颜色的辅助方法
+/// @discussion 此方法将当前图片调整为指定尺寸，并可设置背景颜色。原图片居中绘制于目标画布内，若图片尺寸超出目标尺寸，则直接返回原图片。
+/// @param size 目标尺寸，图片会调整到此大小的画布上
+/// @param backgroundColor 背景颜色，为 nil 时背景透明
+/// @return 调整后的图片，或在特定情况下返回原图片
+- (UIImage *)zhh_resizeImageToSize:(CGSize)size backgroundColor:(UIColor *)backgroundColor {
+    // 1. 检查图片是否存在，以及目标尺寸是否有效
+    if (!self || size.width <= 0 || size.height <= 0) {
+        NSLog(@"输入无效：图片为空或尺寸无效。");
+        return self ?: nil; // 防止图片为空导致崩溃
+    }
+
+    // 2. 如果原图尺寸比目标尺寸大，不进行缩放，直接返回原图
+    CGSize originalSize = self.size;
+    if (originalSize.width > size.width || originalSize.height > size.height) {
+        NSLog(@"原始图片尺寸 (%@) 超出目标尺寸 (%@)，返回原始图片。", NSStringFromCGSize(originalSize), NSStringFromCGSize(size));
+        return self;
+    }
+
+    // 3. 创建新的绘图上下文
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+
+    // 4. 填充背景颜色
+    if (backgroundColor) {
+        [backgroundColor setFill];
+        UIRectFill(CGRectMake(0, 0, size.width, size.height));
+    }
+
+    // 5. 计算原图在目标画布上的绘制位置（居中）
+    CGFloat xPos = (size.width - originalSize.width) / 2.0;
+    CGFloat yPos = (size.height - originalSize.height) / 2.0;
+
+    // 6. 在目标位置绘制原图
+    [self drawInRect:CGRectMake(xPos, yPos, originalSize.width, originalSize.height)];
+
+    // 7. 从上下文中获取新图片
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+
+    // 8. 结束绘图上下文
+    UIGraphicsEndImageContext();
+
+    return newImage;
+}
 @end

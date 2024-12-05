@@ -26,8 +26,8 @@ typedef NS_ENUM(NSUInteger,ZHHGradietDirectionType) {
 /// @return 十六进制颜色字符串，格式为 #RRGGBB
 - (NSString *)zhh_hexString;
 
-/// 控制台打印RGB值
-- (void)zhh_rgbValues;
+/// 获取 UIColor 对象的 RGB 整数值（0xRRGGBB）
+- (uint32_t)zhh_rgbValue;
 
 /// 从 16 进制整数生成 UIColor（默认透明度为 1.0）
 /// @param hexColor 16 进制颜色值（如 0xFF5733）

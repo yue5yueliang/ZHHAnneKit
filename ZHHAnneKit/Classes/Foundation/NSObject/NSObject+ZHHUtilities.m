@@ -9,7 +9,58 @@
 #import "NSObject+ZHHUtilities.h"
 #import <objc/runtime.h>
 
+static char commonCallbackKey;
+
 @implementation NSObject (ZHHUtilities)
+
+/// 获取当前窗口的安全区域内边距
+/// @return UIEdgeInsets 表示窗口的安全区域内边距
+- (UIEdgeInsets)zhh_safeAreaInsets {
+    // 获取主窗口
+    UIWindow *keyWindow = [UIApplication sharedApplication].windows.firstObject;
+    // 确保 keyWindow 存在
+    if (keyWindow) {
+        return keyWindow.safeAreaInsets;
+    }
+    return UIEdgeInsetsZero;
+}
+
+/// 获取状态栏的高度
+/// @return CGFloat 表示状态栏的高度
+- (CGFloat)zhh_statusBarHeight {
+    UIWindow *keyWindow = [UIApplication sharedApplication].windows.firstObject;
+    if (keyWindow) {
+        // 通过 statusBarManager 获取状态栏高度
+        return keyWindow.windowScene.statusBarManager.statusBarFrame.size.height;
+    }
+    return 0;
+}
+
+/// 判断当前设备是否为 iPhone X 及以上型号
+/// @return BOOL 表示是否为 iPhone X 或更新的刘海屏设备
+- (BOOL)zhh_isIPhoneX {
+    // 判断安全区域底部内边距是否大于 0，以此区分是否为刘海屏设备
+    return self.zhh_safeAreaInsets.bottom > 0;
+}
+
+
+/// 设置通用回调 Block
+- (void)setZhh_commonCallback:(nullable ZHHCommonBlock)zhh_commonCallback {
+    objc_setAssociatedObject(self, &commonCallbackKey, zhh_commonCallback, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+/// 获取通用回调 Block
+- (nullable ZHHCommonBlock)zhh_commonCallback {
+    return objc_getAssociatedObject(self, &commonCallbackKey);
+}
+
+/// 触发通用回调，并传递一个值
+- (void)zhh_triggerCommonCallbackWithValue:(nullable id)value {
+    if (self.zhh_commonCallback) {
+        self.zhh_commonCallback(value);
+    }
+}
+
 + (CFTimeInterval)zhh_measureExecutionTimeOfBlock:(void(^)(void))block {
     if (!block) {
         return 0;

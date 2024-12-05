@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "ZHHAnneKit.h"
 #import "ZHHCommonKit.h"
 #import "ZHHCommonTools.h"
 #import "ZHHCountdownManager.h"
@@ -79,6 +78,7 @@
 #import "UIButton+ZHHEmitter.h"
 #import "UIButton+ZHHIndicator.h"
 #import "UIButton+ZHHUtilities.h"
+#import "UICollectionView+ZHHUtilities.h"
 #import "UIColor+ZHHUtilities.h"
 #import "UIControl+ZHHUtilities.h"
 #import "UIDevice+ZHHHardware.h"
@@ -103,6 +103,7 @@
 #import "UISlider+ZHHUtilities.h"
 #import "UISplitViewController+ZHHUtilities.h"
 #import "UITableView+ZHHUtilities.h"
+#import "UITableViewCell+ZHHUtilities.h"
 #import "UITableViewHeaderFooterView+ZHHUtilities.h"
 #import "UITextField+ZHHCommon.h"
 #import "UITextField+ZHHUtilities.h"
@@ -127,6 +128,8 @@
 #import "UIButton+ZHHUtilities.h"
 #import "UIColor+ZHHUtilities.h"
 #import "UIControl+ZHHUtilities.h"
+#import "UIDevice+ZHHHardware.h"
+#import "UIDevice+ZHHUtilities.h"
 #import "UIImage+ZHHAlpha.h"
 #import "UIImage+ZHHBetterFace.h"
 #import "UIImage+ZHHCapture.h"
@@ -147,6 +150,7 @@
 #import "UISlider+ZHHUtilities.h"
 #import "UISplitViewController+ZHHUtilities.h"
 #import "UITableView+ZHHUtilities.h"
+#import "UITableViewCell+ZHHUtilities.h"
 #import "UITableViewHeaderFooterView+ZHHUtilities.h"
 #import "UITextField+ZHHCommon.h"
 #import "UITextField+ZHHUtilities.h"

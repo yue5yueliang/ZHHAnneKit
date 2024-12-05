@@ -29,12 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// NSString *fileContent = [NSBundle zhh_textFileNamed:@"example" ofType:@"txt"];
 + (NSString * _Nullable)zhh_textFileNamed:(NSString * _Nonnull)fileName ofType:(NSString * _Nonnull)type;
 
-/// 加载主包中的 JSON 文件并解析为字典
-/// @param fileName JSON 文件名（不需要后缀）
-/// @return 解析后的 NSDictionary，解析失败则返回 nil
-/// NSDictionary *jsonDict = [NSBundle zhh_jsonFileNamed:@"example"];
-+ (NSDictionary * _Nullable)zhh_jsonFileNamed:(NSString * _Nonnull)fileName;
-
 /// 加载主包中的文件路径
 /// @param fileName 文件名（不需要后缀）
 /// @param type 文件扩展名

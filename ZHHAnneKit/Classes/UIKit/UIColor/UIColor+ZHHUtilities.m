@@ -34,23 +34,19 @@
     return @"#000000";
 }
 
-- (void)zhh_rgbValues {
-    // 获取 RGB 值描述
-    NSString *rgbValue = [NSString stringWithFormat:@"%@", self];
-    // 将 RGB 值描述分隔成字符串
-    NSArray *rgbArr = [rgbValue componentsSeparatedByString:@" "];
+- (uint32_t)zhh_rgbValue {
+    CGFloat r = 0, g = 0, b = 0, a = 0;
     
-    if (rgbArr.count > 3) {
-        // 获取红色值
-        CGFloat r = [[rgbArr objectAtIndex:1] floatValue] * 255;
-        // 获取绿色值
-        CGFloat g = [[rgbArr objectAtIndex:2] floatValue] * 255;
-        // 获取蓝色值
-        CGFloat b = [[rgbArr objectAtIndex:3] floatValue] * 255;
-        NSLog(@"---红色值: %.f, 绿色值: %.f, 蓝色值: %.f---", r, g, b);
-    } else {
-        NSLog(@"无法获取有效的 RGB 值，请确保颜色是由 RGB 模型定义的");
-    }
+    // 通过 UIColor 的方法获取 RGBA 的分量值（0.0 - 1.0）
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    
+    // 将每个分量值从 0.0 - 1.0 转换为 0 - 255 的范围
+    uint8_t red = r * 255;
+    uint8_t green = g * 255;
+    uint8_t blue = b * 255;
+    
+    // 按照 24 位 RGB 格式，将红色值放在高 8 位，绿色值放在中间 8 位，蓝色值放在低 8 位
+    return (red << 16) + (green << 8) + blue;
 }
 
 /// 从 16 进制整数生成 UIColor（默认透明度为 1.0）

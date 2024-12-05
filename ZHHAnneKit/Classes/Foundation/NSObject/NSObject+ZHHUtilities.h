@@ -10,7 +10,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 通用回调 Block 类型
+typedef void (^ZHHCommonBlock)(id _Nullable value);
+
 @interface NSObject (ZHHUtilities)
+
+/// 获取当前窗口的安全区域内边距
+/// @return UIEdgeInsets 表示窗口的安全区域内边距
+- (UIEdgeInsets)zhh_safeAreaInsets;
+
+/// 获取状态栏的高度
+/// @return CGFloat 表示状态栏的高度
+- (CGFloat)zhh_statusBarHeight;
+
+/// 判断当前设备是否为 iPhone X 及以上型号
+/// @return BOOL 表示是否为 iPhone X 或更新的刘海屏设备
+- (BOOL)zhh_isIPhoneX;
+
+/// 设置通用回调 Block
+@property (nonatomic, copy, nullable) ZHHCommonBlock zhh_commonCallback;
+
+/// 触发通用回调，并传递一个值
+/// @param value 回调时传递的值
+- (void)zhh_triggerCommonCallbackWithValue:(nullable id)value;
 
 /**
  *  @brief  测量代码块的执行时间

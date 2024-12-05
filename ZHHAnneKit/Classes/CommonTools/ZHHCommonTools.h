@@ -29,6 +29,30 @@ typedef NS_ENUM(NSInteger, ZHHFeedbackType) {
 /// @param to 随机数的最大值（包含）
 /// @return 返回一个[from, to]区间的随机整数
 + (NSInteger)zhh_randomNumber:(NSInteger)from to:(NSInteger)to;
+/**
+ *  加载并解析指定文件名的 JSON 文件。
+ *
+ *  @param fileName JSON 文件的名称（不包括扩展名）。
+ *  @return 返回解析后的 JSON 数据，可能是 NSDictionary 或 NSArray；若失败返回 nil。
+ *
+ *  @note
+ *  1. 文件必须存储在主工程的 `Bundle` 中，并且扩展名必须是 `.json`。
+ *  2. 如果文件未找到，或者解析失败，会在控制台打印相应的错误信息。
+ *  3. 支持 JSON 数据解析为 `NSDictionary` 或 `NSArray`。
+ *
+ *  使用示例：
+ *  ```objc
+ *  id *json = [ZHHCommonTools zhh_jsonWithFileName:@"example"];
+ *  if ([json isKindOfClass:[NSDictionary class]]) {
+ *      NSDictionary *dict = (NSDictionary *)json;
+ *      // 处理字典数据
+ *  } else if ([json isKindOfClass:[NSArray class]]) {
+ *      NSArray *array = (NSArray *)json;
+ *      // 处理数组数据
+ *  }
+ *  ```
+ */
++ (id)zhh_jsonWithFileName:(NSString *)fileName;
 
 /**
  * 将时间字符串格式化为相对时间描述

@@ -29,6 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 同步获取网络图片大小和信号量
 /// @param URL image link
 + (CGSize)zhh_imageAsyncGetSizeWithURL:(NSURL *)URL;
+
+/// 动态调整图片尺寸并指定背景颜色的辅助方法
+/// @discussion 此方法将当前图片调整为指定尺寸，并可设置背景颜色。原图片居中绘制于目标画布内，若图片尺寸超出目标尺寸，则直接返回原图片。
+/// @param size 目标尺寸，图片会调整到此大小的画布上
+/// @param backgroundColor 背景颜色，为 nil 时背景透明
+/// @return 调整后的图片，或在特定情况下返回原图片
+- (UIImage *)resizeImageToSize:(CGSize)size backgroundColor:(UIColor *)backgroundColor;
 @end
 
 NS_ASSUME_NONNULL_END

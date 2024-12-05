@@ -58,6 +58,39 @@
     return (NSInteger)(from + (arc4random() % (to - from + 1)));
 }
 
+/// 加载并解析指定文件名的 JSON 文件。
++ (id)zhh_jsonWithFileName:(NSString *)fileName {
+    // 获取 JSON 文件的路径
+    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
+
+    if (!path) {
+        NSLog(@"JSON file not found");
+        return nil;
+    }
+
+    // 读取文件内容
+    NSData *data = [NSData dataWithContentsOfFile:path options:NSDataReadingMappedIfSafe error:nil];
+    NSError *error;
+    
+    // 解析 JSON 数据
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    
+    if (error) {
+        NSLog(@"Error parsing JSON: %@", error.localizedDescription);
+    } else {
+        if ([jsonObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *jsonDict = (NSDictionary *)jsonObject;
+            NSLog(@"JSON Dictionary: %@", jsonDict);
+            return jsonObject;
+        } else if ([jsonObject isKindOfClass:[NSArray class]]) {
+            NSArray *jsonArray = (NSArray *)jsonObject;
+            NSLog(@"JSON Array: %@", jsonArray);
+            return jsonObject;
+        }
+    }
+    return nil;
+}
+
 /**
  * 将时间字符串格式化为相对时间描述
  *
