@@ -1,36 +1,24 @@
-//    MIT License
 //
-//    Copyright (c) 2019 https://liangdahong.com
+//  UICollectionView+ZHHUtilities.h
+//  ZHHAnneKit
 //
-//    Permission is hereby granted, free of charge, to any person obtaining a copy
-//    of this software and associated documentation files (the "Software"), to deal
-//    in the Software without restriction, including without limitation the rights
-//    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//    copies of the Software, and to permit persons to whom the Software is
-//    furnished to do so, subject to the following conditions:
+//  Created by 桃色三岁 on 2022/8/2.
+//  Copyright © 2022 桃色三岁. All rights reserved.
 //
-//    The above copyright notice and this permission notice shall be included in all
-//    copies or substantial portions of the Software.
-//
-//    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//    SOFTWARE.
 
 #import <UIKit/UIKit.h>
 
-@interface UICollectionView (BMRect)
+@interface UICollectionView (ZHHUtilities)
 
-/// 获取组的 rect
-/// @param section 组
-- (CGRect)bm_rectForSection:(NSInteger)section;
+/// 获取指定节（section）的区域
+/// @param section 节的索引
+/// @return 包含该节所有单元格的矩形区域
+- (CGRect)zhh_rectForSection:(NSInteger)section;
 
-/// 获取 cell 的 rect
-/// @param indexPath indexPath
-- (CGRect)bm_rectForRowAtIndexPath:(NSIndexPath *)indexPath;
+/// 获取指定单元格（cell）的区域
+/// @param indexPath 单元格的索引路径
+/// @return 单元格的矩形区域
+- (CGRect)zhh_rectForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

@@ -1,6 +1,6 @@
 {
   "name": "ZHHAnneKit",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "summary": "一套实用的分类与工具库，提升开发效率。",
   "description": "ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation 和 UIKit 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。",
   "homepage": "https://github.com/yue5yueliang/ZHHAnneKit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/yue5yueliang/ZHHAnneKit.git",
-    "tag": "0.0.7"
+    "tag": "0.0.8"
   },
   "platforms": {
     "ios": "13.0"
