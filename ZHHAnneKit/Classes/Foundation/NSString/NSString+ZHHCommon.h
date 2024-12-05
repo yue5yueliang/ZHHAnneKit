@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, ZHHSpaceTrimOption) {
 /// - 大于等于 100,000,000：以“亿”为单位，保留 1 位小数，例如 "1.2亿"
 ///
 /// @return 格式化后的数量字符串
-- (NSString *)zhh_formatCount;
++ (NSString *)zhh_formatCount:(NSInteger)count;
 
 /// 格式化金额，去掉多余的小数位
 ///

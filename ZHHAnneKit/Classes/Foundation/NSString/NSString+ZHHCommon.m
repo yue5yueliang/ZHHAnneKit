@@ -77,16 +77,15 @@
 /// - 大于等于 100,000,000：以“亿”为单位，保留 1 位小数，例如 "1.2亿"
 ///
 /// @return 格式化后的数量字符串
-- (NSString *)zhh_formatCount {
-    long long count = self.longLongValue; // 获取字符串中的数字值
-    if (count >= 100000000L) { // 大于或等于 1 亿
-        double value = (double)count / 100000000L;
++ (NSString *)zhh_formatCount:(NSInteger)count {
+    if (count >= 100000000) { // 大于或等于 1 亿
+        double value = (double)count / 100000000.0;
         return [NSString stringWithFormat:@"%.1f亿", value];
-    } else if (count >= 10000L) { // 大于或等于 1 万
-        double value = (double)count / 10000L;
+    } else if (count >= 10000) { // 大于或等于 1 万
+        double value = (double)count / 10000.0;
         return [NSString stringWithFormat:@"%.1f万", value];
     } else { // 小于 1 万
-        return [NSString stringWithFormat:@"%lld", count];
+        return [NSString stringWithFormat:@"%ld", (long)count];
     }
 }
 
