@@ -54,6 +54,7 @@ PODS:
     - ZHHAnneKit/UIKit/UIImage (= 0.1.2)
     - ZHHAnneKit/UIKit/UIImageView (= 0.1.2)
     - ZHHAnneKit/UIKit/UILabel (= 0.1.2)
+    - ZHHAnneKit/UIKit/UINavigationBar (= 0.1.2)
     - ZHHAnneKit/UIKit/UINavigationController (= 0.1.2)
     - ZHHAnneKit/UIKit/UINavigationItem (= 0.1.2)
     - ZHHAnneKit/UIKit/UISlider (= 0.1.2)
@@ -79,6 +80,7 @@ PODS:
   - ZHHAnneKit/UIKit/UIImageView (0.1.2)
   - ZHHAnneKit/UIKit/UILabel (0.1.2):
     - ZHHAnneKit/UIKit/UIView
+  - ZHHAnneKit/UIKit/UINavigationBar (0.1.2)
   - ZHHAnneKit/UIKit/UINavigationController (0.1.2)
   - ZHHAnneKit/UIKit/UINavigationItem (0.1.2)
   - ZHHAnneKit/UIKit/UISlider (0.1.2)
@@ -98,7 +100,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZHHAnneKit: 4a622c9d7ce73e401e10ea6826de49fb68279a02
+  ZHHAnneKit: 94be1222afe60595899c9c5f503556857f11dc95
 
 PODFILE CHECKSUM: ec420e4b32b5884adfe9f94cf1e94d4bb7d51e3d
 

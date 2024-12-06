@@ -23,6 +23,7 @@
   "subspecs": [
     {
       "name": "CommonTools",
+      "public_header_files": "ZHHAnneKit/CommonTools/ZHHCommonKit.h",
       "source_files": "ZHHAnneKit/CommonTools/**/*.{h,m}"
     },
     {
@@ -178,6 +179,10 @@
 
             ]
           }
+        },
+        {
+          "name": "UINavigationBar",
+          "source_files": "ZHHAnneKit/UIKit/UINavigationBar/*.{h,m}"
         },
         {
           "name": "UINavigationController",

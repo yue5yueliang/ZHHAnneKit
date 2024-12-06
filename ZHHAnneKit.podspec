@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
 
   ### 一级目录 CommonTools ###
   s.subspec 'CommonTools' do |commontools|
+    commontools.public_header_files = 'ZHHAnneKit/CommonTools/ZHHCommonKit.h'
     commontools.source_files = 'ZHHAnneKit/CommonTools/**/*.{h,m}'
   end
 
@@ -53,10 +54,10 @@ Pod::Spec.new do |s|
     uikit.public_header_files = 'ZHHAnneKit/UIKit/ZHHUIKit.h'
     uikit.source_files = 'ZHHAnneKit/UIKit/**/*.{h,m}'
 
-    %w[UIApplication UIBarButtonItem UIButton UICollectionView UIColor
-    UIControl UIDevice UIImage UIImageView UILabel UINavigationController
-    UINavigationItem UISlider UISplitViewController UITableView UITextField
-    UITextView UIView UIViewController UIWindow].each do |subspec_name|
+    %w[UIApplication UIBarButtonItem UIButton UICollectionView
+    UIColor UIControl UIDevice UIImage UIImageView UILabel UINavigationBar
+    UINavigationController UINavigationItem UISlider UISplitViewController
+    UITableView UITextField UITextView UIView UIViewController UIWindow].each do |subspec_name|
       uikit.subspec subspec_name do |subspec|
         subspec.source_files = "ZHHAnneKit/UIKit/#{subspec_name}/*.{h,m}"
 

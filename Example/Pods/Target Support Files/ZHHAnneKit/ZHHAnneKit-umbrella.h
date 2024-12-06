@@ -70,6 +70,7 @@
 #import "UIImage+ZHHUtilities.h"
 #import "UIImageView+ZHHUtilities.h"
 #import "UILabel+ZHHUtilities.h"
+#import "UINavigationBar+ZHHUtilities.h"
 #import "UINavigationController+ZHHUtilities.h"
 #import "UINavigationItem+ZHHUtilities.h"
 #import "UISlider+ZHHUtilities.h"
