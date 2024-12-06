@@ -2,7 +2,8 @@
 //  UIViewController+ZHHCommon.m
 //  ZHHAnneKit
 //
-//  Created by 桃色三岁 on 2023/3/17.
+//  Created by 桃色三岁 on 2022/8/2.
+//  Copyright © 2022 桃色三岁. All rights reserved.
 //
 
 #import "UIViewController+ZHHCommon.h"

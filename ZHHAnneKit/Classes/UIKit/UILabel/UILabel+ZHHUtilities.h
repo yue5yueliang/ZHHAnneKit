@@ -38,6 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)zhh_labelWithColor:(UIColor *)color font:(UIFont *)font alignment:(NSTextAlignment)alignment;
 
+/// 获取当前 UILabel 文本的宽高
+- (CGSize)zhh_labelSize;
+
 #pragma mark - 文本样式调整
 
 /// 设置 UILabel 的行间距。

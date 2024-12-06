@@ -7,6 +7,7 @@
 //
 
 #import "UILabel+ZHHUtilities.h"
+#import <ZHHAnneKit/UIView+ZHHFrame.h>
 #import <objc/runtime.h>
 
 @implementation UILabel (ZHHUtilities)
@@ -115,6 +116,42 @@
     // 调整尺寸以适应当前内容（默认内容为空）
     [label sizeToFit];
     return label;
+}
+
+/// 获取当前 UILabel 文本的宽高
+- (CGSize)zhh_labelSize {
+    return [UILabel zhh_labelSizeWithText:self.text width:self.zhh_width height:self.zhh_height font:self.font];
+}
+
+/// 根据文本、宽度、高度和字体计算文本所占的宽高
+/// @param text 文本内容
+/// @param width 最大宽度
+/// @param height 最大高度
+/// @param font 字体
+/// @return 文本所占的宽高
++ (CGSize)zhh_labelSizeWithText:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font {
+    if (text.length == 0 || font == nil) {
+        return CGSizeZero; // 如果文本为空或字体为空，直接返回 CGSizeZero
+    }
+
+    CGSize boundingSize = CGSizeZero;
+    if (width > 0) {
+        boundingSize.width = width;
+    } else {
+        boundingSize.width = MAXFLOAT; // 如果宽度为 0，则不限制宽度
+    }
+
+    if (height > 0) {
+        boundingSize.height = height;
+    } else {
+        boundingSize.height = MAXFLOAT; // 如果高度为 0，则不限制高度
+    }
+
+    CGRect boundingRect = [text boundingRectWithSize:boundingSize
+                                             options:NSStringDrawingUsesLineFragmentOrigin
+                                          attributes:@{NSFontAttributeName: font}
+                                             context:nil];
+    return boundingRect.size;
 }
 
 #pragma mark - UILabel 文本样式调整
