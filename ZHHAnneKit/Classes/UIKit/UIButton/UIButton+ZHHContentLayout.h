@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 图文混排布局样式
 typedef NS_ENUM(NSInteger, ZHHButtonContentLayoutStyle) {
-    ZHHButtonContentLayoutStyleNormal,              ///< 图左文右，居中显示
+    ZHHButtonContentLayoutStyleNone,                ///< 图左文右，居中显示默认
+    ZHHButtonContentLayoutStyleCenterImageLeft,     ///< 图右文左，居中显示
     ZHHButtonContentLayoutStyleCenterImageRight,    ///< 图右文左，居中显示
     ZHHButtonContentLayoutStyleCenterImageTop,      ///< 图上文下，居中显示
     ZHHButtonContentLayoutStyleCenterImageBottom,   ///< 图下文上，居中显示

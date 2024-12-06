@@ -38,7 +38,8 @@
 
     // 根据布局样式设置图片和文字的偏移量
     switch (layoutStyle) {
-        case ZHHButtonContentLayoutStyleNormal:
+        case ZHHButtonContentLayoutStyleNone:
+        case ZHHButtonContentLayoutStyleCenterImageLeft:
             // 图片在左，文字在右，居中对齐
             titleEdgeInsets = UIEdgeInsetsMake(0, padding, 0, 0);
             imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, padding);
