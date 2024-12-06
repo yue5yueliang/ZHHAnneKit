@@ -1,6 +1,6 @@
 {
   "name": "ZHHAnneKit",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "summary": "一套实用的分类与工具库，提升开发效率。",
   "description": "ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation、UIKit 和 QuartzCore 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。",
   "homepage": "https://github.com/yue5yueliang/ZHHAnneKit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/yue5yueliang/ZHHAnneKit.git",
-    "tag": "0.1.2"
+    "tag": "0.1.3"
   },
   "platforms": {
     "ios": "13.0"
@@ -23,7 +23,6 @@
   "subspecs": [
     {
       "name": "CommonTools",
-      "public_header_files": "ZHHAnneKit/Classes/CommonTools/ZHHCommonKit.h",
       "source_files": "ZHHAnneKit/Classes/CommonTools/**/*.{h,m}"
     },
     {
@@ -116,6 +115,7 @@
       "name": "UIKit",
       "public_header_files": "ZHHAnneKit/Classes/UIKit/ZHHUIKit.h",
       "source_files": "ZHHAnneKit/Classes/UIKit/ZHHUIKit.h",
+      "frameworks": "UIKit",
       "subspecs": [
         {
           "name": "UIApplication",
@@ -156,7 +156,12 @@
         },
         {
           "name": "UIDevice",
-          "source_files": "ZHHAnneKit/Classes/UIKit/UIDevice/*.{h,m}"
+          "source_files": "ZHHAnneKit/Classes/UIKit/UIDevice/*.{h,m}",
+          "dependencies": {
+            "ZHHAnneKit/CommonTools": [
+
+            ]
+          }
         },
         {
           "name": "UIImage",
@@ -179,6 +184,10 @@
 
             ]
           }
+        },
+        {
+          "name": "UINavigationBar",
+          "source_files": "ZHHAnneKit/Classes/UIKit/UINavigationBar/*.{h,m}"
         },
         {
           "name": "UINavigationBar",
