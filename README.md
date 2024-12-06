@@ -5,27 +5,30 @@
 [![License](https://img.shields.io/cocoapods/l/ZHHAnneKit.svg?style=flat)](https://cocoapods.org/pods/ZHHAnneKit)
 [![Platform](https://img.shields.io/cocoapods/p/ZHHAnneKit.svg?style=flat)](https://cocoapods.org/pods/ZHHAnneKit)
 
-项目中常用到的一些分类及工具类,方便自己开发.
+ZHHAnneKit 是一套轻量化、实用的工具库，包含常用的分类和工具类，帮助开发者提升效率、优化代码复用性，同时简化日常开发工作。
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+要运行示例项目，请先克隆此仓库，然后进入 Example 目录运行 pod install。
 
 ## Requirements
 
 ## Installation
 
-ZHHAnneKit is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+你可以通过 CocoaPods 获取 ZHHAnneKit。
+安装方法：只需在你的 Podfile 中添加以下内容：
 
 ```ruby
 pod 'ZHHAnneKit'
 ```
 
-## Author
+## 作者
 
-桃色三岁, 136769890@qq.com
+桃色三岁
+邮箱: 136769890@qq.com
 
-## License
+## 许可证
 
-ZHHAnneKit is available under the MIT license. See the LICENSE file for more info.
+ZHHAnneKit 遵循 MIT 许可证。详细信息请查看 LICENSE 文件。
+
+希望本工具库能助您开发更高效！如果您有任何建议或问题，欢迎通过 Issue 或邮件与我联系。 😊
