@@ -18,100 +18,81 @@
   "platforms": {
     "ios": "13.0"
   },
-  "preserve_paths": "ZHHAnneKit/**/*",
   "public_header_files": "ZHHAnneKit/ZHHAnneKit.h",
   "source_files": "ZHHAnneKit/**/*.{h,m}",
   "subspecs": [
     {
       "name": "CommonTools",
-      "source_files": "ZHHAnneKit/CommonTools/**/*.{h,m}",
-      "preserve_paths": "ZHHAnneKit/CommonTools/**"
+      "source_files": "ZHHAnneKit/CommonTools/**/*.{h,m}"
     },
     {
       "name": "Foundation",
       "public_header_files": "ZHHAnneKit/Foundation/ZHHFoundation.h",
       "source_files": "ZHHAnneKit/Foundation/**/*.{h,m}",
-      "preserve_paths": "ZHHAnneKit/Foundation/**",
       "subspecs": [
         {
           "name": "NSArray",
-          "source_files": "ZHHAnneKit/Foundation/NSArray/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSArray/*"
+          "source_files": "ZHHAnneKit/Foundation/NSArray/*.{h,m}"
         },
         {
           "name": "NSAttributedString",
-          "source_files": "ZHHAnneKit/Foundation/NSAttributedString/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSAttributedString/*"
+          "source_files": "ZHHAnneKit/Foundation/NSAttributedString/*.{h,m}"
         },
         {
           "name": "NSBundle",
-          "source_files": "ZHHAnneKit/Foundation/NSBundle/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSBundle/*"
+          "source_files": "ZHHAnneKit/Foundation/NSBundle/*.{h,m}"
         },
         {
           "name": "NSData",
-          "source_files": "ZHHAnneKit/Foundation/NSData/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSData/*"
+          "source_files": "ZHHAnneKit/Foundation/NSData/*.{h,m}"
         },
         {
           "name": "NSDate",
-          "source_files": "ZHHAnneKit/Foundation/NSDate/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSDate/*"
+          "source_files": "ZHHAnneKit/Foundation/NSDate/*.{h,m}"
         },
         {
           "name": "NSDecimalNumber",
-          "source_files": "ZHHAnneKit/Foundation/NSDecimalNumber/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSDecimalNumber/*"
+          "source_files": "ZHHAnneKit/Foundation/NSDecimalNumber/*.{h,m}"
         },
         {
           "name": "NSDictionary",
-          "source_files": "ZHHAnneKit/Foundation/NSDictionary/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSDictionary/*"
+          "source_files": "ZHHAnneKit/Foundation/NSDictionary/*.{h,m}"
         },
         {
           "name": "NSException",
-          "source_files": "ZHHAnneKit/Foundation/NSException/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSException/*"
+          "source_files": "ZHHAnneKit/Foundation/NSException/*.{h,m}"
         },
         {
           "name": "NSFileManager",
-          "source_files": "ZHHAnneKit/Foundation/NSFileManager/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSFileManager/*"
+          "source_files": "ZHHAnneKit/Foundation/NSFileManager/*.{h,m}"
         },
         {
           "name": "NSIndexPath",
-          "source_files": "ZHHAnneKit/Foundation/NSIndexPath/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSIndexPath/*"
+          "source_files": "ZHHAnneKit/Foundation/NSIndexPath/*.{h,m}"
         },
         {
           "name": "NSNotification",
-          "source_files": "ZHHAnneKit/Foundation/NSNotification/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSNotification/*"
+          "source_files": "ZHHAnneKit/Foundation/NSNotification/*.{h,m}"
         },
         {
           "name": "NSNotificationCenter",
-          "source_files": "ZHHAnneKit/Foundation/NSNotificationCenter/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSNotificationCenter/*"
+          "source_files": "ZHHAnneKit/Foundation/NSNotificationCenter/*.{h,m}"
         },
         {
           "name": "NSNumber",
-          "source_files": "ZHHAnneKit/Foundation/NSNumber/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSNumber/*"
+          "source_files": "ZHHAnneKit/Foundation/NSNumber/*.{h,m}"
         },
         {
           "name": "NSObject",
-          "source_files": "ZHHAnneKit/Foundation/NSObject/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSObject/*"
+          "source_files": "ZHHAnneKit/Foundation/NSObject/*.{h,m}"
         },
         {
           "name": "NSString",
-          "source_files": "ZHHAnneKit/Foundation/NSString/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSString/*"
+          "source_files": "ZHHAnneKit/Foundation/NSString/*.{h,m}"
         },
         {
           "name": "NSTimer",
-          "source_files": "ZHHAnneKit/Foundation/NSTimer/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/Foundation/NSTimer/*"
+          "source_files": "ZHHAnneKit/Foundation/NSTimer/*.{h,m}"
         }
       ]
     },
@@ -119,17 +100,14 @@
       "name": "QuartzCore",
       "public_header_files": "ZHHAnneKit/QuartzCore/ZHHQuartzCore.h",
       "source_files": "ZHHAnneKit/QuartzCore/**/*.{h,m}",
-      "preserve_paths": "ZHHAnneKit/QuartzCore/**",
       "subspecs": [
         {
           "name": "CALayer",
-          "source_files": "ZHHAnneKit/QuartzCore/CALayer/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/QuartzCore/CALayer/*"
+          "source_files": "ZHHAnneKit/QuartzCore/CALayer/*.{h,m}"
         },
         {
           "name": "CATransaction",
-          "source_files": "ZHHAnneKit/QuartzCore/CATransaction/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/QuartzCore/CATransaction/*"
+          "source_files": "ZHHAnneKit/QuartzCore/CATransaction/*.{h,m}"
         }
       ]
     },
@@ -137,17 +115,14 @@
       "name": "UIKit",
       "public_header_files": "ZHHAnneKit/UIKit/ZHHUIKit.h",
       "source_files": "ZHHAnneKit/UIKit/**/*.{h,m}",
-      "preserve_paths": "ZHHAnneKit/UIKit/**",
       "subspecs": [
         {
           "name": "UIApplication",
-          "source_files": "ZHHAnneKit/UIKit/UIApplication/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIApplication/*"
+          "source_files": "ZHHAnneKit/UIKit/UIApplication/*.{h,m}"
         },
         {
           "name": "UIBarButtonItem",
           "source_files": "ZHHAnneKit/UIKit/UIBarButtonItem/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIBarButtonItem/*",
           "dependencies": {
             "ZHHAnneKit/UIKit/UIView": [
 
@@ -160,7 +135,6 @@
         {
           "name": "UIButton",
           "source_files": "ZHHAnneKit/UIKit/UIButton/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIButton/*",
           "dependencies": {
             "ZHHAnneKit/UIKit/UIImage": [
 
@@ -169,28 +143,23 @@
         },
         {
           "name": "UICollectionView",
-          "source_files": "ZHHAnneKit/UIKit/UICollectionView/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UICollectionView/*"
+          "source_files": "ZHHAnneKit/UIKit/UICollectionView/*.{h,m}"
         },
         {
           "name": "UIColor",
-          "source_files": "ZHHAnneKit/UIKit/UIColor/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIColor/*"
+          "source_files": "ZHHAnneKit/UIKit/UIColor/*.{h,m}"
         },
         {
           "name": "UIControl",
-          "source_files": "ZHHAnneKit/UIKit/UIControl/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIControl/*"
+          "source_files": "ZHHAnneKit/UIKit/UIControl/*.{h,m}"
         },
         {
           "name": "UIDevice",
-          "source_files": "ZHHAnneKit/UIKit/UIDevice/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIDevice/*"
+          "source_files": "ZHHAnneKit/UIKit/UIDevice/*.{h,m}"
         },
         {
           "name": "UIImage",
           "source_files": "ZHHAnneKit/UIKit/UIImage/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIImage/*",
           "dependencies": {
             "ZHHAnneKit/UIKit/UIColor": [
 
@@ -199,13 +168,11 @@
         },
         {
           "name": "UIImageView",
-          "source_files": "ZHHAnneKit/UIKit/UIImageView/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIImageView/*"
+          "source_files": "ZHHAnneKit/UIKit/UIImageView/*.{h,m}"
         },
         {
           "name": "UILabel",
           "source_files": "ZHHAnneKit/UIKit/UILabel/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UILabel/*",
           "dependencies": {
             "ZHHAnneKit/UIKit/UIView": [
 
@@ -214,53 +181,43 @@
         },
         {
           "name": "UINavigationController",
-          "source_files": "ZHHAnneKit/UIKit/UINavigationController/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UINavigationController/*"
+          "source_files": "ZHHAnneKit/UIKit/UINavigationController/*.{h,m}"
         },
         {
           "name": "UINavigationItem",
-          "source_files": "ZHHAnneKit/UIKit/UINavigationItem/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UINavigationItem/*"
+          "source_files": "ZHHAnneKit/UIKit/UINavigationItem/*.{h,m}"
         },
         {
           "name": "UISlider",
-          "source_files": "ZHHAnneKit/UIKit/UISlider/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UISlider/*"
+          "source_files": "ZHHAnneKit/UIKit/UISlider/*.{h,m}"
         },
         {
           "name": "UISplitViewController",
-          "source_files": "ZHHAnneKit/UIKit/UISplitViewController/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UISplitViewController/*"
+          "source_files": "ZHHAnneKit/UIKit/UISplitViewController/*.{h,m}"
         },
         {
           "name": "UITableView",
-          "source_files": "ZHHAnneKit/UIKit/UITableView/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UITableView/*"
+          "source_files": "ZHHAnneKit/UIKit/UITableView/*.{h,m}"
         },
         {
           "name": "UITextField",
-          "source_files": "ZHHAnneKit/UIKit/UITextField/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UITextField/*"
+          "source_files": "ZHHAnneKit/UIKit/UITextField/*.{h,m}"
         },
         {
           "name": "UITextView",
-          "source_files": "ZHHAnneKit/UIKit/UITextView/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UITextView/*"
+          "source_files": "ZHHAnneKit/UIKit/UITextView/*.{h,m}"
         },
         {
           "name": "UIView",
-          "source_files": "ZHHAnneKit/UIKit/UIView/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIView/*"
+          "source_files": "ZHHAnneKit/UIKit/UIView/*.{h,m}"
         },
         {
           "name": "UIViewController",
-          "source_files": "ZHHAnneKit/UIKit/UIViewController/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIViewController/*"
+          "source_files": "ZHHAnneKit/UIKit/UIViewController/*.{h,m}"
         },
         {
           "name": "UIWindow",
-          "source_files": "ZHHAnneKit/UIKit/UIWindow/*.{h,m}",
-          "preserve_paths": "ZHHAnneKit/UIKit/UIWindow/*"
+          "source_files": "ZHHAnneKit/UIKit/UIWindow/*.{h,m}"
         }
       ]
     }
