@@ -12,54 +12,60 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
 
   # 公共头文件
-  s.public_header_files = 'ZHHAnneKit/ZHHAnneKit.h'
+  s.public_header_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
 
   # 源文件路径
-  s.source_files = 'ZHHAnneKit/**/*.{h,m}'
+  s.source_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
 
   ### 一级目录 CommonTools ###
   s.subspec 'CommonTools' do |commontools|
-    commontools.public_header_files = 'ZHHAnneKit/CommonTools/ZHHCommonKit.h'
-    commontools.source_files = 'ZHHAnneKit/CommonTools/**/*.{h,m}'
+    commontools.public_header_files = 'ZHHAnneKit/Classes/CommonTools/ZHHCommonKit.h'
+    commontools.source_files = 'ZHHAnneKit/Classes/CommonTools/**/*.{h,m}'
   end
 
   ### 一级目录 Foundation ###
   s.subspec 'Foundation' do |foundation|
-    foundation.public_header_files = 'ZHHAnneKit/Foundation/ZHHFoundation.h'
-    foundation.source_files = 'ZHHAnneKit/Foundation/**/*.{h,m}'
-
+    # 指定公共头文件
+    foundation.public_header_files = 'ZHHAnneKit/Classes/Foundation/ZHHFoundation.h'
+    # 为公共头文件所在文件夹添加源文件加载
+    foundation.source_files = 'ZHHAnneKit/Classes/Foundation/ZHHFoundation.h'
+    # 子模块
     %w[NSArray NSAttributedString NSBundle NSData NSDate NSDecimalNumber
     NSDictionary NSException NSFileManager NSIndexPath NSNotification
     NSNotificationCenter NSNumber NSObject NSString NSTimer].each do |subspec_name|
       foundation.subspec subspec_name do |subspec|
-        subspec.source_files = "ZHHAnneKit/Foundation/#{subspec_name}/*.{h,m}"
+        subspec.source_files = "ZHHAnneKit/Classes/Foundation/#{subspec_name}/*.{h,m}"
       end
     end
   end
 
   ### 一级目录 QuartzCore ###
   s.subspec 'QuartzCore' do |quartzcore|
-    quartzcore.public_header_files = 'ZHHAnneKit/QuartzCore/ZHHQuartzCore.h'
-    quartzcore.source_files = 'ZHHAnneKit/QuartzCore/**/*.{h,m}'
-
+    # 指定公共头文件
+    quartzcore.public_header_files = 'ZHHAnneKit/Classes/QuartzCore/ZHHQuartzCore.h'
+    # 为公共头文件所在文件夹添加源文件加载
+    quartzcore.source_files = 'ZHHAnneKit/Classes/QuartzCore/ZHHQuartzCore.h'
+    # 子模块
     %w[CALayer CATransaction].each do |subspec_name|
       quartzcore.subspec subspec_name do |subspec|
-        subspec.source_files = "ZHHAnneKit/QuartzCore/#{subspec_name}/*.{h,m}"
+        subspec.source_files = "ZHHAnneKit/Classes/QuartzCore/#{subspec_name}/*.{h,m}"
       end
     end
   end
 
   ### 一级目录 UIKit ###
   s.subspec 'UIKit' do |uikit|
-    uikit.public_header_files = 'ZHHAnneKit/UIKit/ZHHUIKit.h'
-    uikit.source_files = 'ZHHAnneKit/UIKit/**/*.{h,m}'
-
+      # 指定公共头文件
+    uikit.public_header_files = 'ZHHAnneKit/Classes/UIKit/ZHHUIKit.h'
+    # 为公共头文件所在文件夹添加源文件加载
+    uikit.source_files = 'ZHHAnneKit/Classes/UIKit/ZHHUIKit.h'
+    # 子模块
     %w[UIApplication UIBarButtonItem UIButton UICollectionView
     UIColor UIControl UIDevice UIImage UIImageView UILabel UINavigationBar
     UINavigationController UINavigationItem UISlider UISplitViewController
     UITableView UITextField UITextView UIView UIViewController UIWindow].each do |subspec_name|
       uikit.subspec subspec_name do |subspec|
-        subspec.source_files = "ZHHAnneKit/UIKit/#{subspec_name}/*.{h,m}"
+        subspec.source_files = "ZHHAnneKit/Classes/UIKit/#{subspec_name}/*.{h,m}"
 
         # 根据依赖添加子模块依赖关系
         case subspec_name
