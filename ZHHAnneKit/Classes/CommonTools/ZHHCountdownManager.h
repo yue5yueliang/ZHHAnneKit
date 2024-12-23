@@ -1,8 +1,9 @@
 //
 //  ZHHCountdownManager.h
-//  Pods
+//  ZHHAnneKit
 //
-//  Created by 桃色三岁 on 2024/11/25.
+//  Created by 桃色三岁 on 2022/9/22.
+//  Copyright © 2022 桃色三岁. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

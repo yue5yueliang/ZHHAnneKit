@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.1.4'
+  s.version          = '0.1.5'
   s.summary          = '一套实用的分类与工具库，提升开发效率。'
   s.description      = <<-DESC
   ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation、UIKit 和 QuartzCore 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。
@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
   ### 一级目录 CommonTools ###
   s.subspec 'CommonTools' do |commontools|
     commontools.source_files = 'ZHHAnneKit/Classes/CommonTools/**/*.{h,m}'
+    commontools.dependency 'ZHHAnneKit/UIKit/UITableView'
   end
   
   ### 一级目录 Foundation ###

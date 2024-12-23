@@ -219,9 +219,27 @@ typedef NS_ENUM(NSUInteger, ZHHSpaceTrimOption) {
  *  @discussion
  *  对字符串中中文及特殊字符进行百分号编码，编码后的字符串可以安全地嵌入 URL 请求中。
  *
+ *  NSString *originalString = @"https://example.com/query?name=张三&emoji=👨‍💻";
+    NSString *encodedString = [originalString zhh_encodedURLString];
+    NSLog(@"Encoded String: %@", encodedString);
+    // 输出：Encoded String: https%3A%2F%2Fexample.com%2Fquery%3Fname%3D%E5%BC%A0%E4%B8%89&emoji=%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB
  *  @return 编码后的字符串；如果当前字符串为空或长度为 0，返回 nil
  */
 - (NSString *)zhh_encodedURLString;
+/**
+ *  @brief 将当前字符串进行 URL 解码
+ *
+ *  @discussion
+ *  使用百分号编码的 URL 字符串进行解码，将特殊字符还原到原始字符串形式。
+ *  如果当前字符串为空或解码失败，则返回 nil。
+ *
+ *  NSString *encodedString = @"%E5%BC%A0%E4%B8%89+%E5%A5%BD%E5%8F%8B";
+    NSString *decodedString = [encodedString zhh_decodedURLString];
+    NSLog(@"Decoded String: %@", decodedString);
+    // 输出：Decoded String: 张三 好友
+ *  @return 解码后的字符串
+ */
+- (NSString *)zhh_decodedURLString;
 /**
  *  @brief 将 URL 参数字符串解析为字典
  *

@@ -13,10 +13,16 @@
 #import <ZHHAnneKit/ZHHCommonTools.h>
 #import <ZHHAnneKit/ZHHCountdownManager.h>
 #import <ZHHAnneKit/ZHHKeychainManager.h>
+#import <ZHHAnneKit/ZHHHoveringHeaderView.h>
+#import <ZHHAnneKit/ZHHNonHoveringHeaderView.h>
+#import <ZHHAnneKit/ZHHPrivacyPermissionManager.h>
 #else
 #import "ZHHCommonTools.h"
 #import "ZHHCountdownManager.h"
 #import "ZHHKeychainManager.h"
+#import "ZHHHoveringHeaderView.h"
+#import "ZHHNonHoveringHeaderView.h"
+#import "ZHHPrivacyPermissionManager.h"
 #endif
 
 #endif /* ZHHCommonKit_h */

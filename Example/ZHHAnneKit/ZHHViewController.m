@@ -8,8 +8,6 @@
 
 #import "ZHHViewController.h"
 #import <ZHHAnneKit/ZHHAnneKit.h>
-#import "NonHoveringHeaderView.h"
-#import "HoveringHeaderView.h"
 
 @interface ZHHViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -36,8 +34,8 @@
     [label zhh_addTapActionWithBlock:^(UIGestureRecognizer * _Nonnull gestureRecoginzer) {
         NSLog(@"label点击事件");
     }];
-    [self.tableView registerClass:NonHoveringHeaderView.class forHeaderFooterViewReuseIdentifier:NSStringFromClass(NonHoveringHeaderView.class)];
-    [self.tableView registerClass:HoveringHeaderView.class forHeaderFooterViewReuseIdentifier:NSStringFromClass(HoveringHeaderView.class)];
+    [self.tableView registerClass:ZHHNonHoveringHeaderView.class forHeaderFooterViewReuseIdentifier:NSStringFromClass(ZHHNonHoveringHeaderView.class)];
+    [self.tableView registerClass:ZHHHoveringHeaderView.class forHeaderFooterViewReuseIdentifier:NSStringFromClass(ZHHHoveringHeaderView.class)];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.switchView];
     [self.view bringSubviewToFront:self.switchView];
@@ -85,7 +83,7 @@
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    Class headerClass = self.switchView.isOn ? NonHoveringHeaderView.class : HoveringHeaderView.class;
+    Class headerClass = self.switchView.isOn ? ZHHNonHoveringHeaderView.class : ZHHHoveringHeaderView.class;
     UITableViewHeaderFooterView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:NSStringFromClass(headerClass)];
     header.zhh_tableView = tableView;
     header.zhh_section = section;

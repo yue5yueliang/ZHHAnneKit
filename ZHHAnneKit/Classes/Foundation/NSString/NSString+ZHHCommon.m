@@ -742,7 +742,8 @@
  *  @brief 将当前字符串进行 URL 编码
  *
  *  @discussion
- *  对字符串中中文及特殊字符进行百分号编码，编码后的字符串可以安全地嵌入 URL 请求中。
+ *  对字符串中的中文及特殊字符进行百分号编码，编码后的字符串可以安全地嵌入 URL 请求中。
+ *  遵循 RFC 3986 编码规则，保留部分不需要编码的字符如 "?" 和 "/"，并避免破坏多字节字符。
  *
  *  @return 编码后的字符串；如果当前字符串为空或长度为 0，返回 nil
  */
@@ -751,9 +752,52 @@
     if (self == nil || self.length == 0) {
         return nil;
     }
-    // 使用 URLQueryAllowedCharacterSet 进行百分号编码
-    NSString *encodedURLString = [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    return encodedURLString;
+    
+    // 定义需要移除的保留字符（符合 RFC 3986）
+    static NSString * const kGeneralDelimitersToEncode = @":#[]@"; // 不包括 "?" 和 "/"
+    static NSString * const kSubDelimitersToEncode = @"!$&'()*+,;=";
+    
+    // 构造自定义的字符集，移除需要编码的字符
+    NSMutableCharacterSet *allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+    [allowedCharacterSet removeCharactersInString:[kGeneralDelimitersToEncode stringByAppendingString:kSubDelimitersToEncode]];
+    
+    // 分块处理，防止破坏多字节字符
+    static NSUInteger const batchSize = 50;
+    NSMutableString *escaped = [NSMutableString string];
+    NSUInteger index = 0;
+    
+    while (index < self.length) {
+        // 计算当前分块的范围
+        NSRange range = NSMakeRange(index, MIN(self.length - index, batchSize));
+        // 确保不会截断多字节字符（如 Emoji）
+        range = [self rangeOfComposedCharacterSequencesForRange:range];
+        // 提取子字符串并进行编码
+        NSString *substring = [self substringWithRange:range];
+        NSString *encoded = [substring stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
+        [escaped appendString:encoded];
+        index += range.length;
+    }
+    
+    return escaped;
+}
+
+/**
+ *  @brief 将当前字符串进行 URL 解码
+ *
+ *  @discussion
+ *  使用百分号编码的 URL 字符串进行解码，将特殊字符还原到原始字符串形式。
+ *  如果当前字符串为空或解码失败，则返回 nil。
+ *
+ *  @return 解码后的字符串
+ */
+- (NSString *)zhh_decodedURLString {
+    // 检查当前字符串是否为空
+    if (self == nil || self.length == 0) {
+        return nil;
+    }
+    
+    // 使用现代 API 解码
+    return [self stringByRemovingPercentEncoding];
 }
 
 /**
