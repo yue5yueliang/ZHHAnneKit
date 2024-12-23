@@ -76,3 +76,96 @@ static char zhh_kActionHandlerLongPressGestureKey;
 }
 
 @end
+
+@implementation UIView (LoadingIndicator)
+static char kMaskViewKey;
+static char kLoadingIndicatorKey;
+
+// 默认显示加载指示器
+- (void)zhh_showLoadingIndicator {
+    [self zhh_showLoadingIndicatorWithAlpha:0.8 indicatorStyle:UIActivityIndicatorViewStyleMedium color:nil];
+}
+
+// 带有参数的加载指示器
+- (void)zhh_showLoadingIndicatorWithAlpha:(CGFloat)alpha indicatorStyle:(UIActivityIndicatorViewStyle)style color:(UIColor * _Nullable)color {
+    
+    // 检查是否已存在蒙层
+    UIView *maskView = objc_getAssociatedObject(self, &kMaskViewKey);
+    
+    if (!maskView) {
+        // 创建蒙层视图
+        maskView = [[UIView alloc] initWithFrame:self.bounds];
+        maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:alpha];
+        maskView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        // 添加到当前视图
+        [self addSubview:maskView];
+        
+        // 约束蒙层覆盖整个父视图
+        [NSLayoutConstraint activateConstraints:@[
+            [maskView.topAnchor constraintEqualToAnchor:self.topAnchor],
+            [maskView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+            [maskView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+            [maskView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        ]];
+        
+        // 保存蒙层视图
+        objc_setAssociatedObject(self, &kMaskViewKey, maskView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    // 检查是否已存在加载指示器
+    UIActivityIndicatorView *loadingIndicator = objc_getAssociatedObject(self, &kLoadingIndicatorKey);
+    
+    if (!loadingIndicator) {
+        // 创建加载指示器
+        if (@available(iOS 13.0, *)) {
+            loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:style];
+        } else {
+            loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+        }
+        
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+        loadingIndicator.hidesWhenStopped = YES;
+        loadingIndicator.color = color ?: [UIColor whiteColor]; // 默认白色
+        
+        // 添加加载指示器到蒙层
+        [maskView addSubview:loadingIndicator];
+        
+        // 设置加载指示器居中
+        [NSLayoutConstraint activateConstraints:@[
+            [loadingIndicator.centerXAnchor constraintEqualToAnchor:maskView.centerXAnchor],
+            [loadingIndicator.centerYAnchor constraintEqualToAnchor:maskView.centerYAnchor]
+        ]];
+        
+        // 保存加载指示器
+        objc_setAssociatedObject(self, &kLoadingIndicatorKey, loadingIndicator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    // 开始动画
+    [loadingIndicator startAnimating];
+}
+
+// 隐藏蒙层和加载指示器
+- (void)zhh_hiddenLoadingIndicator {
+    // 获取蒙层视图和加载指示器
+    UIView *maskView = objc_getAssociatedObject(self, &kMaskViewKey);
+    UIActivityIndicatorView *loadingIndicator = objc_getAssociatedObject(self, &kLoadingIndicatorKey);
+    
+    if (loadingIndicator) {
+        [loadingIndicator stopAnimating];
+        [loadingIndicator removeFromSuperview];
+        objc_setAssociatedObject(self, &kLoadingIndicatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    if (maskView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            maskView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [maskView removeFromSuperview];
+            objc_setAssociatedObject(self, &kMaskViewKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }];
+    }
+}
+
+@end
+

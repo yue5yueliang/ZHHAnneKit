@@ -18,6 +18,11 @@
     return [[self zhh_chineseToPinYin] stringByReplacingOccurrencesOfString:@" " withString:@""];
 }
 
+// 返回当前字符串的本地化版本
+- (NSString *)zhh_localized {
+    return NSLocalizedString(self, nil);
+}
+
 /// @brief  获取字符串的拼音首字母
 /// @return 拼音首字母字符串（如“张三”返回“ZS”）
 - (NSString *)zhh_pinyinInitial {

@@ -9,6 +9,33 @@
 #import "UIColor+ZHHUtilities.h"
 
 @implementation UIColor (ZHHUtilities)
+/**
+ 创建一个支持浅色和深色模式的动态颜色
+
+ 此方法根据系统的界面样式（浅色模式或深色模式）返回不同的颜色：
+ - 在 iOS 13 及以上系统中，使用 `UIColor` 的动态特性，自动适配系统模式。
+ - 在 iOS 13 以下版本中，不支持动态颜色，直接返回浅色模式的颜色。
+
+ @param lightColor 浅色模式下使用的颜色
+ @param darkColor 深色模式下使用的颜色
+ @return 一个动态颜色对象，在浅色和深色模式下显示不同的颜色
+ */
++ (UIColor *)colorWithLightColor:(UIColor *)lightColor darkColor:(UIColor *)darkColor {
+    // iOS 13 及以上系统，使用系统自适应暗黑模式的颜色
+    if (@available(iOS 13.0, *)) {
+        return [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                return darkColor;  // 返回暗黑模式颜色
+            } else {
+                return lightColor; // 返回浅色模式颜色
+            }
+        }];
+    } else {
+        // iOS 13 以下，直接返回浅色模式颜色
+        return lightColor;
+    }
+}
+
 /// 将 UIColor 转换为十六进制颜色字符串（默认不带透明度）
 /// @return 十六进制颜色字符串，格式为 #RRGGBB
 - (NSString *)zhh_hexString {

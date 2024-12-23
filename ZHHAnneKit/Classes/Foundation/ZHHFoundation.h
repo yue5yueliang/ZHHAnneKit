@@ -29,6 +29,7 @@
 #import <ZHHAnneKit/NSFileManager+ZHHUtilities.h>
 #import <ZHHAnneKit/NSIndexPath+ZHHUtilities.h>
 #import <ZHHAnneKit/NSNotification+ZHHUtilities.h>
+#import <ZHHAnneKit/NSNotificationCenter+ZHHUtilities.h>
 #import <ZHHAnneKit/NSNumber+ZHHUtilities.h>
 
 #import <ZHHAnneKit/NSObject+ZHHGCDBox.h>
@@ -64,6 +65,7 @@
 #import "NSFileManager+ZHHUtilities.h"
 #import "NSIndexPath+ZHHUtilities.h"
 #import "NSNotification+ZHHUtilities.h"
+#import "NSNotificationCenter+ZHHUtilities.h"
 #import "NSNumber+ZHHUtilities.h"
 
 #import "NSObject+ZHHGCDBox.h"

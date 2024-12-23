@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// @brief  将中文字符串转换为拼音（去除空格和音标）
 /// @return 转换后的拼音字符串（如“你好”返回“nihao”）
 - (NSString *)zhh_pinyin;
+/// 简化加载多语言文本
+- (NSString *)zhh_localized;
 
 /// @brief  获取字符串的拼音首字母
 /// @return 拼音首字母字符串（如“张三”返回“ZS”）

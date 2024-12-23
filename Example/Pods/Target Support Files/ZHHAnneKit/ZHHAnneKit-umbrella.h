@@ -11,9 +11,16 @@
 #endif
 
 #import "ZHHAnneKit.h"
+#import "UIBarButtonItem+ZHHBadgeView.h"
+#import "UITabBarItem+ZHHBadgeView.h"
+#import "UIView+ZHHBadgeView.h"
+#import "ZHHBadgeControl.h"
+#import "ZHHBadgeView.h"
 #import "ZHHCommonKit.h"
 #import "ZHHCommonTools.h"
 #import "ZHHCountdownManager.h"
+#import "ZHHKeychainManager.h"
+#import "ZHHPrivacyPermissionManager.h"
 #import "ZHHFoundation.h"
 #import "NSArray+ZHHCommon.h"
 #import "NSArray+ZHHUtilities.h"

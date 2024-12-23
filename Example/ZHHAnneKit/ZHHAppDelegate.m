@@ -2,8 +2,8 @@
 //  ZHHAppDelegate.m
 //  ZHHAnneKit
 //
-//  Created by ningxiaomo0516 on 09/11/2022.
-//  Copyright (c) 2022 ningxiaomo0516. All rights reserved.
+//  Created by 桃色三岁 on 09/11/2022.
+//  Copyright (c) 2022 桃色三岁. All rights reserved.
 //
 
 #import "ZHHAppDelegate.h"

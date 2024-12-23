@@ -12,9 +12,11 @@
 #if __has_include(<ZHHAnneKit/ZHHCommonKit.h>)
 #import <ZHHAnneKit/ZHHCommonTools.h>
 #import <ZHHAnneKit/ZHHCountdownManager.h>
+#import <ZHHAnneKit/ZHHKeychainManager.h>
 #else
 #import "ZHHCommonTools.h"
 #import "ZHHCountdownManager.h"
+#import "ZHHKeychainManager.h"
 #endif
 
 #endif /* ZHHCommonKit_h */

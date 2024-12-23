@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.1.3'
+  s.version          = '0.1.4'
   s.summary          = '一套实用的分类与工具库，提升开发效率。'
   s.description      = <<-DESC
   ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation、UIKit 和 QuartzCore 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。
@@ -14,14 +14,17 @@ Pod::Spec.new do |s|
   # 公共头文件和源文件
   s.public_header_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
   s.source_files = 'ZHHAnneKit/Classes/ZHHAnneKit.h'
-
+  
+  ### 一级目录 BadgeView ###
+  s.subspec 'BadgeView' do |badgeview|
+      badgeview.source_files = 'ZHHAnneKit/Classes/BadgeView/**/*.{h,m}'
+  end
+  
   ### 一级目录 CommonTools ###
   s.subspec 'CommonTools' do |commontools|
     commontools.source_files = 'ZHHAnneKit/Classes/CommonTools/**/*.{h,m}'
-#        commontools.public_header_files = 'ZHHAnneKit/Classes/CommonTools/ZHHCommonKit.h'
-#        commontools.source_files = 'ZHHAnneKit/Classes/CommonTools/ZHHCommonKit.h'
   end
-
+  
   ### 一级目录 Foundation ###
   s.subspec 'Foundation' do |foundation|
     # 公共头文件和源文件
@@ -134,9 +137,6 @@ Pod::Spec.new do |s|
     uikit.subspec 'UILabel' do |subspec|
         subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UILabel/*.{h,m}'
         subspec.dependency 'ZHHAnneKit/UIKit/UIView'
-    end
-    uikit.subspec 'UINavigationBar' do |subspec|
-        subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UINavigationBar/*.{h,m}'
     end
     uikit.subspec 'UINavigationBar' do |subspec|
         subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UINavigationBar/*.{h,m}'

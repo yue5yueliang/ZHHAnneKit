@@ -1,9 +1,11 @@
 PODS:
   - ZHHAnneKit (0.1.3):
+    - ZHHAnneKit/BadgeView (= 0.1.3)
     - ZHHAnneKit/CommonTools (= 0.1.3)
     - ZHHAnneKit/Foundation (= 0.1.3)
     - ZHHAnneKit/QuartzCore (= 0.1.3)
     - ZHHAnneKit/UIKit (= 0.1.3)
+  - ZHHAnneKit/BadgeView (0.1.3)
   - ZHHAnneKit/CommonTools (0.1.3)
   - ZHHAnneKit/Foundation (0.1.3):
     - ZHHAnneKit/Foundation/NSArray (= 0.1.3)
@@ -101,7 +103,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZHHAnneKit: dc69dc6e015da387c6aacff807f28006f47bc83b
+  ZHHAnneKit: e1611d949efb8db697746e66e2a74e88f400749f
 
 PODFILE CHECKSUM: ec420e4b32b5884adfe9f94cf1e94d4bb7d51e3d
 

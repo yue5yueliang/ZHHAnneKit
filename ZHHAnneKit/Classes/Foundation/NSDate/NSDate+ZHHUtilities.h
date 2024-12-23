@@ -159,6 +159,10 @@ NS_ASSUME_NONNULL_BEGIN
  * @return 比较结果：0（相等），1（date01 大于 date02），-1（date01 小于 date02）
  */
 + (int)zhh_compareDate:(NSString *)date01 withDate:(NSString *)date02 formatter:(NSString *)formatter;
+
+/// 获取系统自上次启动以来的运行时间（以秒为单位）。
+/// @return 系统运行时间（秒），若获取失败返回 -1
++ (NSTimeInterval)timeSinceSystemBoot;
 @end
 
 NS_ASSUME_NONNULL_END

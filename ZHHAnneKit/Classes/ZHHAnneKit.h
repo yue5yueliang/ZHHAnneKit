@@ -19,17 +19,19 @@ FOUNDATION_EXPORT const unsigned char ZHHAnneKitVersionString[];
 // 在这个头文件中导入框架的所有公共头文件
 // 使用 #import <ZHHAnneKit/ZHH*.h> 来导入公共头文件
 #import <ZHHAnneKit/ZHHUIKit.h>
+#import <ZHHAnneKit/ZHHBadgeView.h>
 #import <ZHHAnneKit/ZHHCommonKit.h>
-#import <ZHHAnneKit/ZHHQuartzCore.h>
 #import <ZHHAnneKit/ZHHFoundation.h>
+#import <ZHHAnneKit/ZHHQuartzCore.h>
 
 #else
 
 // 如果不能使用框架导入，则使用本地路径的导入方式
 #import "ZHHUIKit.h"
+#import "ZHHBadgeView.h"
 #import "ZHHCommonKit.h"
-#import "ZHHQuartzCore.h"
 #import "ZHHFoundation.h"
+#import "ZHHQuartzCore.h"
 
 #endif
 

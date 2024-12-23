@@ -11,6 +11,7 @@
 
 #if __has_include(<ZHHAnneKit/ZHHUIKit.h>)
 #import <ZHHAnneKit/UIApplication+ZHHUtilities.h>
+#import <ZHHAnneKit/UIBarButtonItem+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UIButton+ZHHContentLayout.h>
 #import <ZHHAnneKit/UIButton+ZHHEmitter.h>
@@ -20,6 +21,7 @@
 
 #import <ZHHAnneKit/UICollectionView+ZHHUtilities.h>
 #import <ZHHAnneKit/UIColor+ZHHUtilities.h>
+#import <ZHHAnneKit/UIControl+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UIDevice+ZHHUtilities.h>
 #import <ZHHAnneKit/UIDevice+ZHHHardware.h>
@@ -28,15 +30,17 @@
 #import <ZHHAnneKit/UIImage+ZHHBetterFace.h>
 #import <ZHHAnneKit/UIImage+ZHHCapture.h>
 #import <ZHHAnneKit/UIImage+ZHHColor.h>
+#import <ZHHAnneKit/UIImage+ZHHCommon.h>
 #import <ZHHAnneKit/UIImage+ZHHCompress.h>
 #import <ZHHAnneKit/UIImage+ZHHCut.h>
-#import <ZHHAnneKit/UIImage+ZHHCommon.h>
 #import <ZHHAnneKit/UIImage+ZHHMask.h>
 #import <ZHHAnneKit/UIImage+ZHHMerge.h>
 #import <ZHHAnneKit/UIImage+ZHHOrientation.h>
 #import <ZHHAnneKit/UIImage+ZHHQRCode.h>
 #import <ZHHAnneKit/UIImage+ZHHResize.h>
 #import <ZHHAnneKit/UIImage+ZHHUtilities.h>
+
+#import <ZHHAnneKit/UIImageView+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UILabel+ZHHUtilities.h>
 #import <ZHHAnneKit/UINavigationBar+ZHHUtilities.h>
@@ -59,6 +63,7 @@
 #import <ZHHAnneKit/UIView+ZHHCustomBorder.h>
 #import <ZHHAnneKit/UIView+ZHHFrame.h>
 #import <ZHHAnneKit/UIView+ZHHScreenshot.h>
+#import <ZHHAnneKit/UIView+ZHHShake.h>
 #import <ZHHAnneKit/UIView+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UIViewController+ZHHCommon.h>
@@ -68,6 +73,7 @@
 
 #else
 #import "UIApplication+ZHHUtilities.h"
+#import "UIBarButtonItem+ZHHUtilities.h"
 
 #import "UIButton+ZHHContentLayout.h"
 #import "UIButton+ZHHEmitter.h"
@@ -77,6 +83,7 @@
 
 #import "UICollectionView+ZHHUtilities.h"
 #import "UIColor+ZHHUtilities.h"
+#import "UIControl+ZHHUtilities.h"
 
 #import "UIDevice+ZHHUtilities.h"
 #import "UIDevice+ZHHHardware.h"
@@ -85,15 +92,17 @@
 #import "UIImage+ZHHBetterFace.h"
 #import "UIImage+ZHHCapture.h"
 #import "UIImage+ZHHColor.h"
+#import "UIImage+ZHHCommon.h"
 #import "UIImage+ZHHCompress.h"
 #import "UIImage+ZHHCut.h"
-#import "UIImage+ZHHCommon.h"
 #import "UIImage+ZHHMask.h"
 #import "UIImage+ZHHMerge.h"
 #import "UIImage+ZHHOrientation.h"
 #import "UIImage+ZHHQRCode.h"
 #import "UIImage+ZHHResize.h"
 #import "UIImage+ZHHUtilities.h"
+
+#import "UIImageView+ZHHUtilities.h"
 
 #import "UILabel+ZHHUtilities.h"
 #import "UINavigationBar+ZHHUtilities.h"
@@ -116,6 +125,7 @@
 #import "UIView+ZHHCustomBorder.h"
 #import "UIView+ZHHFrame.h"
 #import "UIView+ZHHScreenshot.h"
+#import "UIView+ZHHShake.h"
 #import "UIView+ZHHUtilities.h"
 
 #import "UIViewController+ZHHCommon.h"

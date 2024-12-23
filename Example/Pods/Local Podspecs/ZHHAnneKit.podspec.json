@@ -22,6 +22,10 @@
   "source_files": "ZHHAnneKit/Classes/ZHHAnneKit.h",
   "subspecs": [
     {
+      "name": "BadgeView",
+      "source_files": "ZHHAnneKit/Classes/BadgeView/**/*.{h,m}"
+    },
+    {
       "name": "CommonTools",
       "source_files": "ZHHAnneKit/Classes/CommonTools/**/*.{h,m}"
     },
@@ -184,10 +188,6 @@
 
             ]
           }
-        },
-        {
-          "name": "UINavigationBar",
-          "source_files": "ZHHAnneKit/Classes/UIKit/UINavigationBar/*.{h,m}"
         },
         {
           "name": "UINavigationBar",

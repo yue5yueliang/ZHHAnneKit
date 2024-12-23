@@ -7,6 +7,7 @@
 //
 
 #import "NSDate+ZHHUtilities.h"
+#import <sys/sysctl.h>
 
 @implementation NSDate (ZHHUtilities)
 /// 将日期转化为本地时间
@@ -457,5 +458,38 @@
     
     // 默认返回值（理论上不会到达这里）
     return 0;
+}
+
+/// 获取系统自上次启动以来的运行时间（以秒为单位）。
+/// @return 系统运行时间（秒），若获取失败返回 -1
++ (NSTimeInterval)timeSinceSystemBoot {
+    // 定义变量存储当前时间戳
+    struct timeval now;
+    struct timezone tz;
+    
+    // 获取当前设备的时间戳（受用户手动调整时间的影响）
+    gettimeofday(&now, &tz);
+    
+    // 定义变量存储系统启动时间戳
+    struct timeval boottime;
+    // 设置 sysctl 获取启动时间的参数
+    int mib[2] = {CTL_KERN, KERN_BOOTTIME};
+    size_t size = sizeof(boottime);
+    
+    // 初始化返回值，默认为 -1 表示获取失败
+    double uptime = -1;
+    
+    // 调用 sysctl 获取系统启动时间戳
+    if (sysctl(mib, 2, &boottime, &size, NULL, 0) != -1 && boottime.tv_sec != 0) {
+        // 成功获取系统启动时间
+        // 计算从启动到当前的秒数差值
+        uptime = now.tv_sec - boottime.tv_sec;
+        
+        // 计算从启动到当前的微秒数差值，并转换为秒
+        uptime += (double)(now.tv_usec - boottime.tv_usec) / 1000000.0;
+    }
+    
+    // 返回系统运行时间，若失败则返回 -1
+    return uptime;
 }
 @end

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param type 动画类型（可传入 `kCATransitionFade`, `kCATransitionPush`, `kCATransitionMoveIn`, `kCATransitionReveal` 等）。
  *  @param subtype 动画方向（可传入 `kCATransitionFromRight`, `kCATransitionFromLeft`, `kCATransitionFromTop`, `kCATransitionFromBottom` 等）。
  */
-- (void)zhh_pushViewController:(UIViewController *)controller withCustomTransitionType:(NSString * _Nullable)type subtype:(NSString * _Nullable)subtype;
+- (void)zhh_pushViewController:(UIViewController *)controller withTransitionType:(CATransitionType)type subtype:(CATransitionSubtype)subtype;
 
 /**
  *  弹出当前 ViewController，并带有自定义动画。
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 弹出的 ViewController。
  */
-- (nullable UIViewController *)zhh_popViewControllerWithCustomTransitionType:(NSString * _Nullable)type subtype:(NSString * _Nullable)subtype;
+- (UIViewController *)zhh_popViewController:(CATransitionType)type subtype:(CATransitionSubtype)subtype;
 
 /**
  * @brief 在导航栈中查找指定类型的 ViewController 对象。

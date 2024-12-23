@@ -29,5 +29,20 @@ typedef void (^ZHHGestureActionBlock)(UIGestureRecognizer *gestureRecoginzer);
 - (void)zhh_addLongPressActionWithBlock:(ZHHGestureActionBlock)block;
 @end
 
+
+@interface UIView (LoadingIndicator)
+// 显示默认的蒙层和加载指示器（带默认参数）
+- (void)zhh_showLoadingIndicator;
+
+// 显示带自定义配置的蒙层和加载指示器
+// @param alpha 蒙层的透明度
+// @param style 指示器的样式
+// @param color 指示器的颜色（可为空，默认为白色）
+- (void)zhh_showLoadingIndicatorWithAlpha:(CGFloat)alpha indicatorStyle:(UIActivityIndicatorViewStyle)style color:(UIColor * _Nullable)color;
+
+// 隐藏蒙层和加载指示器
+- (void)zhh_hiddenLoadingIndicator;
+
+@end
 NS_ASSUME_NONNULL_END
 

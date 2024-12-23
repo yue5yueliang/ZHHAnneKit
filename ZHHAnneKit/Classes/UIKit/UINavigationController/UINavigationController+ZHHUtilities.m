@@ -10,7 +10,7 @@
 
 @implementation UINavigationController (ZHHUtilities)
 
-- (void)zhh_pushViewController:(UIViewController *)controller withCustomTransitionType:(NSString * _Nullable)type subtype:(NSString * _Nullable)subtype {
+- (void)zhh_pushViewController:(UIViewController *)controller withTransitionType:(CATransitionType)type subtype:(CATransitionSubtype)subtype {
     if (!controller) return;
 
     // 创建 CATransition 动画
@@ -25,7 +25,8 @@
     [self pushViewController:controller animated:NO];
 }
 
-- (UIViewController *)zhh_popViewControllerWithCustomTransitionType:(NSString * _Nullable)type subtype:(NSString * _Nullable)subtype {
+/// 弹出当前 ViewController，并带有自定义动画。
+- (UIViewController *)zhh_popViewController:(CATransitionType)type subtype:(CATransitionSubtype)subtype {
     if (!self.viewControllers.count) return nil;
 
     // 创建 CATransition 动画
