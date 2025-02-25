@@ -62,6 +62,7 @@
 #import "UIButton+ZHHIndicator.h"
 #import "UIButton+ZHHUtilities.h"
 #import "UICollectionView+ZHHUtilities.h"
+#import "UICollectionViewCell+ZHHUtilities.h"
 #import "UIColor+ZHHUtilities.h"
 #import "UIControl+ZHHUtilities.h"
 #import "UIDevice+ZHHHardware.h"

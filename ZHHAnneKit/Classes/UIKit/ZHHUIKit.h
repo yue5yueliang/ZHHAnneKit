@@ -20,6 +20,7 @@
 #import <ZHHAnneKit/UIButton+ZHHUtilities.h>
 
 #import <ZHHAnneKit/UICollectionView+ZHHUtilities.h>
+#import <ZHHAnneKit/UICollectionViewCell+ZHHUtilities.h>
 #import <ZHHAnneKit/UIColor+ZHHUtilities.h>
 #import <ZHHAnneKit/UIControl+ZHHUtilities.h>
 
@@ -83,6 +84,7 @@
 #import "UIButton+ZHHUtilities.h"
 
 #import "UICollectionView+ZHHUtilities.h"
+#import "UICollectionViewCell+ZHHUtilities.h"
 #import "UIColor+ZHHUtilities.h"
 #import "UIControl+ZHHUtilities.h"
 
