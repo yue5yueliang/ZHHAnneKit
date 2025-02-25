@@ -85,6 +85,11 @@ NS_ASSUME_NONNULL_BEGIN
  * @param contentsGravity 图像填充模式（可选），默认为 kCAGravityResizeAspectFill。
  */
 - (void)zhh_viewBackgroundImage:(UIImage *_Nonnull)image contentsGravity:(CALayerContentsGravity _Nullable)contentsGravity;
+
+/// 添加模糊效果视图
+/// @param style 模糊效果的样式，使用 `UIBlurEffectStyle` 枚举类型，例如 `UIBlurEffectStyleLight`, `UIBlurEffectStyleDark` 等
+- (void)zhh_addBlurEffectWithStyle:(UIBlurEffectStyle)style;
+
 /*
  * 从视图中移除并应用淡入效果
  *

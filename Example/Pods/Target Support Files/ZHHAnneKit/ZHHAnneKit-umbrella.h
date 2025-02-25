@@ -84,6 +84,7 @@
 #import "UINavigationBar+ZHHUtilities.h"
 #import "UINavigationController+ZHHUtilities.h"
 #import "UINavigationItem+ZHHUtilities.h"
+#import "UIScrollView+ZHHUtilities.h"
 #import "UISlider+ZHHUtilities.h"
 #import "UISplitViewController+ZHHUtilities.h"
 #import "UITableView+ZHHUtilities.h"

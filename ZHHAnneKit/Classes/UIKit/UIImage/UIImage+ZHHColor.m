@@ -9,75 +9,91 @@
 #import "UIImage+ZHHColor.h"
 
 @implementation UIImage (ZHHColor)
+/// 生成颜色图片
+/// @param color 生成图片的颜色（不能为空）
+/// @return 如果参数无效，返回空图片；否则返回指定颜色和尺寸的图片
 + (UIImage *)zhh_imageWithColor:(UIColor *)color{
     return [self zhh_imageWithColor:color size:CGSizeMake(1, 1)];
 }
 
 /// 生成颜色图片
-/// @param color 生成图片颜色
-/// @param size 图片尺寸
+/// @param color 生成图片的颜色（不能为空）
+/// @param size 图片的尺寸（宽和高必须大于 0）
+/// @return 如果参数无效，返回空图片；否则返回指定颜色和尺寸的图片
 + (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size{
-    if (!color || size.width <= 0 || size.height <= 0) return [[UIImage alloc] init];
-    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
-    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    return [self zhh_imageWithColor:color size:size cornerRadius:0];
+}
+
+/// 生成指定颜色和尺寸的图片，可选圆角
+/// @param color 图片的填充颜色
+/// @param size 图片尺寸（默认 `CGSizeMake(1, 1)`）
+/// @param cornerRadius 圆角半径（0 表示无圆角）
+/// @return 生成的 UIImage 对象
++ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)cornerRadius {
+    // 校验颜色是否有效
+    if (!color) {
+        NSLog(@"错误：颜色为空，返回空图片。");
+        return [[UIImage alloc] init];
+    }
+    
+    // 校验尺寸是否有效，若无效则设置为默认值 1x1
+    if (size.width <= 0 || size.height <= 0) {
+        NSLog(@"警告：无效的尺寸（%.2f, %.2f），使用默认尺寸（1,1）。", size.width, size.height);
+        size = CGSizeMake(1, 1);
+    }
+
+    // 绘制基础颜色图片
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextFillRect(context, rect);
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
-+ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)radius {
-    if (CGSizeEqualToSize(size, CGSizeZero)) {
-        size = CGSizeMake(1, 1);
-    }
-    
-    CGRect rect = CGRectMake(0, 0, size.width, size.height);
-    UIGraphicsBeginImageContextWithOptions(rect.size, 0, [UIScreen mainScreen].scale);
-    [color set];
-    UIRectFill(rect);
     UIImage *colorImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    UIGraphicsBeginImageContextWithOptions(size, 0, [UIScreen mainScreen].scale);
-    
-    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius] addClip];
+
+    // 如果不需要圆角，直接返回基础图片
+    if (cornerRadius <= 0) {
+        return colorImage;
+    }
+
+    // 绘制带圆角的图片
+    UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:cornerRadius];
+    [path addClip];
     [colorImage drawInRect:rect];
-    
-    colorImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    return colorImage;
+
+    return roundedImage;
 }
 
-/// UIImage加圆角
-/// @param cornerRadius 圆角
-- (UIImage *)zhh_imageWithCornerRadius:(CGFloat)cornerRadius{
+/// 为 UIImage 添加圆角
+/// @param cornerRadius 圆角半径
+- (UIImage *)zhh_imageWithCornerRadius:(CGFloat)cornerRadius {
     return [self zhh_imageWithSize:self.size cornerRadius:cornerRadius];
 }
 
-/// UIImage加圆角
-/// @param size 图片宽高
-/// @param cornerRadius 圆角
-- (UIImage *)zhh_imageWithSize:(CGSize)size cornerRadius:(CGFloat)cornerRadius{
-    CGRect rect = (CGRect){0.f, 0.f, size};
+/// 为 UIImage 添加圆角和自定义尺寸
+/// @param size 图片尺寸
+/// @param cornerRadius 圆角半径
+- (UIImage *)zhh_imageWithSize:(CGSize)size cornerRadius:(CGFloat)cornerRadius {
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
     
-    // 创建一个基于位图的上下文（context）,并将其设置为当前上下文(context) size图片大小，opaque是否透明，scale缩放比列
-    UIGraphicsBeginImageContextWithOptions(size, NO, UIScreen.mainScreen.scale);
-    // 添加路径 UIGraphicsGetCurrentContext(); 设置绘图的上下文 使用贝塞尔曲线设置路径
-    CGContextAddPath(UIGraphicsGetCurrentContext(),[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:cornerRadius].CGPath);
-
-    // context裁剪路径,后续操作的路径
-    CGContextClip(UIGraphicsGetCurrentContext());
+    // 开始图形上下文
+    UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+    
+    // 绘制圆角路径并裁剪
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:cornerRadius];
+    [path addClip];
+    
+    // 将当前图片绘制到上下文中
     [self drawInRect:rect];
-
-    // 获取修改之后的image
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    // 最后移除栈顶的基于当前位图的图形上下文。
+    
+    // 获取圆角图片
+    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
-    return image;
+    
+    return roundedImage;
 }
 
 /// 改变图片颜色

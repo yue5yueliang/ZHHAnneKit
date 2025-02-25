@@ -30,21 +30,12 @@ IB_DESIGNABLE
 /// 图文布局类型
 @property (nonatomic, assign) ZHHButtonContentLayoutStyle zhh_layoutType;
 /// 图文间距
-@property (nonatomic, assign) CGFloat zhh_padding;
-/// 图文边界间距
-@property (nonatomic, assign) CGFloat zhh_periphery;
+@property (nonatomic, assign) CGFloat zhh_spacing;
 
 /// 设置按钮的图文混排布局
 /// @param layoutStyle 图文混排样式
-/// @param padding 图文间距
-/// @param periphery 图文边界间距
-- (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle padding:(CGFloat)padding periphery:(CGFloat)periphery;
-
-/// 设置按钮的图文混排布局（带默认边界间距）
-/// @param layoutStyle 图文混排样式
-/// @param padding 图文间距
-- (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle padding:(CGFloat)padding;
-
+/// @param spacing 图文间距
+- (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle spacing:(CGFloat)spacing;
 @end
 
 NS_ASSUME_NONNULL_END

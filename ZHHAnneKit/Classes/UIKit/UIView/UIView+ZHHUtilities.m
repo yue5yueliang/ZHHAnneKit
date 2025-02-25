@@ -143,6 +143,18 @@
     self.layer.contentsGravity = contentsGravity ?: kCAGravityResizeAspectFill; // 默认值
 }
 
+/// 添加模糊效果视图
+/// @param style 模糊效果的样式，使用 `UIBlurEffectStyle` 枚举类型，例如 `UIBlurEffectStyleLight`, `UIBlurEffectStyleDark` 等
+- (void)zhh_addBlurEffectWithStyle:(UIBlurEffectStyle)style {
+    // 创建模糊效果
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:style];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    effectView.frame = self.bounds;
+    
+    // 将模糊视图添加到视图的最底层
+    [self insertSubview:effectView atIndex:0];
+}
+
 /*
  * 从视图中移除并应用淡入效果
  *

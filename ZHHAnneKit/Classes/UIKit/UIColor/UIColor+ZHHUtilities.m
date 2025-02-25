@@ -424,6 +424,12 @@
                                    point:(CGPoint)point
                                     size:(CGFloat)size
                                direction:(ZHHGradietDirectionType)direction {
+    
+    if (size <= 0) {
+        NSLog(@"错误：渐变绘制的尺寸无效 size:%f",size);
+        return nil;
+    }
+    
     // 计算起点和终点的坐标
     CGPoint startPoint = point;
     CGPoint endPoint = point;

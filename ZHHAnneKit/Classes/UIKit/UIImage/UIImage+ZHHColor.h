@@ -23,19 +23,20 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param size  图片大小
 + (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size;
 
-/// 根据颜色生成指定size纯色图片
-/// @param color  颜色
-/// @param size   图片大小
-/// @param radius 圆角
-+ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)radius;
+/// 生成指定颜色和尺寸的图片，可选圆角
+/// @param color 图片的填充颜色
+/// @param size 图片尺寸（默认 `CGSizeMake(1, 1)`）
+/// @param cornerRadius 圆角半径（0 表示无圆角）
+/// @return 生成的 UIImage 对象
++ (UIImage *)zhh_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)cornerRadius;
 
-/// UIImage加圆角
-/// @param cornerRadius 圆角
+/// 为 UIImage 添加圆角
+/// @param cornerRadius 圆角半径
 - (UIImage *)zhh_imageWithCornerRadius:(CGFloat)cornerRadius;
 
-/// UIImage加圆角
-/// @param size 图片宽高
-/// @param cornerRadius 圆角
+/// 为 UIImage 添加圆角和自定义尺寸
+/// @param size 图片尺寸
+/// @param cornerRadius 圆角半径
 - (UIImage *)zhh_imageWithSize:(CGSize)size cornerRadius:(CGFloat)cornerRadius;
 
 /// 更改图片的背景色

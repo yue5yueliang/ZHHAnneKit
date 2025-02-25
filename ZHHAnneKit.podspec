@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.1.6'
+  s.version          = '0.1.7'
   s.summary          = '一套实用的分类与工具库，提升开发效率。'
   s.description      = <<-DESC
   ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation、UIKit 和 QuartzCore 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。
@@ -147,6 +147,9 @@ Pod::Spec.new do |s|
     end
     uikit.subspec 'UINavigationItem' do |subspec|
         subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UINavigationItem/*.{h,m}'
+    end
+    uikit.subspec 'UIScrollView' do |subspec|
+        subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIScrollView/*.{h,m}'
     end
     uikit.subspec 'UISlider' do |subspec|
         subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UISlider/*.{h,m}'

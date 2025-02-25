@@ -46,6 +46,7 @@
 #import <ZHHAnneKit/UINavigationBar+ZHHUtilities.h>
 #import <ZHHAnneKit/UINavigationController+ZHHUtilities.h>
 #import <ZHHAnneKit/UINavigationItem+ZHHUtilities.h>
+#import <ZHHAnneKit/UIScrollView+ZHHUtilities.h>
 #import <ZHHAnneKit/UISlider+ZHHUtilities.h>
 #import <ZHHAnneKit/UISplitViewController+ZHHUtilities.h>
 
@@ -108,6 +109,7 @@
 #import "UINavigationBar+ZHHUtilities.h"
 #import "UINavigationController+ZHHUtilities.h"
 #import "UINavigationItem+ZHHUtilities.h"
+#import "UIScrollView+ZHHUtilities.h"
 #import "UISlider+ZHHUtilities.h"
 #import "UISplitViewController+ZHHUtilities.h"
 
