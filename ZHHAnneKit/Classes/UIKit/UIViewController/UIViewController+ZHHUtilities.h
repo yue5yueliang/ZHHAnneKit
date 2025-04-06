@@ -11,6 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIViewController (ZHHUtilities) <UINavigationControllerDelegate>
+
+/// 通过类名字符串跳转到指定的 ViewController
+/// @param className 控制器类名字符串
+- (void)zhh_pushViewControllerWithClassName:(NSString *)className;
+
 /// 通过类名字符串跳转到指定的 ViewController
 /// @param className 控制器类名字符串
 /// @param titleName 控制器标题

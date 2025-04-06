@@ -11,6 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (ZHHHash)
+/// 计算字符串的 MD5 哈希值
+- (NSString *)zhh_MD5String;
+
 #pragma mark - SHA 系列哈希方法
 /// 生成 SHA-1 哈希值
 /// @return SHA-1 哈希值（40 位十六进制字符串）

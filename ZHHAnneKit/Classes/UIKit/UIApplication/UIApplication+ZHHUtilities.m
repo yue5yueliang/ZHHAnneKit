@@ -84,3 +84,104 @@ static CGRect _zhh_keyboardFrame = (CGRect){ (CGPoint){ 0.0f, 0.0f }, (CGSize){ 
     return [UIApplication sharedApplication].windows.lastObject;
 }
 @end
+
+@implementation UIApplication (ZHHAppInfo)
+
+#pragma mark - 获取 Info.plist
++ (NSDictionary *)zhh_infoDictionary {
+    static NSDictionary *infoDict = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        infoDict = [[NSBundle mainBundle] infoDictionary];
+    });
+    return infoDict;
+}
+
+#pragma mark - 应用版本号
++ (NSString *)zhh_appVersion {
+    static NSString *version = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        version = [self zhh_infoDictionary][@"CFBundleShortVersionString"] ?: @"0.0.0";
+    });
+    return version;
+}
+
+#pragma mark - Build 版本号
++ (NSString *)zhh_buildVersion {
+    static NSString *buildVersion = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        buildVersion = [self zhh_infoDictionary][@"CFBundleVersion"] ?: @"0";
+    });
+    return buildVersion;
+}
+
+#pragma mark - 应用名称
++ (NSString *)zhh_appName {
+    static NSString *name = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        name = [self zhh_infoDictionary][@"CFBundleDisplayName"];
+        if (!name) {
+            name = [self zhh_infoDictionary][@"CFBundleName"] ?: @"Unknown App";
+        }
+    });
+    return name;
+}
+
+#pragma mark - Bundle Identifier
++ (NSString *)zhh_bundleIdentifier {
+    static NSString *bundleIdentifier = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        bundleIdentifier = [self zhh_infoDictionary][@"CFBundleIdentifier"] ?: @"Unknown";
+    });
+    return bundleIdentifier;
+}
+
+#pragma mark - 应用图标
++ (UIImage *)zhh_appIcon {
+    static UIImage *image = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary *infoDict = [self zhh_infoDictionary];
+        NSDictionary *iconsDict = infoDict[@"CFBundleIcons"];
+        NSDictionary *primaryIconsDict = iconsDict[@"CFBundlePrimaryIcon"];
+        NSArray *iconFiles = primaryIconsDict[@"CFBundleIconFiles"];
+        
+        NSString *iconFilename = iconFiles.lastObject ?: infoDict[@"CFBundleIconFile"];
+        if (iconFilename) {
+            image = [UIImage imageNamed:iconFilename];
+        }
+        
+        if (!image) {
+            NSLog(@"[zhh_appIcon] Failed to load app icon.");
+        }
+    });
+    return image;
+}
+
+#pragma mark - 启动页面图片
++ (UIImage *)zhh_launchImage {
+    static UIImage *launchImage = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        NSString *viewOrientation = @"Portrait";
+        
+        NSArray *imagesDictionary = [self zhh_infoDictionary][@"UILaunchImages"];
+        for (NSDictionary *dict in imagesDictionary) {
+            CGSize imageSize = CGSizeFromString(dict[@"UILaunchImageSize"]);
+            if (CGSizeEqualToSize(imageSize, screenSize) &&
+                [viewOrientation isEqualToString:dict[@"UILaunchImageOrientation"]]) {
+                launchImage = [UIImage imageNamed:dict[@"UILaunchImageName"]];
+                break;
+            }
+        }
+    });
+    return launchImage;
+}
+
+@end
+

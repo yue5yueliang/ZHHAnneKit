@@ -113,6 +113,7 @@
     self.layer.cornerRadius = radius;
     self.layer.borderColor = color.CGColor;
     self.layer.borderWidth = borderWidth;
+    self.layer.masksToBounds = YES;
 }
 
 /**

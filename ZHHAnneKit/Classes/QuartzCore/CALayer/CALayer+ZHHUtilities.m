@@ -89,4 +89,42 @@
     return array[finalIndex];
 }
 
+#pragma mark - 设置边框颜色
+
+- (void)zhh_setBorderColor:(UIColor *)color {
+    if (self.borderWidth == 0) {
+        self.borderWidth = 0.5; // 默认边框宽度
+    }
+    self.borderColor = color.CGColor;
+}
+
+#pragma mark - 设置阴影颜色
+
+- (void)zhh_setShadowColor:(UIColor *)color {
+    self.shadowColor = color.CGColor;
+    if (self.shadowOpacity == 0) {
+        self.shadowOpacity = 0.5; // 默认阴影透明度
+    }
+    self.shadowOffset = CGSizeZero;
+}
+
+#pragma mark - 边框颜色 (UIColor) 便捷属性
+
+- (void)setZhh_borderUIColor:(UIColor *)zhh_borderUIColor {
+    self.borderColor = zhh_borderUIColor.CGColor;
+}
+
+- (UIColor *)zhh_borderUIColor {
+    return [UIColor colorWithCGColor:self.borderColor];
+}
+
+#pragma mark - 阴影颜色 (UIColor) 便捷属性
+
+- (void)setZhh_shadowColor:(UIColor *)zhh_shadowUIColor {
+    self.shadowColor = zhh_shadowUIColor.CGColor;
+}
+
+- (UIColor *)zhh_shadowColor {
+    return [UIColor colorWithCGColor:self.shadowColor];
+}
 @end

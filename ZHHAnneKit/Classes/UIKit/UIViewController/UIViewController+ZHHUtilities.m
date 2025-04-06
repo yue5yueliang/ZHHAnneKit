@@ -10,6 +10,10 @@
 
 @implementation UIViewController (ZHHUtilities)
 
+- (void)zhh_pushViewControllerWithClassName:(NSString *)className {
+    [self zhh_pushViewControllerWithClassName:className title:@""];
+}
+
 /// 通过类名字符串跳转到指定的 ViewController
 /// @param className 控制器类名字符串
 /// @param titleName 控制器标题
@@ -17,18 +21,20 @@
     // 获取类对象
     Class controllerClass = NSClassFromString(className);
     
-    // 判断类是否为 UIViewController 的子类
+    // 判断是否是 UIViewController 子类
     if (controllerClass && [controllerClass isSubclassOfClass:[UIViewController class]]) {
-        // 实例化控制器
         UIViewController *viewController = [[controllerClass alloc] init];
         viewController.title = titleName;
         viewController.hidesBottomBarWhenPushed = YES; // 隐藏底部 TabBar
         
-        // 使用当前控制器的导航控制器进行跳转
-        [self.navigationController pushViewController:viewController animated:YES];
+        // 确保 self 具有 navigationController
+        if ([self isKindOfClass:[UIViewController class]] && self.navigationController) {
+            [self.navigationController pushViewController:viewController animated:YES];
+        } else {
+            NSLog(@"❌ 当前对象无 navigationController，无法 push");
+        }
     } else {
-        // 如果类名无效或不是 UIViewController 子类，打印提示信息
-        NSLog(@"无法找到对应的控制器类: %@", className);
+        NSLog(@"❌ 无法找到对应的控制器类: %@", className);
     }
 }
 

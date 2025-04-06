@@ -70,6 +70,21 @@ typedef NS_ENUM(NSInteger, ZHHTransitionCurve) {
 /// @return 转场动画实例
 - (CATransition *)zhh_transitionWithAnimType:(ZHHTransitionAnimType)animType subType:(ZHHTransitionSubType)subType curve:(ZHHTransitionCurve)curve duration:(CGFloat)duration;
 
+/// 用于在 Interface Builder (Storyboard) 里直接设置 `borderColor`
+/// @param color 需要设置的边框颜色 (`UIColor`)
+- (void)zhh_setBorderColor:(UIColor *)color;
+
+/// 用于在 Interface Builder (Storyboard) 里直接设置 `shadowColor
+/// @param color 需要设置的阴影颜色 (`UIColor`)
+- (void)zhh_setShadowColor:(UIColor *)color;
+
+/// @brief  需要注意：
+/// - 如果要 **同时** 设置圆角（cornerRadius）和阴影（shadow），
+/// 请 **先设置阴影**，然后再设置圆角，否则可能会导致阴影效果被裁剪
+/// `borderColor` 的 `UIColor` 便捷设置属性
+@property (nonatomic, strong) UIColor *zhh_borderColor;
+/// `shadowColor` 的 `UIColor` 便捷设置属性
+@property (nonatomic, strong) UIColor *zhh_shadowColor;
 @end
 
 NS_ASSUME_NONNULL_END

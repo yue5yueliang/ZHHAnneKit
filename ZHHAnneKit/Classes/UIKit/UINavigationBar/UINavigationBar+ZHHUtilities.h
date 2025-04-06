@@ -18,14 +18,14 @@ typedef NS_ENUM(NSUInteger, ZHHNavigationBarShadowType) {
 };
 
 @interface UINavigationBar (ZHHUtilities)
-@property (nonatomic, assign) BOOL zhh_enableScrollEdgeAppearance; // 导航外观是否根据滚动边缘变化 默认 YES
-@property (nonatomic, assign) BOOL zhh_translucent; // 是否半透明 默认 YES
-@property (nonatomic, assign) BOOL zhh_transparent; // 是否全透明
-@property (nonatomic, assign) BOOL zhh_hideBottomLine; // 是否隐藏底部线条
-@property (nonatomic, strong) UIFont *zhh_titleFont; // 设置标题字体大小
-@property (nonatomic, strong) UIColor *zhh_titleColor; // 设置标题字体颜色
-@property (nonatomic, strong) UIColor *zhh_backgroundColor; // 导航栏背景颜色
-@property (nonatomic, strong) UIColor *zhh_tintColor; // 导航栏主题色
+@property (nonatomic, assign) BOOL zhh_enableScrollEdgeAppearance; ///< 导航外观是否根据滚动边缘变化 默认 YES
+@property (nonatomic, assign) BOOL zhh_translucent; ///< 是否半透明 默认 YES
+@property (nonatomic, assign) BOOL zhh_transparent; ///< 是否全透明
+@property (nonatomic, assign) BOOL zhh_hideBottomLine; ///< 是否隐藏底部线条
+@property (nonatomic, strong) UIFont *zhh_titleFont; ///< 设置标题字体大小
+@property (nonatomic, strong) UIColor *zhh_titleColor; ///< 设置标题字体颜色
+@property (nonatomic, strong) UIColor *zhh_backgroundColor; ///< 导航栏背景颜色
+@property (nonatomic, strong) UIColor *zhh_tintColor; ///< 导航栏主题色
 
 /// 重置导航栏的所有配置到默认值，恢复初始状态。
 /// 调用此方法会重置导航栏的所有自定义设置，例如颜色、字体、透明度等，恢复为默认值。

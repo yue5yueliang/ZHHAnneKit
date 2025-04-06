@@ -68,7 +68,7 @@
 
 /// 开始验证码倒计时，设置默认值
 - (void)zhh_startCountdown {
-    [self zhh_startCountdownWithTimeout:60 resendText:@"重新获取" countdownText:@"%@秒后获取"];
+    [self zhh_startCountdownWithTimeout:60 resendText:@"重新获取" countdownText:@"%@ 秒后获取"];
 }
 
 /// 倒计时方法

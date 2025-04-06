@@ -20,4 +20,30 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIWindow *)zhh_currentWindow;
 @end
 
+///=============================================================================
+/// @name 应用信息
+///=============================================================================
+@interface UIApplication (ZHHAppInfo)
+
+/// 获取应用程序的版本号
+@property (nonatomic, class, readonly) NSString *zhh_appVersion;
+
+/// 获取应用程序的显示名称
+@property (nonatomic, class, readonly) NSString *zhh_appName;
+
+/// 获取应用程序的 Build 版本号
+@property (nonatomic, class, readonly) NSString *zhh_buildVersion;
+
+/// 获取应用程序的 Bundle Identifier
+@property (nonatomic, class, readonly) NSString *zhh_bundleIdentifier;
+
+/// 获取应用程序图标
+@property (nonatomic, class, readonly) UIImage *zhh_appIcon;
+
+/// 获取启动页面图片
+@property (nonatomic, class, readonly) UIImage *zhh_launchImage;
+
+@end
+
 NS_ASSUME_NONNULL_END
+

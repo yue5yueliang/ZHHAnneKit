@@ -12,6 +12,22 @@
 #import <CommonCrypto/CommonCryptor.h>
 
 @implementation NSString (ZHHHash)
+
+/// 计算字符串的 MD5 哈希值
+- (NSString *)zhh_MD5String {
+    const char *cStr = [self UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH]; // MD5 结果长度 16 字节
+
+    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest); // 计算 MD5
+
+    NSMutableString *hash = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [hash appendFormat:@"%02x", digest[i]]; // 转换成 32 位小写的十六进制字符串
+    }
+
+    return hash;
+}
+
 #pragma mark - SHA 系列哈希方法
 
 /// 生成 SHA-1 哈希值

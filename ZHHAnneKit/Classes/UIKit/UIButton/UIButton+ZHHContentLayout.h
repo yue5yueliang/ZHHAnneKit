@@ -10,32 +10,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// 图文混排布局样式
-typedef NS_ENUM(NSInteger, ZHHButtonContentLayoutStyle) {
-    ZHHButtonContentLayoutStyleNone,                ///< 图左文右，居中显示默认
-    ZHHButtonContentLayoutStyleCenterImageLeft,     ///< 图右文左，居中显示
-    ZHHButtonContentLayoutStyleCenterImageRight,    ///< 图右文左，居中显示
-    ZHHButtonContentLayoutStyleCenterImageTop,      ///< 图上文下，居中显示
-    ZHHButtonContentLayoutStyleCenterImageBottom,   ///< 图下文上，居中显示
-    ZHHButtonContentLayoutStyleLeftImageLeft,       ///< 图左文右，整体靠左
-    ZHHButtonContentLayoutStyleLeftImageRight,      ///< 文左图右，整体靠左
-    ZHHButtonContentLayoutStyleRightImageLeft,      ///< 图左文右，整体靠右
-    ZHHButtonContentLayoutStyleRightImageRight      ///< 文左图右，整体靠右
-};
 
+/// 控制图片在UIButton里的位置，默认为ZHHUIButtonImagePositionLeft
+typedef NS_ENUM(NSUInteger, ZHHUIButtonImagePosition) {
+    ZHHUIButtonImagePositionTop,             ///< imageView在titleLabel上面
+    ZHHUIButtonImagePositionLeft,            ///< imageView在titleLabel左边
+    ZHHUIButtonImagePositionBottom,          ///< imageView在titleLabel下面
+    ZHHUIButtonImagePositionRight,           ///< imageView在titleLabel右边
+};
 
 IB_DESIGNABLE
 @interface UIButton (ZHHContentLayout)
 
-/// 图文布局类型
-@property (nonatomic, assign) ZHHButtonContentLayoutStyle zhh_layoutType;
+/// 设置按钮里图标和文字的相对位置，默认为ZHHUIButtonImagePositionLeft
+/// 可配合imageEdgeInsets、titleEdgeInsets、contentHorizontalAlignment、contentVerticalAlignment使用
+@property (nonatomic, assign) ZHHUIButtonImagePosition zhh_postion;
 /// 图文间距
 @property (nonatomic, assign) CGFloat zhh_spacing;
 
 /// 设置按钮的图文混排布局
-/// @param layoutStyle 图文混排样式
+/// @param postion 图文混排样式
 /// @param spacing 图文间距
-- (void)zhh_contentLayout:(ZHHButtonContentLayoutStyle)layoutStyle spacing:(CGFloat)spacing;
+- (void)zhh_buttonImagePosition:(ZHHUIButtonImagePosition)postion spacing:(CGFloat)spacing;
+
 @end
 
 NS_ASSUME_NONNULL_END

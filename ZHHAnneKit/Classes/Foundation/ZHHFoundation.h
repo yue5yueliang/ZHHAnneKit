@@ -37,6 +37,8 @@
 #import <ZHHAnneKit/NSObject+ZHHRuntime.h>
 #import <ZHHAnneKit/NSObject+ZHHUtilities.h>
 
+#import <ZHHAnneKit/NSShadow+ZHHUtilities.h>
+
 #import <ZHHAnneKit/NSString+ZHHCommon.h>
 #import <ZHHAnneKit/NSString+ZHHHardware.h>
 #import <ZHHAnneKit/NSString+ZHHHash.h>
@@ -72,6 +74,8 @@
 #import "NSObject+ZHHRunLoop.h"
 #import "NSObject+ZHHRuntime.h"
 #import "NSObject+ZHHUtilities.h"
+
+#import "NSShadow+ZHHUtilities.h"
 
 #import "NSString+ZHHCommon.h"
 #import "NSString+ZHHHardware.h"
