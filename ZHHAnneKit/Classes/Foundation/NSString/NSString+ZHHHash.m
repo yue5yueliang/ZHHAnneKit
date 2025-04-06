@@ -13,16 +13,19 @@
 
 @implementation NSString (ZHHHash)
 
-/// 计算字符串的 MD5 哈希值
+/// 计算字符串的 MD5 哈希值（仅用于兼容服务端加密，CC_MD5 已被弃用）
 - (NSString *)zhh_MD5String {
     const char *cStr = [self UTF8String];
-    unsigned char digest[CC_MD5_DIGEST_LENGTH]; // MD5 结果长度 16 字节
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
 
-    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest); // 计算 MD5
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest);
+#pragma clang diagnostic pop
 
     NSMutableString *hash = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
     for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
-        [hash appendFormat:@"%02x", digest[i]]; // 转换成 32 位小写的十六进制字符串
+        [hash appendFormat:@"%02x", digest[i]];
     }
 
     return hash;
@@ -40,7 +43,7 @@
     return [self zhh_hashStringUsingAlg:CC_SHA224_DIGEST_LENGTH function:CC_SHA224];
 }
 
-/// 生成 SHA-256 哈希值
+/// 生成 SHA-256 哈希值zhh_sha256WithString
 - (NSString *)zhh_sha256String {
     return [self zhh_hashStringUsingAlg:CC_SHA256_DIGEST_LENGTH function:CC_SHA256];
 }

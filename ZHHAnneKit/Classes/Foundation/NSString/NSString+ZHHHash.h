@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (ZHHHash)
-/// 计算字符串的 MD5 哈希值
+/// 计算字符串的 MD5 哈希值（仅用于兼容服务端加密，CC_MD5 已被弃用）
 - (NSString *)zhh_MD5String;
 
 #pragma mark - SHA 系列哈希方法
