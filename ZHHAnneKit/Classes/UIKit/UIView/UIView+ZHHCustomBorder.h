@@ -39,23 +39,23 @@ typedef NS_ENUM(NSInteger, ZHHCustomBorderPosition) {
 
 /// 添加顶部边框
 /// @param color 边框颜色
-/// @param width 边框宽度
-- (void)zhh_addTopBorderWithColor:(UIColor *)color width:(CGFloat)width;
+/// @param height 边框高度
+- (void)zhh_addTopBorderWithColor:(UIColor *)color height:(CGFloat)height;
 
 /// 添加左侧边框
 /// @param color 边框颜色
-/// @param height 边框宽度
-- (void)zhh_addLeftBorderWithColor:(UIColor *)color height:(CGFloat)height;
+/// @param width 边框宽度
+- (void)zhh_addLeftBorderWithColor:(UIColor *)color width:(CGFloat)width;
 
 /// 添加底部边框
 /// @param color 边框颜色
-/// @param width 边框宽度
-- (void)zhh_addBottomBorderWithColor:(UIColor *)color width:(CGFloat)width;
+/// @param height 边框宽度
+- (void)zhh_addBottomBorderWithColor:(UIColor *)color height:(CGFloat)height;
 
 /// 添加右侧边框
 /// @param color 边框颜色
-/// @param height 边框宽度
-- (void)zhh_addRightBorderWithColor:(UIColor *)color height:(CGFloat)height;
+/// @param width 边框宽度
+- (void)zhh_addRightBorderWithColor:(UIColor *)color width:(CGFloat)width;
 
 /// 为指定方向的边框视图添加 Auto Layout 约束
 ///
