@@ -40,7 +40,7 @@
 
 /// 添加左侧边框
 - (void)zhh_addLeftBorderWithColor:(UIColor *)color height:(CGFloat)height {
-    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionLeft color:color height:height inset:0 edgeType:ZHHBorderInsetNone];
+    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionLeft color:color width:height inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 /// 添加底部边框
@@ -50,7 +50,7 @@
 
 /// 添加右侧边框
 - (void)zhh_addRightBorderWithColor:(UIColor *)color height:(CGFloat)height {
-    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionRight color:color height:height inset:0 edgeType:ZHHBorderInsetNone];
+    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionRight color:color width:height inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 #pragma mark - Private Methods
