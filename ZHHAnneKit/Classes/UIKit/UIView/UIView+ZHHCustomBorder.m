@@ -34,23 +34,23 @@
 }
 
 /// 添加顶部边框
-- (void)zhh_addTopBorderWithColor:(UIColor *)color width:(CGFloat)borderWidth {
-    [self zhh_addBorderWithTag:ZHHCustomBorderPositionTop color:color width:borderWidth excludePoint:0 edgeType:0];
+- (void)zhh_addTopBorderWithColor:(UIColor *)color thickness:(CGFloat)thickness {
+    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionTop color:color thickness:thickness inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 /// 添加左侧边框
-- (void)zhh_addLeftBorderWithColor:(UIColor *)color width:(CGFloat)borderWidth {
-    [self zhh_addBorderWithTag:ZHHCustomBorderPositionLeft color:color width:borderWidth excludePoint:0 edgeType:0];
+- (void)zhh_addLeftBorderWithColor:(UIColor *)color thickness:(CGFloat)thickness {
+    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionLeft color:color thickness:thickness inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 /// 添加底部边框
-- (void)zhh_addBottomBorderWithColor:(UIColor *)color width:(CGFloat)borderWidth {
-    [self zhh_addBorderWithTag:ZHHCustomBorderPositionBottom color:color width:borderWidth excludePoint:0 edgeType:0];
+- (void)zhh_addBottomBorderWithColor:(UIColor *)color thickness:(CGFloat)thickness {
+    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionBottom color:color thickness:thickness inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 /// 添加右侧边框
-- (void)zhh_addRightBorderWithColor:(UIColor *)color width:(CGFloat)borderWidth {
-    [self zhh_addBorderWithTag:ZHHCustomBorderPositionRight color:color width:borderWidth excludePoint:0 edgeType:0];
+- (void)zhh_addRightBorderWithColor:(UIColor *)color thickness:(CGFloat)thickness {
+    [self zhh_addBorderWithPosition:ZHHCustomBorderPositionRight color:color thickness:thickness inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 #pragma mark - Private Methods
@@ -66,87 +66,122 @@
 }
 
 /// 添加指定位置的边框
-/// @param tag 边框的 tag，用于标识边框
+/// @param position 边框的 tag，用于标识边框
 /// @param color 边框颜色
-/// @param borderWidth 边框宽度
-/// @param excludePoint 排除起点或终点的长度
+/// @param thickness 边框宽度
+/// @param inset 排除起点或终点的长度
 /// @param edgeType 指定排除点的类型
-- (void)zhh_addBorderWithTag:(NSInteger)tag color:(UIColor *)color width:(CGFloat)borderWidth excludePoint:(CGFloat)excludePoint edgeType:(ZHHExcludePoint)edgeType {
-    [self zhh_removeBorderWithTag:tag];
+- (void)zhh_addBorderWithPosition:(NSInteger)position color:(UIColor *)color thickness:(CGFloat)thickness inset:(CGFloat)inset edgeType:(ZHHBorderInsetMode)edgeType {
+    [self zhh_removeBorderWithTag:position];
     
     UIView *border = [[UIView alloc] init];
     border.userInteractionEnabled = NO;
     border.backgroundColor = color;
-    border.tag = tag;
+    border.tag = position;
     [self addSubview:border];
     
-    CGFloat startPoint = (edgeType & ZHHExcludeStartPoint) ? excludePoint : 0;
-    CGFloat endPoint = (edgeType & ZHHExcludeEndPoint) ? excludePoint : 0;
+    CGFloat margin = (edgeType & ZHHBorderInsetEqual) ? inset : 0;
     
     if (!self.translatesAutoresizingMaskIntoConstraints) {
         border.translatesAutoresizingMaskIntoConstraints = NO;
-        [self zhh_addConstraintsForBorder:border withTag:tag width:borderWidth startPoint:startPoint endPoint:endPoint];
+        [self zhh_setBorderConstraints:border position:position thickness:thickness inset:margin];
     } else {
-        [self zhh_setBorderFrame:border withTag:tag width:borderWidth startPoint:startPoint endPoint:endPoint];
+        [self zhh_setBorderFrame:border position:position thickness:thickness inset:inset];
     }
 }
 
-/// 添加边框的布局约束
-/// @param border 边框视图
-/// @param position 边框 位置，用于区分方向
-/// @param width 边框宽度
-/// @param startPoint 边框起点偏移量
-/// @param endPoint 边框终点偏移量
-- (void)zhh_addConstraintsForBorder:(UIView *)border withTag:(ZHHCustomBorderPosition)position width:(CGFloat)width startPoint:(CGFloat)startPoint endPoint:(CGFloat)endPoint {
+/// 为指定方向的边框视图添加 Auto Layout 约束
+///
+/// @param border     要添加约束的边框视图（线条）
+/// @param position   边框位置（上、下、左、右），使用 ZHHCustomBorderPosition 枚举标识
+/// @param thickness  边框线条的厚度（横向为高度，纵向为宽度）
+/// @param inset      边缘内间距（等距缩进，影响边框的起始点与终点）
+///
+/// @discussion 使用此方法可便捷地为指定方向的边框线设置自动布局约束，常用于 StackView 或其他布局容器中的分隔线场景。
+- (void)zhh_setBorderConstraints:(UIView *)border position:(ZHHCustomBorderPosition)position thickness:(CGFloat)thickness inset:(CGFloat)inset {
+
+    border.translatesAutoresizingMaskIntoConstraints = NO;
+
+    NSMutableArray<NSLayoutConstraint *> *constraints = [NSMutableArray array];
+
+    switch (position) {
+        case ZHHCustomBorderPositionTop: {
+            [constraints addObjectsFromArray:@[
+                [border.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:inset],
+                [border.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-inset],
+                [border.topAnchor constraintEqualToAnchor:self.topAnchor],
+                [border.heightAnchor constraintEqualToConstant:thickness]
+            ]];
+        } break;
+
+        case ZHHCustomBorderPositionBottom: {
+            [constraints addObjectsFromArray:@[
+                [border.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:inset],
+                [border.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-inset],
+                [border.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+                [border.heightAnchor constraintEqualToConstant:thickness]
+            ]];
+        } break;
+
+        case ZHHCustomBorderPositionLeft: {
+            [constraints addObjectsFromArray:@[
+                [border.topAnchor constraintEqualToAnchor:self.topAnchor constant:inset],
+                [border.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-inset],
+                [border.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+                [border.widthAnchor constraintEqualToConstant:thickness]
+            ]];
+        } break;
+
+        case ZHHCustomBorderPositionRight: {
+            [constraints addObjectsFromArray:@[
+                [border.topAnchor constraintEqualToAnchor:self.topAnchor constant:inset],
+                [border.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-inset],
+                [border.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+                [border.widthAnchor constraintEqualToConstant:thickness]
+            ]];
+        } break;
+    }
+
+    [NSLayoutConstraint activateConstraints:constraints];
+}
+
+/// 手动设置边框的 frame（适用于非自动布局场景）
+///
+/// @param border    边框视图（线条视图）
+/// @param position  边框方向（上、下、左、右），使用 ZHHCustomBorderPosition 枚举
+/// @param thickness 边框线条的厚度（上/下为高度，左/右为宽度）
+/// @param inset     边框线距离起止边的内边距（等距缩进）
+///
+/// @note 该方法用于根据位置手动设置边框的 frame，不依赖 Auto Layout
+- (void)zhh_setBorderFrame:(UIView *)border position:(ZHHCustomBorderPosition)position thickness:(CGFloat)thickness inset:(CGFloat)inset {
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+    CGFloat doubleInset = inset * 2;
+
+    CGRect frame = CGRectZero;
+
     switch (position) {
         case ZHHCustomBorderPositionTop:
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:startPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-endPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
+            frame = CGRectMake(inset, 0, width - doubleInset, thickness);
             break;
-        case ZHHCustomBorderPositionLeft:
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:startPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-endPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
-            break;
-        case ZHHCustomBorderPositionBottom:
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:startPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-endPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
-            break;
-        case ZHHCustomBorderPositionRight:
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:startPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-endPoint]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:border attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
-            break;
-    }
-}
 
-/// 手动设置边框的 frame
-/// @param border 边框视图
-/// @param tag 边框 tag，用于区分方向
-/// @param width 边框宽度
-/// @param startPoint 边框起点偏移量
-/// @param endPoint 边框终点偏移量
-- (void)zhh_setBorderFrame:(UIView *)border withTag:(NSInteger)tag width:(CGFloat)width startPoint:(CGFloat)startPoint endPoint:(CGFloat)endPoint {
-    switch (tag) {
-        case ZHHCustomBorderPositionTop:
-            border.frame = CGRectMake(startPoint, 0, self.bounds.size.width - startPoint - endPoint, width);
-            break;
         case ZHHCustomBorderPositionLeft:
-            border.frame = CGRectMake(0, startPoint, width, self.bounds.size.height - startPoint - endPoint);
+            frame = CGRectMake(0, inset, thickness, height - doubleInset);
             break;
+
         case ZHHCustomBorderPositionBottom:
-            border.frame = CGRectMake(startPoint, self.bounds.size.height - width, self.bounds.size.width - startPoint - endPoint, width);
+            frame = CGRectMake(inset, height - thickness, width - doubleInset, thickness);
             break;
+
         case ZHHCustomBorderPositionRight:
-            border.frame = CGRectMake(self.bounds.size.width - width, startPoint, width, self.bounds.size.height - startPoint - endPoint);
+            frame = CGRectMake(width - thickness, inset, thickness, height - doubleInset);
+            break;
+
+        default:
             break;
     }
+
+    border.frame = frame;
 }
 
 @end

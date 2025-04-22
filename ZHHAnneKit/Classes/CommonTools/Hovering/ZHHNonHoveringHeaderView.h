@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ZHHNonHoveringHeaderView : UITableViewHeaderFooterView
-@property (nonatomic, strong)UIView *customView;
+
 @end

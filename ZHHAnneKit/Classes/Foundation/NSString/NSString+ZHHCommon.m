@@ -263,25 +263,40 @@
  *  @return 返回一个富文本字符串，包含指定的颜色和字体。
  */
 - (NSAttributedString *)zhh_attributedStringWithColors:(NSArray<UIColor *> *)colors fonts:(NSArray<UIFont *> *)fonts ranges:(NSArray<NSValue *> *)ranges {
-    // 创建一个 NSMutableAttributedString 对象，用来存储富文本
+    // 创建一个可变富文本，用于设置样式
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self];
 
-    // 遍历范围数组，为每个范围设置颜色和字体
+    // 遍历所有需要设置样式的范围
     for (NSInteger i = 0; i < ranges.count; i++) {
         NSRange range = [ranges[i] rangeValue];
         
-        // 如果字体数组中有对应的字体，且范围有效，设置字体
-        if (i < fonts.count && fonts[i]) {
-            [attributedString addAttribute:NSFontAttributeName value:fonts[i] range:range];
+        // 越界保护，防止 range 超出字符串长度
+        if (NSMaxRange(range) > self.length) continue;
+
+        // 获取对应的颜色：支持传一个复用
+        UIColor *color = nil;
+        if (colors.count == 1) {
+            color = colors.firstObject;
+        } else if (i < colors.count) {
+            color = colors[i];
         }
-        
-        // 如果颜色数组中有对应的颜色，且范围有效，设置颜色
-        if (i < colors.count && colors[i]) {
-            [attributedString addAttribute:NSForegroundColorAttributeName value:colors[i] range:range];
+        if (color) {
+            [attributedString addAttribute:NSForegroundColorAttributeName value:color range:range];
+        }
+
+        // 获取对应的字体：支持传一个复用
+        UIFont *font = nil;
+        if (fonts.count == 1) {
+            font = fonts.firstObject;
+        } else if (i < fonts.count) {
+            font = fonts[i];
+        }
+        if (font) {
+            [attributedString addAttribute:NSFontAttributeName value:font range:range];
         }
     }
-    
-    // 返回创建的富文本
+
+    // 返回处理后的富文本
     return attributedString;
 }
 

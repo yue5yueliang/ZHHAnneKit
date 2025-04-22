@@ -158,17 +158,4 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)zhh_drawPentagramWithCenter:(CGPoint)center radius:(CGFloat)radius color:(UIColor *)color rate:(CGFloat)rate;
 @end
 
-IB_DESIGNABLE
-@interface UIView (IBExtension)
-
-/// 边线颜色（支持 Interface Builder）
-@property (nonatomic, strong, nullable) IBInspectable UIColor *zhh_borderColor;
-/// 边线宽度（支持 Interface Builder）
-@property (nonatomic, assign) IBInspectable CGFloat zhh_borderWidth;
-/// 脚半径（支持 Interface Builder）
-@property (nonatomic, assign) IBInspectable CGFloat zhh_cornerRadius;
-
-@end
-
-
 NS_ASSUME_NONNULL_END

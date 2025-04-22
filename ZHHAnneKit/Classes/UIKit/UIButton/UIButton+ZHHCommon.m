@@ -14,16 +14,25 @@ static const void *ZHHUIButtonBlockKey = &ZHHUIButtonBlockKey;
 
 @implementation UIButton (ZHHCommon)
 
+#pragma mark - 关联标识
+
+/// 获取按钮的唯一标识
 - (NSObject *)zhh_identifier {
     return objc_getAssociatedObject(self, &ZHHIdentifier);
 }
 
+/// 设置按钮的唯一标识
 - (void)setZhh_identifier:(NSString *)zhh_identifier{
     objc_setAssociatedObject(self, &ZHHIdentifier, zhh_identifier, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-#pragma mark --- 创建默认按钮--有标题、字体、颜色
-+ (instancetype)zhh_buttonWithTitle:(NSString *)title titleColor:(UIColor *)titleColor font:(UIFont *)font{
+#pragma mark - 创建按钮
+
+/// 创建一个带有标题、字体和颜色的按钮
+/// @param title 按钮标题
+/// @param titleColor 按钮字体颜色
+/// @param font 按钮字体
++ (instancetype)zhh_buttonWithTitle:(NSString *)title titleColor:(UIColor *)titleColor font:(UIFont *)font {
     UIButton *button = [[UIButton alloc] init];
     [button setTitle:title forState:UIControlStateNormal];
     [button setTitleColor:titleColor forState:UIControlStateNormal];
@@ -32,50 +41,39 @@ static const void *ZHHUIButtonBlockKey = &ZHHUIButtonBlockKey;
     return button;
 }
 
-#pragma mark --- 获取按钮额外的点击热区
-/// 获取按钮额外的点击热区
+#pragma mark - 点击热区
+
+/// 获取按钮的额外点击热区
 - (UIEdgeInsets)zhh_touchAreaInsets {
     NSValue *value = objc_getAssociatedObject(self, @selector(zhh_touchAreaInsets));
-    if (value) {
-        return [value UIEdgeInsetsValue];
-    }
-    return UIEdgeInsetsZero; // 默认无扩展
+    return value ? [value UIEdgeInsetsValue] : UIEdgeInsetsZero;
 }
 
-/// 设置按钮额外的点击热区
-/// @param touchAreaInsets 额外热区范围（使用负值可缩小点击范围）
+/// 设置按钮的额外点击热区
+/// @param touchAreaInsets 额外热区范围（可使用负值缩小点击范围）
 - (void)setZhh_touchAreaInsets:(UIEdgeInsets)touchAreaInsets {
     NSValue *value = [NSValue valueWithUIEdgeInsets:touchAreaInsets];
     objc_setAssociatedObject(self, @selector(zhh_touchAreaInsets), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-/// 修改按钮点击区域，使用自定义热区
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    UIEdgeInsets touchAreaInsets = self.zhh_touchAreaInsets;
-    CGRect bounds = self.bounds;
-    bounds = CGRectMake(bounds.origin.x - touchAreaInsets.left,
-                        bounds.origin.y - touchAreaInsets.top,
-                        bounds.size.width + touchAreaInsets.left + touchAreaInsets.right,
-                        bounds.size.height + touchAreaInsets.top + touchAreaInsets.bottom);
-    return CGRectContainsPoint(bounds, point);
-}
+#pragma mark - 添加点击事件
 
-#pragma mark --- 添加点击事件
-/// 添加点击事件，默认UIControlEventTouchUpInside
-- (void)zhh_addActionHandler:(ZHHTouchedButtonBlock)touchHandler{
+/// 为按钮添加默认点击事件（UIControlEventTouchUpInside）
+- (void)zhh_addActionHandler:(ZHHTouchedButtonBlock)touchHandler {
     [self zhh_addActionHandler:touchHandler forControlEvents:UIControlEventTouchUpInside];
 }
 
-/// 添加事件，支持自定义 UIControlEvents
+/// 为按钮添加自定义事件类型
+/// @param touchHandler 点击事件的回调
+/// @param controlEvents 自定义的事件类型
 - (void)zhh_addActionHandler:(ZHHTouchedButtonBlock)touchHandler forControlEvents:(UIControlEvents)controlEvents {
-    // 绑定事件 block 到 UIButton
     objc_setAssociatedObject(self, ZHHUIButtonBlockKey, touchHandler, OBJC_ASSOCIATION_COPY_NONATOMIC);
-    // 绑定点击事件
     [self addTarget:self action:@selector(zhh_blockActionTouched:) forControlEvents:controlEvents];
 }
 
-#pragma mark - 触发事件的处理方法
-/// 按钮点击触发方法
+#pragma mark - 触发事件
+
+/// 按钮点击事件触发的方法
 - (void)zhh_blockActionTouched:(UIButton *)sender {
     ZHHTouchedButtonBlock touchHandler = objc_getAssociatedObject(self, ZHHUIButtonBlockKey);
     if (touchHandler) {

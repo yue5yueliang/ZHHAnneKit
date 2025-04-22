@@ -35,57 +35,74 @@
                                   completion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     switch (type) {
         case ZHHPrivacyPermissionTypePhoto:
-            [self zhh_requestPhotoPermissionWithCompletion:completion];
+            [self requestPhotoPermissionWithCompletion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypeCamera:
+            [self requestAVPermissionWithType:AVMediaTypeVideo completion:completion];
+            break;
+
         case ZHHPrivacyPermissionTypeMicrophone:
-            [self zhh_requestAVPermissionWithType:(type == ZHHPrivacyPermissionTypeCamera ? AVMediaTypeVideo : AVMediaTypeAudio) completion:completion];
+            [self requestAVPermissionWithType:AVMediaTypeAudio completion:completion];
             break;
+
         case ZHHPrivacyPermissionTypeMedia:
-            [self zhh_requestMediaPermissionWithCompletion:completion];
+            [self requestMediaPermissionWithCompletion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypeLocation:
-            [self zhh_requestLocationPermissionWithCompletion:completion];
+            [self requestLocationPermissionWithCompletion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypeBluetooth:
-            [self zhh_requestBluetoothPermissionWithCompletion:completion];
+            [self requestBluetoothPermissionWithCompletion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypePushNotification:
-            [self zhh_requestPushNotificationPermissionWithCompletion:completion];
+            [self requestPushNotificationPermissionWithCompletion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypeSpeech:
-            [self zhh_requestSpeechPermissionWithCompletion:completion];
+            [self requestSpeechPermissionWithCompletion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypeEvent:
+            [self requestEntityPermission:EKEntityTypeEvent completion:completion];
+            break;
+            
         case ZHHPrivacyPermissionTypeReminder:
-            [self zhh_requestEntityPermission:(type == ZHHPrivacyPermissionTypeEvent ? EKEntityTypeEvent : EKEntityTypeReminder) completion:completion];
+            [self requestEntityPermission:EKEntityTypeReminder completion:completion];
             break;
+            
         case ZHHPrivacyPermissionTypeContact:
-            [self zhh_requestContactPermissionWithCompletion:completion];
+            [self requestContactPermissionWithCompletion:completion];
             break;
+            
         default:
-            completion(NO, ZHHPrivacyPermissionAuthorizationStatusUnknown);
+            if (completion) {
+                completion(NO, ZHHPrivacyPermissionAuthorizationStatusUnknown);
+            }
             break;
     }
 }
 
 #pragma mark - 权限处理方法
 
-/// **相册权限**
-- (void)zhh_requestPhotoPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 相册权限
+- (void)requestPhotoPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     if (@available(iOS 14, *)) {
         [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(PHAuthorizationStatus status) {
-            [self zhh_handlePhotoAuthorizationStatus:status completion:completion];
+            [self handlePhotoAuthorizationStatus:status completion:completion];
         }];
     } else {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            [self zhh_handlePhotoAuthorizationStatus:status completion:completion];
+            [self handlePhotoAuthorizationStatus:status completion:completion];
         }];
     }
 }
 
-/// **相册权限状态处理**
-- (void)zhh_handlePhotoAuthorizationStatus:(PHAuthorizationStatus)status
+/// 相册权限状态处理
+- (void)handlePhotoAuthorizationStatus:(PHAuthorizationStatus)status
                                 completion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     switch (status) {
         case PHAuthorizationStatusAuthorized:
@@ -108,8 +125,8 @@
     }
 }
 
-/// **AV权限（相机/麦克风）**
-- (void)zhh_requestAVPermissionWithType:(AVMediaType)type completion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// AV权限（相机/麦克风）
+- (void)requestAVPermissionWithType:(AVMediaType)type completion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     [AVCaptureDevice requestAccessForMediaType:type completionHandler:^(BOOL granted) {
         if (granted) {
             completion(YES, ZHHPrivacyPermissionAuthorizationStatusAuthorized);
@@ -124,8 +141,8 @@
     }];
 }
 
-/// **媒体库权限**
-- (void)zhh_requestMediaPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 媒体库权限
+- (void)requestMediaPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     [MPMediaLibrary requestAuthorization:^(MPMediaLibraryAuthorizationStatus status) {
         if (status == MPMediaLibraryAuthorizationStatusAuthorized) {
             completion(YES, ZHHPrivacyPermissionAuthorizationStatusAuthorized);
@@ -137,8 +154,8 @@
     }];
 }
 
-/// **定位权限**
-- (void)zhh_requestLocationPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 定位权限
+- (void)requestLocationPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     CLLocationManager *manager = [[CLLocationManager alloc] init];
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if (status == kCLAuthorizationStatusNotDetermined) {
@@ -148,8 +165,8 @@
     }
 }
 
-/// **蓝牙权限**
-- (void)zhh_requestBluetoothPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 蓝牙权限
+- (void)requestBluetoothPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     if (@available(iOS 13.1, *)) {
         CBManagerAuthorization authorization = [CBManager authorization];
         switch (authorization) {
@@ -184,8 +201,8 @@
     }
 }
 
-/// **推送通知权限**
-- (void)zhh_requestPushNotificationPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 推送通知权限
+- (void)requestPushNotificationPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
                           completionHandler:^(BOOL granted, NSError * _Nullable error) {
@@ -197,8 +214,8 @@
     }];
 }
 
-/// **语音识别权限**
-- (void)zhh_requestSpeechPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 语音识别权限
+- (void)requestSpeechPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status) {
         if (status == SFSpeechRecognizerAuthorizationStatusAuthorized) {
             completion(YES, ZHHPrivacyPermissionAuthorizationStatusAuthorized);
@@ -210,8 +227,8 @@
     }];
 }
 
-/// **日历/提醒事项权限**
-- (void)zhh_requestEntityPermission:(EKEntityType)type completion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 日历/提醒事项权限
+- (void)requestEntityPermission:(EKEntityType)type completion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     EKEventStore *eventStore = [[EKEventStore alloc] init];
     [eventStore requestAccessToEntityType:type completion:^(BOOL granted, NSError * _Nullable error) {
         if (granted) {
@@ -222,8 +239,8 @@
     }];
 }
 
-/// **通讯录权限**
-- (void)zhh_requestContactPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
+/// 通讯录权限
+- (void)requestContactPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     CNContactStore *contactStore = [[CNContactStore alloc] init];
     [contactStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
         if (granted) {

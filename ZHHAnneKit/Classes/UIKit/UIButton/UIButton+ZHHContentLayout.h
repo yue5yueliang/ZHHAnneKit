@@ -24,14 +24,14 @@ IB_DESIGNABLE
 
 /// 设置按钮里图标和文字的相对位置，默认为ZHHUIButtonImagePositionLeft
 /// 可配合imageEdgeInsets、titleEdgeInsets、contentHorizontalAlignment、contentVerticalAlignment使用
-@property (nonatomic, assign) ZHHUIButtonImagePosition zhh_postion;
+@property (nonatomic, assign) ZHHUIButtonImagePosition zhh_position;
 /// 图文间距
 @property (nonatomic, assign) CGFloat zhh_spacing;
 
 /// 设置按钮的图文混排布局
-/// @param postion 图文混排样式
+/// @param position 图文混排样式
 /// @param spacing 图文间距
-- (void)zhh_buttonImagePosition:(ZHHUIButtonImagePosition)postion spacing:(CGFloat)spacing;
+- (void)zhh_buttonImagePosition:(ZHHUIButtonImagePosition)position spacing:(CGFloat)spacing;
 
 @end
 

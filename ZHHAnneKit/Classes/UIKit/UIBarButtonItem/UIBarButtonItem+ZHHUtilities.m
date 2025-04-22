@@ -13,149 +13,143 @@
 
 @implementation UIBarButtonItem (ZHHUtilities)
 
-// 执行关联的 block
+#pragma mark - Block 关联处理
+
+/// 触发 block 回调
 - (void)zhh_performActionBlock {
     if (self.zhh_actionBlock) {
         self.zhh_actionBlock();
     }
 }
 
-// 动态获取关联的 block
+/// 获取 block
 - (ZHHBarButtonActionBlock)zhh_actionBlock {
     return objc_getAssociatedObject(self, @selector(zhh_actionBlock));
 }
 
-// 动态设置关联的 block
+/// 设置 block 并绑定 target/action
 - (void)setZhh_actionBlock:(ZHHBarButtonActionBlock)actionBlock {
     if (actionBlock != self.zhh_actionBlock) {
-        // 设置关联对象
         objc_setAssociatedObject(self, @selector(zhh_actionBlock), actionBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-
-        // 配置 target 和 action
         [self setTarget:self];
         [self setAction:@selector(zhh_performActionBlock)];
     }
 }
 
-+ (UIBarButtonItem *)zhh_itemWithImageName:(NSString *_Nullable)imageName highImageName:(NSString *_Nullable)highImageName target:(id)target action:(SEL)action {
-    // 防御性编程：检查 imageName 是否为空
-    if (imageName == nil) {
-        return nil;
-    }
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+#pragma mark - 创建带图片按钮项
 
-    // 设置按钮图片
+/// 创建普通状态 & 可选高亮状态的 UIBarButtonItem
++ (UIBarButtonItem *)zhh_itemWithImageName:(NSString *)imageName
+                             highImageName:(NSString *)highImageName
+                                    target:(id)target
+                                    action:(SEL)action {
+    if (!imageName) return nil;
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *normalImage = [UIImage imageNamed:imageName];
     [button setImage:normalImage forState:UIControlStateNormal];
-    
+
     if (highImageName) {
         UIImage *highlightedImage = [UIImage imageNamed:highImageName];
         [button setImage:highlightedImage forState:UIControlStateHighlighted];
     }
-    
-    // 根据图片大小调整按钮尺寸，确保内容适配
-    CGSize imageSize = normalImage.size;
-    button.frame = CGRectMake(0, 0, imageSize.width, imageSize.height);
+
     button.frame = CGRectMake(0, 0, 44, 44);
-    
-    // 添加事件监听
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    
-    // 创建 UIBarButtonItem
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
-    return item;
-}
 
-+ (UIBarButtonItem *)zhh_itemWithImageName:(NSString *)imageName target:(id)target action:(SEL)action {
-    return [UIBarButtonItem zhh_itemWithImageName:imageName highImageName:nil target:target action:action];
-}
-
-+ (UIBarButtonItem *)zhh_systemItemWithTitle:(NSString *)title titleColor:(UIColor *)titleColor imageName:(NSString *)imageName target:(id)target selector:(SEL)selector textType:(BOOL)textType {
-    
-    UIBarButtonItem *item;
-    if (textType) {
-        // 创建文字类型的 UIBarButtonItem
-        item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:target action:selector];
-        
-        // 设置默认文字颜色和字体
-        UIColor *defaultTitleColor = titleColor ?: [UIColor zhh_colorWithHex:0x181818];
-        UIFont *defaultFont = [UIFont systemFontOfSize:15.f];
-        
-        // 普通状态文字属性
-        NSMutableDictionary *normalAttributes = [NSMutableDictionary dictionary];
-        normalAttributes[NSForegroundColorAttributeName] = defaultTitleColor;
-        normalAttributes[NSFontAttributeName] = defaultFont;
-        [item setTitleTextAttributes:normalAttributes forState:UIControlStateNormal];
-        
-        // 高亮状态文字属性
-        NSMutableDictionary *highlightedAttributes = [normalAttributes mutableCopy];
-        highlightedAttributes[NSForegroundColorAttributeName] = [defaultTitleColor colorWithAlphaComponent:0.5f];
-        [item setTitleTextAttributes:highlightedAttributes forState:UIControlStateHighlighted];
-        
-        // 禁用状态文字属性
-        NSMutableDictionary *disabledAttributes = [normalAttributes mutableCopy];
-        disabledAttributes[NSForegroundColorAttributeName] = [defaultTitleColor colorWithAlphaComponent:0.5f];
-        [item setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
-        
-    } else {
-        // 创建图片类型的 UIBarButtonItem
-        UIImage *originalImage = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        item = [[UIBarButtonItem alloc] initWithImage:originalImage style:UIBarButtonItemStylePlain target:target action:selector];
-    }
-    
-    return item;
-}
-
-+ (UIBarButtonItem *)zhh_customItemWithTitle:(NSString *_Nullable)title
-                                  titleColor:(UIColor *_Nullable)titleColor
-                                   imageName:(NSString *_Nullable)imageName
-                                      target:(id _Nullable)target
-                                    selector:(SEL _Nullable)selector
-                  contentHorizontalAlignment:(UIControlContentHorizontalAlignment)contentHorizontalAlignment {
-    // 创建 UIButton
-    UIButton *button = [[UIButton alloc] init];
-    
-    // 设置默认的标题颜色（白色）和字体
-    UIColor *defaultTitleColor = titleColor ?: [UIColor whiteColor];
-    UIFont *defaultFont = [UIFont systemFontOfSize:15.f];
-    
-    // 设置标题
-    if (title.length > 0) {
-        [button setTitle:title forState:UIControlStateNormal];
-        [button.titleLabel setFont:defaultFont];
-        [button setTitleColor:defaultTitleColor forState:UIControlStateNormal];
-        [button setTitleColor:[defaultTitleColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
-        [button setTitleColor:[defaultTitleColor colorWithAlphaComponent:0.5f] forState:UIControlStateDisabled];
-    }
-    
-    // 设置图片
-    if (imageName.length > 0) {
-        UIImage *originalImage = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [button setImage:originalImage forState:UIControlStateNormal];
-    }
-    
-    // 调整按钮尺寸
-    [button sizeToFit];
-    if (button.bounds.size.width < 44) {
-        button.zhh_size = CGSizeMake(44, 44); // 设置最小点击区域
-    }
-    
-    // 设置内容水平对齐方式
-    button.contentHorizontalAlignment = contentHorizontalAlignment;
-    
-    // 添加点击事件
-    if (target && selector) {
-        [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    // 返回自定义的 UIBarButtonItem
     return [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
-/// 返回按钮 带箭头的
-+ (UIBarButtonItem *)zhh_backItemWithTitle:(NSString *_Nullable)title imageName:(NSString *_Nullable)imageName target:(id _Nullable)target action:(SEL _Nullable)action {
-    return [self zhh_customItemWithTitle:title titleColor:nil imageName:imageName target:target selector:action contentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+/// 创建普通图片的 UIBarButtonItem（无高亮）
++ (UIBarButtonItem *)zhh_itemWithImageName:(NSString *)imageName
+                                    target:(id)target
+                                    action:(SEL)action {
+    return [self zhh_itemWithImageName:imageName highImageName:nil target:target action:action];
+}
+
+#pragma mark - 系统风格按钮项（文字/图片）
+
+/// 创建系统文字或图片类型 UIBarButtonItem
++ (UIBarButtonItem *)zhh_systemItemWithTitle:(NSString *)title
+                                  titleColor:(UIColor *)titleColor
+                                   imageName:(NSString *)imageName
+                                      target:(id)target
+                                    selector:(SEL)selector
+                                    textType:(BOOL)textType {
+
+    if (textType) {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:target action:selector];
+
+        UIColor *color = titleColor ?: [UIColor zhh_colorWithHex:0x181818];
+        UIFont *font = [UIFont systemFontOfSize:15.f];
+        NSDictionary *normalAttrs = @{ NSForegroundColorAttributeName: color, NSFontAttributeName: font };
+        NSDictionary *disabledAttrs = @{ NSForegroundColorAttributeName: [color colorWithAlphaComponent:0.5], NSFontAttributeName: font };
+
+        [item setTitleTextAttributes:normalAttrs forState:UIControlStateNormal];
+        [item setTitleTextAttributes:disabledAttrs forState:UIControlStateHighlighted];
+        [item setTitleTextAttributes:disabledAttrs forState:UIControlStateDisabled];
+
+        return item;
+    } else {
+        UIImage *image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        return [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:selector];
+    }
+}
+
+#pragma mark - 自定义按钮项
+
+/// 创建带自定义标题/图片的 UIBarButtonItem
++ (UIBarButtonItem *)zhh_customItemWithTitle:(NSString *)title
+                                  titleColor:(UIColor *)titleColor
+                                   imageName:(NSString *)imageName
+                                      target:(id)target
+                                    selector:(SEL)selector
+                  contentHorizontalAlignment:(UIControlContentHorizontalAlignment)alignment {
+    
+    UIButton *button = [[UIButton alloc] init];
+    button.contentHorizontalAlignment = alignment;
+
+    // 设置标题
+    if (title.length > 0) {
+        UIColor *color = titleColor ?: UIColor.whiteColor;
+        button.titleLabel.font = [UIFont systemFontOfSize:15];
+        [button setTitle:title forState:UIControlStateNormal];
+        [button setTitleColor:color forState:UIControlStateNormal];
+        [button setTitleColor:[color colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
+        [button setTitleColor:[color colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+    }
+
+    // 设置图片
+    if (imageName.length > 0) {
+        UIImage *image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [button setImage:image forState:UIControlStateNormal];
+    }
+
+    // 调整尺寸（最小点击范围 44x44）
+    [button sizeToFit];
+    if (button.bounds.size.width < 44) {
+        button.zhh_size = CGSizeMake(44, 44);
+    }
+
+    if (target && selector) {
+        [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    }
+
+    return [[UIBarButtonItem alloc] initWithCustomView:button];
+}
+
+#pragma mark - 返回按钮项
+
+/// 创建返回样式的 UIBarButtonItem（支持文字+图标）
++ (UIBarButtonItem *)zhh_backItemWithTitle:(NSString *)title
+                                 imageName:(NSString *)imageName
+                                    target:(id)target
+                                    action:(SEL)action {
+    return [self zhh_customItemWithTitle:title
+                              titleColor:nil
+                               imageName:imageName
+                                  target:target
+                                selector:action
+              contentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
 }
 @end

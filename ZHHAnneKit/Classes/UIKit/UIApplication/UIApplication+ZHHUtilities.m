@@ -7,7 +7,6 @@
 //
 
 #import "UIApplication+ZHHUtilities.h"
-#define QMUISynthesizeBOOLProperty(_getterName, _setterName) _QMUISynthesizeNonObject(_getterName, _setterName, BOOL, numberWithBool, boolValue)
 
 static CGRect _zhh_keyboardFrame = (CGRect){ (CGPoint){ 0.0f, 0.0f }, (CGSize){ 0.0f, 0.0f } };
 
@@ -59,30 +58,28 @@ static CGRect _zhh_keyboardFrame = (CGRect){ (CGPoint){ 0.0f, 0.0f }, (CGSize){ 
     }
 }
 
-/**
- 获取当前活动的窗口
-
- @return 当前活动的 `UIWindow` 对象
- @discussion 该方法适用于最低支持 iOS 13 的应用，使用 `UIScene` 获取当前 `UIWindowScene` 的窗口。
- */
+/// 获取当前活动的窗口（支持 iOS 13+）
+/// @return 当前活跃的 UIWindow 实例
 + (UIWindow *)zhh_currentWindow {
-    // 获取所有连接的场景
-    NSArray<UIWindowScene *> *scenes = (NSArray<UIWindowScene *> *)[[[UIApplication sharedApplication] connectedScenes] allObjects];
-    
-    // 遍历场景，找到 `UIWindowScene` 对象
-    for (UIWindowScene *scene in scenes) {
-        if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
-            // 使用 KVC 获取 `window`，以支持 SDK 开发中无法引入宿主 App 的 SceneDelegate 的情况
-            UIWindow *window = [scene valueForKeyPath:@"delegate.window"];
-            if (window) {
-                return window;
+    // iOS 13+ 多场景支持
+    NSSet *connectedScenes = [UIApplication sharedApplication].connectedScenes;
+    for (UIScene *scene in connectedScenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive &&
+            [scene isKindOfClass:[UIWindowScene class]]) {
+
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            for (UIWindow *window in windowScene.windows) {
+                if (window.isKeyWindow) {
+                    return window;
+                }
             }
         }
     }
     
-    // 如果未找到前台活跃场景，返回应用窗口数组的最后一个窗口
-    return [UIApplication sharedApplication].windows.lastObject;
+    // 兜底返回最后一个 window
+    return UIApplication.sharedApplication.windows.lastObject;
 }
+
 @end
 
 @implementation UIApplication (ZHHAppInfo)

@@ -12,70 +12,74 @@
 @implementation UIButton (ZHHContentLayout)
 
 /// 设置按钮的图文混排布局
-/// @param postion 图文混排样式
+/// @param position 图文混排样式
 /// @param spacing 图文间距
-- (void)zhh_buttonImagePosition:(ZHHUIButtonImagePosition)postion spacing:(CGFloat)spacing {
+- (void)zhh_buttonImagePosition:(ZHHUIButtonImagePosition)position spacing:(CGFloat)spacing {
     [self setTitle:self.currentTitle forState:UIControlStateNormal];
     [self setImage:self.currentImage forState:UIControlStateNormal];
-    
-    CGFloat imageWidth = self.imageView.image.size.width;
-    CGFloat imageHeight = self.imageView.image.size.height;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    CGFloat labelWidth = [self.titleLabel.text sizeWithFont:self.titleLabel.font].width;
-    CGFloat labelHeight = [self.titleLabel.text sizeWithFont:self.titleLabel.font].height;
-#pragma clang diagnostic pop
-    
-    CGFloat imageOffsetX = (imageWidth + labelWidth) / 2 - imageWidth / 2;//image中心移动的x距离
-    CGFloat imageOffsetY = imageHeight / 2 + spacing / 2;//image中心移动的y距离
-    CGFloat labelOffsetX = (imageWidth + labelWidth / 2) - (imageWidth + labelWidth) / 2;//label中心移动的x距离
-    CGFloat labelOffsetY = labelHeight / 2 + spacing / 2;//label中心移动的y距离
-    
-    CGFloat tempWidth = MAX(labelWidth, imageWidth);
-    CGFloat changedWidth = labelWidth + imageWidth - tempWidth;
-    CGFloat tempHeight = MAX(labelHeight, imageHeight);
-    CGFloat changedHeight = labelHeight + imageHeight + spacing - tempHeight;
-    
-    switch (postion) {
-        case ZHHUIButtonImagePositionLeft:
-            self.imageEdgeInsets = UIEdgeInsetsMake(0, -spacing/2, 0, spacing/2);
-            self.titleEdgeInsets = UIEdgeInsetsMake(0, spacing/2, 0, -spacing/2);
-            self.contentEdgeInsets = UIEdgeInsetsMake(0, spacing/2, 0, spacing/2);
+
+    // 获取图片和文字的尺寸
+    CGSize imageSize = self.imageView.image.size;
+    UIFont *font = self.titleLabel.font;
+    NSString *text = self.titleLabel.text ?: @"";
+    CGSize labelSize = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)
+                                           options:NSStringDrawingUsesLineFragmentOrigin
+                                        attributes:@{NSFontAttributeName: font}
+                                           context:nil].size;
+
+    CGFloat imageWidth = imageSize.width;
+    CGFloat imageHeight = imageSize.height;
+    CGFloat labelWidth = ceil(labelSize.width);
+    CGFloat labelHeight = ceil(labelSize.height);
+
+    // 重置边距
+    self.imageEdgeInsets = UIEdgeInsetsZero;
+    self.titleEdgeInsets = UIEdgeInsetsZero;
+    self.contentEdgeInsets = UIEdgeInsetsZero;
+
+    switch (position) {
+        case ZHHUIButtonImagePositionLeft: {
+            self.imageEdgeInsets = UIEdgeInsetsMake(0, -spacing / 2, 0, spacing / 2);
+            self.titleEdgeInsets = UIEdgeInsetsMake(0, spacing / 2, 0, -spacing / 2);
+            self.contentEdgeInsets = UIEdgeInsetsMake(0, spacing / 2, 0, spacing / 2);
             break;
-        case ZHHUIButtonImagePositionRight:
-            self.imageEdgeInsets = UIEdgeInsetsMake(0, labelWidth + spacing/2, 0, -(labelWidth + spacing/2));
-            self.titleEdgeInsets = UIEdgeInsetsMake(0, -(imageWidth + spacing/2), 0, imageWidth + spacing/2);
-            self.contentEdgeInsets = UIEdgeInsetsMake(0, spacing/2, 0, spacing/2);
+        }
+        case ZHHUIButtonImagePositionRight: {
+            self.imageEdgeInsets = UIEdgeInsetsMake(0, labelWidth + spacing / 2, 0, -(labelWidth + spacing / 2));
+            self.titleEdgeInsets = UIEdgeInsetsMake(0, -(imageWidth + spacing / 2), 0, imageWidth + spacing / 2);
+            self.contentEdgeInsets = UIEdgeInsetsMake(0, spacing / 2, 0, spacing / 2);
             break;
-        case ZHHUIButtonImagePositionTop:
-            self.imageEdgeInsets = UIEdgeInsetsMake(-imageOffsetY, imageOffsetX, imageOffsetY, -imageOffsetX);
-            self.titleEdgeInsets = UIEdgeInsetsMake(labelOffsetY, -labelOffsetX, -labelOffsetY, labelOffsetX);
-            self.contentEdgeInsets = UIEdgeInsetsMake(imageOffsetY, -changedWidth/2, changedHeight-imageOffsetY, -changedWidth/2);
+        }
+        case ZHHUIButtonImagePositionTop: {
+            self.imageEdgeInsets = UIEdgeInsetsMake(-labelHeight / 2 - spacing / 2, labelWidth / 2, labelHeight / 2 + spacing / 2, -labelWidth / 2);
+            self.titleEdgeInsets = UIEdgeInsetsMake(imageHeight / 2 + spacing / 2, -imageWidth / 2, -imageHeight / 2 - spacing / 2, imageWidth / 2);
+            self.contentEdgeInsets = UIEdgeInsetsMake(labelHeight / 2 + spacing / 2, -spacing / 2, imageHeight / 2 + spacing / 2, -spacing / 2);
             break;
-        case ZHHUIButtonImagePositionBottom:
-            self.imageEdgeInsets = UIEdgeInsetsMake(imageOffsetY, imageOffsetX, -imageOffsetY, -imageOffsetX);
-            self.titleEdgeInsets = UIEdgeInsetsMake(-labelOffsetY, -labelOffsetX, labelOffsetY, labelOffsetX);
-            self.contentEdgeInsets = UIEdgeInsetsMake(changedHeight-imageOffsetY, -changedWidth/2, imageOffsetY, -changedWidth/2);
+        }
+        case ZHHUIButtonImagePositionBottom: {
+            self.imageEdgeInsets = UIEdgeInsetsMake(labelHeight / 2 + spacing / 2, labelWidth / 2, -labelHeight / 2 - spacing / 2, -labelWidth / 2);
+            self.titleEdgeInsets = UIEdgeInsetsMake(-imageHeight / 2 - spacing / 2, -imageWidth / 2, imageHeight / 2 + spacing / 2, imageWidth / 2);
+            self.contentEdgeInsets = UIEdgeInsetsMake(imageHeight / 2 + spacing / 2, -spacing / 2, labelHeight / 2 + spacing / 2, -spacing / 2);
             break;
+        }
         default:
             break;
     }
 
-    // 触发重新布局
     [self setNeedsLayout];
 }
 
 #pragma mark - Associated Properties
 
 /// 获取图文布局样式
-- (ZHHUIButtonImagePosition)zhh_postion {
-    return [objc_getAssociatedObject(self, @selector(zhh_postion)) integerValue];
+- (ZHHUIButtonImagePosition)zhh_position {
+    return [objc_getAssociatedObject(self, @selector(zhh_position)) integerValue];
 }
 
 /// 设置图文布局样式，并重新布局
-- (void)setZhh_postion:(ZHHUIButtonImagePosition)zhh_postion {
-    objc_setAssociatedObject(self, @selector(zhh_postion), @(zhh_postion), OBJC_ASSOCIATION_ASSIGN);
-    [self zhh_buttonImagePosition:zhh_postion spacing:self.zhh_spacing];
+- (void)setZhh_position:(ZHHUIButtonImagePosition)zhh_position {
+    objc_setAssociatedObject(self, @selector(zhh_position), @(zhh_position), OBJC_ASSOCIATION_ASSIGN);
+    [self zhh_buttonImagePosition:zhh_position spacing:self.zhh_spacing];
 }
 
 /// 获取图文间距
@@ -86,7 +90,7 @@
 /// 设置图文间距，并重新布局
 - (void)setZhh_spacing:(CGFloat)zhh_spacing {
     objc_setAssociatedObject(self, @selector(zhh_spacing), @(zhh_spacing), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [self zhh_buttonImagePosition:self.zhh_postion spacing:zhh_spacing];
+    [self zhh_buttonImagePosition:self.zhh_position spacing:zhh_spacing];
 }
 
 @end
