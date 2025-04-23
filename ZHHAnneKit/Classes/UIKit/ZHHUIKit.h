@@ -69,6 +69,7 @@
 #import <ZHHAnneKit/UIView+ZHHBlockGesture.h>
 #import <ZHHAnneKit/UIView+ZHHCustomBorder.h>
 #import <ZHHAnneKit/UIView+ZHHFrame.h>
+#import <ZHHAnneKit/UIView+ZHHRectCorner.h>
 #import <ZHHAnneKit/UIView+ZHHScreenshot.h>
 #import <ZHHAnneKit/UIView+ZHHShake.h>
 #import <ZHHAnneKit/UIView+ZHHUtilities.h>
@@ -139,6 +140,7 @@
 #import "UIView+ZHHBlockGesture.h"
 #import "UIView+ZHHCustomBorder.h"
 #import "UIView+ZHHFrame.h"
+#import "UIView+ZHHRectCorner.h"
 #import "UIView+ZHHScreenshot.h"
 #import "UIView+ZHHShake.h"
 #import "UIView+ZHHUtilities.h"

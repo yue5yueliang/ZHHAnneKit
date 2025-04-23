@@ -34,17 +34,17 @@
 }
 
 /// 添加顶部边框
-- (void)zhh_addTopBorderWithColor:(UIColor *)color height:(CGFloat)height{
+- (void)zhh_addTopBorderWithColor:(UIColor *)color height:(CGFloat)height {
     [self zhh_addBorderWithPosition:ZHHCustomBorderPositionTop color:color width:height inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 /// 添加左侧边框
-- (void)zhh_addLeftBorderWithColor:(UIColor *)color width:(CGFloat)width{
+- (void)zhh_addLeftBorderWithColor:(UIColor *)color width:(CGFloat)width {
     [self zhh_addBorderWithPosition:ZHHCustomBorderPositionLeft color:color width:width inset:0 edgeType:ZHHBorderInsetNone];
 }
 
 /// 添加底部边框
-- (void)zhh_addBottomBorderWithColor:(UIColor *)color height:(CGFloat)height{
+- (void)zhh_addBottomBorderWithColor:(UIColor *)color height:(CGFloat)height {
     [self zhh_addBorderWithPosition:ZHHCustomBorderPositionBottom color:color width:height inset:0 edgeType:ZHHBorderInsetNone];
 }
 
