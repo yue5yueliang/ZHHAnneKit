@@ -32,6 +32,7 @@ Pod::Spec.new do |s|
     ### 一级目录 BadgeView ###
     core.subspec 'BadgeView' do |badgeview|
         badgeview.source_files = 'ZHHAnneKit/Classes/BadgeView/**/*.{h,m}'
+        badgeview.dependency 'ZHHAnneKit/Core/UIKit/UIColor'
     end
     
     ### 一级目录 CommonTools ###
@@ -150,7 +151,8 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UIBarButtonItem' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIBarButtonItem/*.{h,m}'
-          subspec.dependency 'ZHHAnneKit/Core/BadgeView'
+          subspec.dependency 'ZHHAnneKit/Core/UIKit/UIColor'
+          subspec.dependency 'ZHHAnneKit/Core/UIKit/UIView'
       end
       uikit.subspec 'UIButton' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIButton/*.{h,m}'
@@ -201,7 +203,8 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UITabBarItem' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UITabBarItem/*.{h,m}'
-          subspec.dependency 'ZHHAnneKit/Core/BadgeView'
+          subspec.dependency 'ZHHAnneKit/Core/UIKit/UIColor'
+          subspec.dependency 'ZHHAnneKit/Core/UIKit/UIView'
       end
       uikit.subspec 'UITableView' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UITableView/*.{h,m}'
@@ -214,7 +217,6 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UIView' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIView/*.{h,m}'
-          subspec.dependency 'ZHHAnneKit/Core/BadgeView'
       end
       uikit.subspec 'UIViewController' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIViewController/*.{h,m}'

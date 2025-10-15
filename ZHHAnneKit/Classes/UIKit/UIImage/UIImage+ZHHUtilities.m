@@ -7,8 +7,8 @@
 //
 
 #import "UIImage+ZHHUtilities.h"
-#import <ZHHAnneKit/UIColor+ZHHUtilities.h>
-#import <ZHHAnneKit/UIImage+ZHHColor.h>
+#import "UIColor+ZHHUtilities.h"
+#import "UIImage+ZHHColor.h"
 
 @implementation UIImage (ZHHUtilities)
 

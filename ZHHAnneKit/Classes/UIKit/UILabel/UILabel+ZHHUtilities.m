@@ -7,7 +7,7 @@
 //
 
 #import "UILabel+ZHHUtilities.h"
-#import <ZHHAnneKit/UIView+ZHHFrame.h>
+#import "UIView+ZHHFrame.h"
 #import <objc/runtime.h>
 
 @implementation UILabel (ZHHUtilities)

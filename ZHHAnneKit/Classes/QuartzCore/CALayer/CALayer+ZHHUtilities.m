@@ -176,4 +176,19 @@
     }
     return nil;
 }
+
+- (void)setZhh_borderColor:(UIColor *)zhh_borderColor {
+    if (zhh_borderColor) {
+        self.borderColor = zhh_borderColor.CGColor;
+    } else {
+        self.borderColor = nil;
+    }
+}
+
+- (UIColor *)zhh_borderColor {
+    if (self.borderColor) {
+        return [UIColor colorWithCGColor:self.borderColor];
+    }
+    return nil;
+}
 @end

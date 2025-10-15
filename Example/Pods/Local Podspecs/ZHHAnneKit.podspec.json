@@ -1,8 +1,8 @@
 {
   "name": "ZHHAnneKit",
-  "version": "0.2.1",
-  "summary": "一套实用的分类与工具库，提升开发效率。",
-  "description": "ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation、UIKit 和 QuartzCore 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。",
+  "version": "0.2.2",
+  "summary": "一套高性能、安全可靠的 iOS 工具库，支持 iOS 13.0+",
+  "description": "ZHHAnneKit 是一套轻量化、实用的工具库，包含常用的分类和工具类，帮助开发者提升效率、优化代码复用性。\n\n主要特性：\n- 🚀 高性能：优化的内存管理和 Core Foundation 对象处理\n- 🛡️ 安全可靠：完善的参数验证和错误处理\n- 📱 iOS 13+：充分利用最新的 iOS 特性\n- 🎨 UI 增强：丰富的 UIView 扩展方法\n- 🔧 工具齐全：涵盖 Foundation、UIKit、QuartzCore、BadgeView 等模块\n- 📚 文档完善：详细的方法注释和使用示例\n\n涵盖模块：Foundation 扩展、UIKit 扩展、QuartzCore 动画、BadgeView 组件、CommonTools 工具等。",
   "homepage": "https://github.com/yue5yueliang/ZHHAnneKit",
   "license": {
     "type": "MIT",
@@ -13,11 +13,21 @@
   },
   "source": {
     "git": "https://github.com/yue5yueliang/ZHHAnneKit.git",
-    "tag": "0.2.1"
+    "tag": "0.2.2"
   },
   "platforms": {
     "ios": "13.0"
   },
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "QuartzCore",
+    "CoreGraphics",
+    "AVFoundation",
+    "CoreLocation",
+    "Social"
+  ],
+  "requires_arc": true,
   "default_subspecs": "Core",
   "subspecs": [
     {
@@ -27,7 +37,10 @@
       "subspecs": [
         {
           "name": "BadgeView",
-          "source_files": "ZHHAnneKit/Classes/BadgeView/**/*.{h,m}"
+          "source_files": "ZHHAnneKit/Classes/BadgeView/**/*.{h,m}",
+          "dependencies": {
+            "ZHHAnneKit/Core/UIKit/UIColor": []
+          }
         },
         {
           "name": "CommonTools",
@@ -46,9 +59,7 @@
               "name": "Hovering",
               "source_files": "ZHHAnneKit/Classes/CommonTools/Hovering/*.{h,m}",
               "dependencies": {
-                "ZHHAnneKit/Core/UIKit/UITableView": [
-
-                ]
+                "ZHHAnneKit/Core/UIKit/UITableView": []
               }
             },
             {
@@ -57,7 +68,8 @@
             },
             {
               "name": "Permission",
-              "source_files": "ZHHAnneKit/Classes/CommonTools/Permission/*.{h,m}"
+              "source_files": "ZHHAnneKit/Classes/CommonTools/Permission/*.{h,m}",
+              "frameworks": "CoreLocation"
             }
           ]
         },
@@ -165,21 +177,15 @@
               "name": "UIBarButtonItem",
               "source_files": "ZHHAnneKit/Classes/UIKit/UIBarButtonItem/*.{h,m}",
               "dependencies": {
-                "ZHHAnneKit/Core/UIKit/UIView": [
-
-                ],
-                "ZHHAnneKit/Core/UIKit/UIColor": [
-
-                ]
+                "ZHHAnneKit/Core/UIKit/UIColor": [],
+                "ZHHAnneKit/Core/UIKit/UIView": []
               }
             },
             {
               "name": "UIButton",
               "source_files": "ZHHAnneKit/Classes/UIKit/UIButton/*.{h,m}",
               "dependencies": {
-                "ZHHAnneKit/Core/UIKit/UIImage": [
-
-                ]
+                "ZHHAnneKit/Core/UIKit/UIImage": []
               }
             },
             {
@@ -192,24 +198,21 @@
             },
             {
               "name": "UIControl",
-              "source_files": "ZHHAnneKit/Classes/UIKit/UIControl/*.{h,m}"
+              "source_files": "ZHHAnneKit/Classes/UIKit/UIControl/*.{h,m}",
+              "frameworks": "AVFoundation"
             },
             {
               "name": "UIDevice",
               "source_files": "ZHHAnneKit/Classes/UIKit/UIDevice/*.{h,m}",
               "dependencies": {
-                "ZHHAnneKit/Core/CommonTools": [
-
-                ]
+                "ZHHAnneKit/Core/CommonTools": []
               }
             },
             {
               "name": "UIImage",
               "source_files": "ZHHAnneKit/Classes/UIKit/UIImage/*.{h,m}",
               "dependencies": {
-                "ZHHAnneKit/Core/UIKit/UIColor": [
-
-                ]
+                "ZHHAnneKit/Core/UIKit/UIColor": []
               }
             },
             {
@@ -220,9 +223,7 @@
               "name": "UILabel",
               "source_files": "ZHHAnneKit/Classes/UIKit/UILabel/*.{h,m}",
               "dependencies": {
-                "ZHHAnneKit/Core/UIKit/UIView": [
-
-                ]
+                "ZHHAnneKit/Core/UIKit/UIView": []
               }
             },
             {
@@ -251,7 +252,11 @@
             },
             {
               "name": "UITabBarItem",
-              "source_files": "ZHHAnneKit/Classes/UIKit/UITabBarItem/*.{h,m}"
+              "source_files": "ZHHAnneKit/Classes/UIKit/UITabBarItem/*.{h,m}",
+              "dependencies": {
+                "ZHHAnneKit/Core/UIKit/UIColor": [],
+                "ZHHAnneKit/Core/UIKit/UIView": []
+              }
             },
             {
               "name": "UITableView",
@@ -271,7 +276,8 @@
             },
             {
               "name": "UIViewController",
-              "source_files": "ZHHAnneKit/Classes/UIKit/UIViewController/*.{h,m}"
+              "source_files": "ZHHAnneKit/Classes/UIKit/UIViewController/*.{h,m}",
+              "frameworks": "Social"
             },
             {
               "name": "UIWindow",

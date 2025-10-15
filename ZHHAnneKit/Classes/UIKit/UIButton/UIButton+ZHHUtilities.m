@@ -7,7 +7,7 @@
 //
 
 #import "UIButton+ZHHUtilities.h"
-#import <ZHHAnneKit/UIImage+ZHHColor.h>
+#import "UIImage+ZHHColor.h"
 #import <objc/runtime.h>
 
 @implementation UIButton (ZHHUtilities)
