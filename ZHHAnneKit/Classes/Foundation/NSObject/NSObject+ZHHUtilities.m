@@ -72,20 +72,32 @@ static char commonCallbackKey;
     // 计算执行时间（以秒为单位，转换为毫秒）
     CFAbsoluteTime executionTime = CFAbsoluteTimeGetCurrent() - startTime;
     // 输出执行时间
-    NSLog(@"Execution Time: %.3f ms", executionTime * 1000.0);
+    NSLog(@"ZHHAnneKit 信息: 执行时间: %.3f 毫秒", executionTime * 1000.0);
     return executionTime * 1000;  // 返回执行时间，单位为毫秒
 }
 
 + (void)zhh_preventQuickClick:(float)time {
-    static BOOL canClick = YES;
-    // 如果可以点击，返回并设置延迟
-    if (canClick) {
-        canClick = NO;
-        // 延迟指定时间后允许再次点击
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            canClick = YES;
-        });
+    static NSMutableSet *clickingObjects = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        clickingObjects = [[NSMutableSet alloc] init];
+    });
+    
+    // 使用对象地址作为唯一标识符
+    NSString *objectKey = [NSString stringWithFormat:@"%p", self];
+    
+    // 如果对象正在点击中，直接返回
+    if ([clickingObjects containsObject:objectKey]) {
+        return;
     }
+    
+    // 标记对象为点击中
+    [clickingObjects addObject:objectKey];
+    
+    // 延迟指定时间后允许再次点击
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [clickingObjects removeObject:objectKey];
+    });
 }
 
 static char kSavePhotosKey;

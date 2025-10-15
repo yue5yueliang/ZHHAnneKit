@@ -8,7 +8,7 @@
 
 #import "UIView+ZHHUtilities.h"
 
-@implementation UIView (ZHHExtend)
+@implementation UIView (ZHHUtilities)
 /**
  * @brief 创建一个指定背景颜色的 UIView 实例。
  *
@@ -298,6 +298,12 @@
 
 // 画直线
 - (void)zhh_drawLineWithPoint:(CGPoint)fPoint toPoint:(CGPoint)tPoint lineColor:(UIColor *)color lineWidth:(CGFloat)width{
+    // 参数验证
+    if (width <= 0) {
+        NSLog(@"ZHHAnneKit 警告: 线条宽度必须大于0");
+        return;
+    }
+    
     // 创建CAShapeLayer来绘制线条
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     
@@ -311,20 +317,32 @@
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     
     // 创建一个UIBezierPath来画线
-    shapeLayer.path = ({
-        UIBezierPath *path = [UIBezierPath bezierPath];
-        [path moveToPoint:fPoint]; // 起始点
-        [path addLineToPoint:tPoint]; // 结束点
-        path.CGPath;
-    });
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:fPoint]; // 起始点
+    [path addLineToPoint:tPoint]; // 结束点
+    shapeLayer.path = path.CGPath;
     
     // 设置线宽
     shapeLayer.lineWidth = width;
+    // 设置线条样式
+    shapeLayer.lineCap = kCALineCapRound;
+    shapeLayer.lineJoin = kCALineJoinRound;
+    
     // 添加到视图的layer中进行渲染
     [self.layer addSublayer:shapeLayer];
 }
 
 - (void)zhh_drawPentagramWithCenter:(CGPoint)center radius:(CGFloat)radius color:(UIColor *)color rate:(CGFloat)rate {
+    // 参数验证
+    if (radius <= 0) {
+        NSLog(@"ZHHAnneKit 警告: 半径必须大于0");
+        return;
+    }
+    
+    // 限制 rate 的范围
+    if (rate <= 0) rate = 1.0;
+    if (rate > 1.5) rate = 1.5;
+    
     // 创建一个 CAShapeLayer 用来绘制形状
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     
@@ -338,36 +356,30 @@
     }
     
     // 创建路径（五角星形状）
-    shapeLayer.path = ({
-        UIBezierPath *path = [UIBezierPath bezierPath];
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    
+    // 五角星最上面的点
+    CGPoint first = CGPointMake(center.x, center.y - radius);
+    [path moveToPoint:first];
+    
+    // 计算每个点的角度（五角星的角度）
+    CGFloat angle = 4 * M_PI / 5.0;  // 360度 / 5 (五角星的角度)
+    
+    // 循环绘制五角星的每个顶点
+    for (int i = 1; i <= 5; i++) {
+        // 计算每个顶点的位置
+        CGFloat x = center.x - sinf(i * angle) * radius;
+        CGFloat y = center.y - cosf(i * angle) * radius;
         
-        // 五角星最上面的点
-        CGPoint first = CGPointMake(center.x, center.y - radius);
-        [path moveToPoint:first];
+        // 计算控制点的位置，决定五角星的"尖角"形状
+        CGFloat midx = center.x - sinf(i * angle - 2 * M_PI / 5.0) * radius * rate;
+        CGFloat midy = center.y - cosf(i * angle - 2 * M_PI / 5.0) * radius * rate;
         
-        // 计算每个点的角度（五角星的角度）
-        CGFloat angle = 4 * M_PI / 5.0;  // 360度 / 5 (五角星的角度)
-        
-        // 限制 rate 的最大值为 1.5
-        if (rate > 1.5) rate = 1.5;
-        
-        // 循环绘制五角星的每个顶点
-        for (int i = 1; i <= 5; i++) {
-            // 计算每个顶点的位置
-            CGFloat x = center.x - sinf(i * angle) * radius;
-            CGFloat y = center.y - cosf(i * angle) * radius;
-            
-            // 计算控制点的位置，决定五角星的"尖角"形状
-            CGFloat midx = center.x - sinf(i * angle - 2 * M_PI / 5.0) * radius * rate;
-            CGFloat midy = center.y - cosf(i * angle - 2 * M_PI / 5.0) * radius * rate;
-            
-            // 绘制曲线连接点
-            [path addQuadCurveToPoint:CGPointMake(x, y) controlPoint:CGPointMake(midx, midy)];
-        }
-        
-        // 返回路径
-        path.CGPath;
-    });
+        // 绘制曲线连接点
+        [path addQuadCurveToPoint:CGPointMake(x, y) controlPoint:CGPointMake(midx, midy)];
+    }
+    
+    shapeLayer.path = path.CGPath;
     
     // 设置线条宽度和线条连接方式
     shapeLayer.lineWidth = 1.0f;

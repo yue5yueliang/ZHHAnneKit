@@ -218,7 +218,7 @@
                                                                                   error:error];
 
     if (*error) {
-        NSLog(@"正则表达式错误: %@", (*error).localizedDescription);  // 打印错误信息
+        NSLog(@"ZHHAnneKit 警告: 正则表达式错误: %@", (*error).localizedDescription);  // 打印错误信息
         return @[];
     }
 

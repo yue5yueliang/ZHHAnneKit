@@ -14,6 +14,12 @@
 /// @param animations 动画块，定义动画的具体内容
 /// @param completion 动画完成后的回调
 + (void)zhh_animateWithDuration:(NSTimeInterval)duration animations:(void (^)(void))animations completion:(void (^)(void))completion {
+    // 参数验证
+    if (duration < 0) {
+        NSLog(@"ZHHAnneKit 警告: 动画时长不能为负数");
+        return;
+    }
+    
     // 开始事务
     [CATransaction begin];
     // 设置动画持续时间

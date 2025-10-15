@@ -20,6 +20,14 @@
     return manager;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        // 创建串行队列用于保护 countdownTasks 字典的访问
+        _countdownQueue = dispatch_queue_create("com.zhh.countdown.queue", DISPATCH_QUEUE_SERIAL);
+    }
+    return self;
+}
+
 // 懒加载倒计时任务字典
 - (NSMutableDictionary<NSString *, dispatch_source_t> *)countdownTasks {
     if (!_countdownTasks) {
@@ -33,6 +41,12 @@
                            timeout:(NSInteger)timeout
                   countdownHandler:(ZHHCountdownHandler)countdownHandler
                         completion:(ZHHCountdownCompletion)completion {
+    // 参数验证
+    if (!key || key.length == 0 || timeout <= 0) {
+        NSLog(@"ZHHAnneKit 警告: 倒计时参数无效");
+        return;
+    }
+    
     // 先取消可能存在的旧任务
     [self zhh_cancelCountdownForKey:key];
 
@@ -56,8 +70,10 @@
                     completion();
                 }
             });
-            // 从字典中移除定时器任务
-            [self.countdownTasks removeObjectForKey:key];
+            // 从字典中移除定时器任务（线程安全）
+            dispatch_async(self.countdownQueue, ^{
+                [self.countdownTasks removeObjectForKey:key];
+            });
         } else {
             // 更新剩余时间
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -69,8 +85,10 @@
             remainingTime--;
         }
     });
-    // 将定时器保存到字典中
-    self.countdownTasks[key] = timer;
+    // 将定时器保存到字典中（线程安全）
+    dispatch_async(self.countdownQueue, ^{
+        self.countdownTasks[key] = timer;
+    });
     // 启动定时器
     dispatch_resume(timer);
 }
@@ -91,27 +109,36 @@
 
 // 取消指定 Key 的倒计时任务
 - (void)zhh_cancelCountdownForKey:(NSString *)key {
-    // 获取定时器
-    dispatch_source_t timer = self.countdownTasks[key];
-    if (timer) {
-        // 取消定时器
-        dispatch_source_cancel(timer);
-        // 从字典中移除定时器任务
-        [self.countdownTasks removeObjectForKey:key];
+    if (!key || key.length == 0) {
+        return;
     }
+    
+    // 线程安全地获取和移除定时器
+    dispatch_async(self.countdownQueue, ^{
+        dispatch_source_t timer = self.countdownTasks[key];
+        if (timer) {
+            // 取消定时器
+            dispatch_source_cancel(timer);
+            // 从字典中移除定时器任务
+            [self.countdownTasks removeObjectForKey:key];
+        }
+    });
 }
 
 // 取消所有倒计时任务
 - (void)zhh_cancelAllCountdowns {
-    // 遍历并取消所有倒计时任务
-    for (NSString *key in self.countdownTasks.allKeys) {
-        dispatch_source_t timer = self.countdownTasks[key];
-        if (timer) {
-            dispatch_source_cancel(timer);
+    // 线程安全地取消所有倒计时任务
+    dispatch_async(self.countdownQueue, ^{
+        // 遍历并取消所有倒计时任务
+        for (NSString *key in self.countdownTasks.allKeys) {
+            dispatch_source_t timer = self.countdownTasks[key];
+            if (timer) {
+                dispatch_source_cancel(timer);
+            }
         }
-    }
-    // 清空任务字典
-    [self.countdownTasks removeAllObjects];
+        // 清空任务字典
+        [self.countdownTasks removeAllObjects];
+    });
 }
 
 @end

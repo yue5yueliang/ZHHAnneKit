@@ -58,10 +58,10 @@ static CGRect _zhh_keyboardFrame = (CGRect){ (CGPoint){ 0.0f, 0.0f }, (CGSize){ 
     }
 }
 
-/// 获取当前活动的窗口（支持 iOS 13+）
+/// 获取当前活动的窗口（iOS 13.0+）
 /// @return 当前活跃的 UIWindow 实例
 + (UIWindow *)zhh_currentWindow {
-    // iOS 13+ 多场景支持
+    // iOS 13.0+ 多场景支持
     NSSet *connectedScenes = [UIApplication sharedApplication].connectedScenes;
     for (UIScene *scene in connectedScenes) {
         if (scene.activationState == UISceneActivationStateForegroundActive &&
@@ -73,11 +73,24 @@ static CGRect _zhh_keyboardFrame = (CGRect){ (CGPoint){ 0.0f, 0.0f }, (CGSize){ 
                     return window;
                 }
             }
+            
+            // 如果没有找到 keyWindow，返回第一个 window
+            if (windowScene.windows.count > 0) {
+                return windowScene.windows.firstObject;
+            }
         }
     }
     
-    // 兜底返回最后一个 window
-    return UIApplication.sharedApplication.windows.lastObject;
+    // 兜底方案
+    NSArray *windows = [UIApplication sharedApplication].windows;
+    for (UIWindow *window in windows) {
+        if (window.isKeyWindow) {
+            return window;
+        }
+    }
+    
+    // 最后兜底返回最后一个 window
+    return windows.lastObject;
 }
 
 @end
@@ -153,7 +166,7 @@ static CGRect _zhh_keyboardFrame = (CGRect){ (CGPoint){ 0.0f, 0.0f }, (CGSize){ 
         }
         
         if (!image) {
-            NSLog(@"[zhh_appIcon] Failed to load app icon.");
+            NSLog(@"ZHHAnneKit 警告: 无法加载应用图标");
         }
     });
     return image;

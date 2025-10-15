@@ -20,16 +20,12 @@
 - (CGFloat)zhh_toCGFloat {
     CGFloat result = 0.0;
 
-    // 确保对象是有效的数值类型
-    if ([self respondsToSelector:@selector(doubleValue)]) {
+    // iOS 13.0+ 直接使用数值转换
 #if (CGFLOAT_IS_DOUBLE == 1)
-        result = [self doubleValue];
+    result = [self doubleValue];
 #else
-        result = [self floatValue];
+    result = [self floatValue];
 #endif
-    } else {
-        NSLog(@"警告: 对象 %@ 不能转换为 CGFloat，将返回默认值 0.0", self);
-    }
 
     return result;
 }

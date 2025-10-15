@@ -21,10 +21,10 @@
     NSArray<CIFaceFeature *> *features = [UIImage zhh_detectFaceFeaturesInImage:self accuracy:accuracy];
     
     if (features.count == 0) {
-        NSLog(@"[BetterFace] No faces detected");
+        NSLog(@"ZHHAnneKit 信息: 未检测到人脸");
         return nil;
     } else {
-        NSLog(@"[BetterFace] Detected %lu face(s)", (unsigned long)features.count);
+        NSLog(@"ZHHAnneKit 信息: 检测到 %lu 个人脸", (unsigned long)features.count);
         // 根据人脸特征裁剪图片
         return [self zhh_croppedImageForFaceFeatures:features targetSize:targetSize];
     }

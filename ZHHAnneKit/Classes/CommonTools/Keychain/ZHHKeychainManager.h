@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
      // 获取数据
      NSString *password = [ZHHKeychainManager zhh_getValueForKey:key inService:service];
-     NSLog(@"Password: %@", password);
+     NSLog(@"ZHHAnneKit 信息: 密码: %@", password);
 
      // 删除数据
      [ZHHKeychainManager zhh_deleteValueForKey:key inService:service];

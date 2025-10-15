@@ -161,6 +161,10 @@
 
     // 创建 Core Text 字体对象
     CTFontRef cfFont = CTFontCreateWithName((CFStringRef)font.fontName, font.pointSize, NULL);
+    if (!cfFont) {
+        return CGSizeZero;
+    }
+    
     // 计算行间距
     CGFloat leading = font.lineHeight - font.ascender + font.descender;
     // 设置段落样式，主要调整行间距
@@ -168,10 +172,21 @@
         {kCTParagraphStyleSpecifierLineSpacingAdjustment, sizeof(CGFloat), &leading}
     };
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(paragraphSettings, 1);
+    if (!paragraphStyle) {
+        CFRelease(cfFont);
+        return CGSizeZero;
+    }
+    
     // 创建 CFRange，表示文本的范围
     CFRange textRange = CFRangeMake(0, self.length);
     // 创建可变的 CFAttributedString，用于存储带属性的字符串
     CFMutableAttributedStringRef string = CFAttributedStringCreateMutable(kCFAllocatorDefault, self.length);
+    if (!string) {
+        CFRelease(paragraphStyle);
+        CFRelease(cfFont);
+        return CGSizeZero;
+    }
+    
     // 将当前 NSString 转换为 CFString，并替换到 CFAttributedString 中
     CFAttributedStringReplaceString(string, CFRangeMake(0, 0), (CFStringRef)self);
     // 设置字体属性
@@ -180,6 +195,13 @@
     CFAttributedStringSetAttribute(string, textRange, kCTParagraphStyleAttributeName, paragraphStyle);
     // 创建一个文本框架的构造器
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(string);
+    if (!framesetter) {
+        CFRelease(paragraphStyle);
+        CFRelease(string);
+        CFRelease(cfFont);
+        return CGSizeZero;
+    }
+    
     // 计算文本尺寸，宽度无限制，高度仅为单行
     CGSize size = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), nil, CGSizeMake(DBL_MAX, DBL_MAX), nil);
     
@@ -204,6 +226,9 @@
 
     // 创建 Core Text 字体对象
     CTFontRef ctFont = CTFontCreateWithName((CFStringRef)(font.fontName), font.pointSize, NULL);
+    if (!ctFont) {
+        return nil;
+    }
 
     // 创建富文本字符串，包含段落样式
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self];
@@ -215,11 +240,24 @@
 
     // 创建 CTFramesetter
     CTFramesetterRef frameSetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
+    if (!frameSetter) {
+        return nil;
+    }
 
     // 设置绘制区域，宽度受限，高度设置为足够大
     CGMutablePathRef path = CGPathCreateMutable();
+    if (!path) {
+        CFRelease(frameSetter);
+        return nil;
+    }
+    
     CGPathAddRect(path, NULL, CGRectMake(0, 0, maxWidth, CGFLOAT_MAX));
     CTFrameRef frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), path, NULL);
+    if (!frame) {
+        CGPathRelease(path);
+        CFRelease(frameSetter);
+        return nil;
+    }
 
     // 获取每行内容
     NSArray *lines = (NSArray *)CTFrameGetLines(frame);

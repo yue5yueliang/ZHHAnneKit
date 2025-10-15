@@ -16,6 +16,12 @@
 /// @param duration 动画时长
 /// @return 转场动画实例
 - (CATransition *)zhh_transitionWithAnimType:(ZHHTransitionAnimType)animType subType:(ZHHTransitionSubType)subType curve:(ZHHTransitionCurve)curve duration:(CGFloat)duration {
+    // 参数验证
+    if (duration <= 0) {
+        NSLog(@"ZHHAnneKit 警告: 动画时长必须大于0");
+        return nil;
+    }
+    
     NSString *key = @"zhh_transition";
     // 检查是否已有相同动画，避免冲突
     if ([self animationForKey:key] != nil) {
@@ -84,14 +90,38 @@
 /// @param isRandom 是否随机
 /// @return 对应的对象
 - (id)zhh_objectFromArray:(NSArray *)array index:(NSUInteger)index isRandom:(BOOL)isRandom {
+    // 参数验证
+    if (!array || array.count == 0) {
+        NSLog(@"ZHHAnneKit 警告: 数组为空或不存在");
+        return nil;
+    }
+    
     NSUInteger count = array.count;
-    NSUInteger finalIndex = isRandom ? arc4random_uniform((u_int32_t)count) : index;
+    NSUInteger finalIndex;
+    
+    if (isRandom) {
+        finalIndex = arc4random_uniform((u_int32_t)count);
+    } else {
+        // 边界检查
+        if (index >= count) {
+            NSLog(@"ZHHAnneKit 警告: 索引 %lu 超出数组边界，数组长度为 %lu", (unsigned long)index, (unsigned long)count);
+            finalIndex = count - 1; // 使用最后一个有效索引
+        } else {
+            finalIndex = index;
+        }
+    }
+    
     return array[finalIndex];
 }
 
 #pragma mark - 设置边框颜色
 
 - (void)zhh_setBorderColor:(UIColor *)color {
+    if (!color) {
+        NSLog(@"ZHHAnneKit 警告: 边框颜色不能为空");
+        return;
+    }
+    
     if (self.borderWidth == 0) {
         self.borderWidth = 0.5; // 默认边框宽度
     }
@@ -101,6 +131,11 @@
 #pragma mark - 设置阴影颜色
 
 - (void)zhh_setShadowColor:(UIColor *)color {
+    if (!color) {
+        NSLog(@"ZHHAnneKit 警告: 阴影颜色不能为空");
+        return;
+    }
+    
     self.shadowColor = color.CGColor;
     if (self.shadowOpacity == 0) {
         self.shadowOpacity = 0.5; // 默认阴影透明度
@@ -111,20 +146,34 @@
 #pragma mark - 边框颜色 (UIColor) 便捷属性
 
 - (void)setZhh_borderUIColor:(UIColor *)zhh_borderUIColor {
-    self.borderColor = zhh_borderUIColor.CGColor;
+    if (zhh_borderUIColor) {
+        self.borderColor = zhh_borderUIColor.CGColor;
+    } else {
+        self.borderColor = nil;
+    }
 }
 
 - (UIColor *)zhh_borderUIColor {
-    return [UIColor colorWithCGColor:self.borderColor];
+    if (self.borderColor) {
+        return [UIColor colorWithCGColor:self.borderColor];
+    }
+    return nil;
 }
 
 #pragma mark - 阴影颜色 (UIColor) 便捷属性
 
 - (void)setZhh_shadowColor:(UIColor *)zhh_shadowUIColor {
-    self.shadowColor = zhh_shadowUIColor.CGColor;
+    if (zhh_shadowUIColor) {
+        self.shadowColor = zhh_shadowUIColor.CGColor;
+    } else {
+        self.shadowColor = nil;
+    }
 }
 
 - (UIColor *)zhh_shadowColor {
-    return [UIColor colorWithCGColor:self.shadowColor];
+    if (self.shadowColor) {
+        return [UIColor colorWithCGColor:self.shadowColor];
+    }
+    return nil;
 }
 @end

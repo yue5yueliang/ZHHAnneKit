@@ -158,10 +158,46 @@
 - (void)requestLocationPermissionWithCompletion:(void(^)(BOOL response, ZHHPrivacyPermissionAuthorizationStatus status))completion {
     CLLocationManager *manager = [[CLLocationManager alloc] init];
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    if (status == kCLAuthorizationStatusNotDetermined) {
-        [manager requestWhenInUseAuthorization];
-    } else {
-        completion(status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse, status == kCLAuthorizationStatusAuthorizedAlways ? ZHHPrivacyPermissionAuthorizationStatusLocationAlways : ZHHPrivacyPermissionAuthorizationStatusLocationWhenInUse);
+    
+    switch (status) {
+        case kCLAuthorizationStatusNotDetermined:
+            // 首次请求权限
+            [manager requestWhenInUseAuthorization];
+            // 注意：这里不会立即回调，需要在实际的 CLLocationManagerDelegate 中处理
+            if (completion) {
+                completion(NO, ZHHPrivacyPermissionAuthorizationStatusNotDetermined);
+            }
+            break;
+            
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            if (completion) {
+                completion(YES, ZHHPrivacyPermissionAuthorizationStatusLocationWhenInUse);
+            }
+            break;
+            
+        case kCLAuthorizationStatusAuthorizedAlways:
+            if (completion) {
+                completion(YES, ZHHPrivacyPermissionAuthorizationStatusLocationAlways);
+            }
+            break;
+            
+        case kCLAuthorizationStatusDenied:
+            if (completion) {
+                completion(NO, ZHHPrivacyPermissionAuthorizationStatusDenied);
+            }
+            break;
+            
+        case kCLAuthorizationStatusRestricted:
+            if (completion) {
+                completion(NO, ZHHPrivacyPermissionAuthorizationStatusRestricted);
+            }
+            break;
+            
+        default:
+            if (completion) {
+                completion(NO, ZHHPrivacyPermissionAuthorizationStatusUnknown);
+            }
+            break;
     }
 }
 

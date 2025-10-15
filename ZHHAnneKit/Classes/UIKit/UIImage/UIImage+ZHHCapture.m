@@ -81,13 +81,8 @@
                               -window.bounds.size.width * window.layer.anchorPoint.x,
                               -window.bounds.size.height * window.layer.anchorPoint.y);
 
-        // 如果支持 `drawViewHierarchyInRect:afterScreenUpdates:` 方法，优先使用
-        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
-        } else {
-            // 否则使用 `renderInContext:` 绘制
-            [window.layer renderInContext:context];
-        }
+        // iOS 13.0+ 直接使用 drawViewHierarchyInRect:afterScreenUpdates: 方法
+        [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
 
         // 恢复图形上下文状态
         CGContextRestoreGState(context);
@@ -159,12 +154,8 @@
                 break;
         }
         
-        // 绘制窗口内容
-        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
-        } else {
-            [window.layer renderInContext:context];
-        }
+        // 绘制窗口内容（iOS 13.0+）
+        [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
         
         // 恢复上下文状态
         CGContextRestoreGState(context);

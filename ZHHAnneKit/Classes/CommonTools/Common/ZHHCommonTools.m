@@ -64,7 +64,7 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
 
     if (!path) {
-        NSLog(@"JSON file not found");
+        NSLog(@"ZHHAnneKit 警告: JSON文件未找到");
         return nil;
     }
 
@@ -76,15 +76,15 @@
     id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     
     if (error) {
-        NSLog(@"Error parsing JSON: %@", error.localizedDescription);
+        NSLog(@"ZHHAnneKit 警告: JSON解析错误: %@", error.localizedDescription);
     } else {
         if ([jsonObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *jsonDict = (NSDictionary *)jsonObject;
-            NSLog(@"JSON Dictionary: %@", jsonDict);
+            NSLog(@"ZHHAnneKit 信息: JSON字典: %@", jsonDict);
             return jsonObject;
         } else if ([jsonObject isKindOfClass:[NSArray class]]) {
             NSArray *jsonArray = (NSArray *)jsonObject;
-            NSLog(@"JSON Array: %@", jsonArray);
+            NSLog(@"ZHHAnneKit 信息: JSON数组: %@", jsonArray);
             return jsonObject;
         }
     }
@@ -338,7 +338,7 @@
         }
         default: {
             // 无效反馈类型
-            NSLog(@"Invalid feedback type: %ld", (long)type);
+            NSLog(@"ZHHAnneKit 警告: 无效的反馈类型: %ld", (long)type);
             break;
         }
     }
@@ -348,21 +348,23 @@
 /// @param count 生成的汉字数量
 /// @return 随机生成的汉字字符串
 + (NSString *)zhh_randomChineseWithCount:(NSInteger)count {
-    NSMutableString *randomString = [NSMutableString stringWithString:@""];
-    NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    if (count <= 0) {
+        return @"";
+    }
     
+    NSMutableString *randomString = [NSMutableString stringWithString:@""];
+    
+    // 使用更现代的汉字范围：常用汉字范围 0x4E00-0x9FFF
     for (NSInteger i = 0; i < count; i++) {
-        // 随机生成高字节和低字节
-        NSInteger randomH = 0xA1 + arc4random() % (0xFE - 0xA1 + 1);
-        NSInteger randomL = 0xB0 + arc4random() % (0xF7 - 0xB0 + 1);
-        NSInteger number = (randomH << 8) + randomL;
+        // 生成常用汉字范围内的随机码点
+        NSInteger randomCodePoint = 0x4E00 + arc4random() % (0x9FFF - 0x4E00 + 1);
         
-        // 将字节数据转换为NSString
-        NSData *data = [NSData dataWithBytes:&number length:2];
-        NSString *string = [[NSString alloc] initWithData:data encoding:encoding];
+        // 将码点转换为Unicode字符
+        unichar character = (unichar)randomCodePoint;
+        NSString *chineseChar = [NSString stringWithCharacters:&character length:1];
         
         // 拼接汉字
-        [randomString appendString:string];
+        [randomString appendString:chineseChar];
     }
     
     return randomString.copy;

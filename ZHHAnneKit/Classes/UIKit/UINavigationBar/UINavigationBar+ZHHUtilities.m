@@ -52,6 +52,22 @@ static char zhh_tintColorKey;
 
 // 开发者自定义阴影设置
 - (void)zhh_navigationBarCustomShadowColor:(UIColor *)shadowColor shadowOffset:(CGFloat)shadowOffset shadowOpacity:(CGFloat)shadowOpacity shadowRadius:(CGFloat)shadowRadius {
+    // 参数验证
+    if (!shadowColor) {
+        NSLog(@"ZHHAnneKit 警告: 阴影颜色不能为空");
+        return;
+    }
+    
+    if (shadowOpacity < 0.0 || shadowOpacity > 1.0) {
+        NSLog(@"ZHHAnneKit 警告: 阴影透明度必须在 0.0 到 1.0 之间");
+        return;
+    }
+    
+    if (shadowRadius < 0.0) {
+        NSLog(@"ZHHAnneKit 警告: 阴影半径不能为负数");
+        return;
+    }
+    
     // 设置阴影颜色
     self.layer.shadowColor = shadowColor.CGColor;
     // 设置阴影偏移量
@@ -60,26 +76,33 @@ static char zhh_tintColorKey;
     self.layer.shadowOpacity = shadowOpacity; // 阴影透明度
     // 设置阴影的模糊半径
     self.layer.shadowRadius = shadowRadius; // 半径
-    // 设置阴影路径，优化性能
-    self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    // 设置阴影路径，优化性能（避免重复计算）
+    if (CGRectIsEmpty(self.bounds)) {
+        // 如果 bounds 为空，延迟设置阴影路径
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!CGRectIsEmpty(self.bounds)) {
+                self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+            }
+        });
+    } else {
+        self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    }
 }
 
 // 较强的底部阴影效果
 - (void)zhh_applyStrongShadow {
-    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.4].CGColor;
-    self.layer.shadowOffset = CGSizeMake(0, 4); // 向下偏移 4px
-    self.layer.shadowOpacity = 0.3; // 阴影透明度 0.3
-    self.layer.shadowRadius = 6.0; // 半径 6px
-    self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    [self zhh_navigationBarCustomShadowColor:[UIColor.blackColor colorWithAlphaComponent:0.4] 
+                                shadowOffset:4 
+                               shadowOpacity:0.3 
+                                shadowRadius:6.0];
 }
 
 // 自定义品牌色阴影效果
 - (void)zhh_applyCustomShadow {
-    self.layer.shadowColor = [UIColor colorWithRed:0.12 green:0.34 blue:0.56 alpha:0.3].CGColor; // 使用品牌色
-    self.layer.shadowOffset = CGSizeMake(0, 5); // 向下偏移 5px
-    self.layer.shadowOpacity = 0.35; // 阴影透明度 0.35
-    self.layer.shadowRadius = 8.0; // 半径 8px
-    self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    [self zhh_navigationBarCustomShadowColor:[UIColor colorWithRed:0.12 green:0.34 blue:0.56 alpha:0.3] 
+                                shadowOffset:5 
+                               shadowOpacity:0.35 
+                                shadowRadius:8.0];
 }
 
 // 重置导航栏的默认配置
@@ -100,13 +123,17 @@ static char zhh_tintColorKey;
 
 // 通过回调配置导航栏
 - (void)zhh_configureWithBlock:(void (^)(UINavigationBar *bar))configurationBlock {
+    // 参数验证
+    if (!configurationBlock) {
+        NSLog(@"ZHHAnneKit 警告: 配置回调块不能为空");
+        return;
+    }
+    
     // 在配置前先重置为默认值
     [self zhh_resetConfiguration];
     
-    // 如果回调不为空，则执行回调，允许自定义配置
-    if (configurationBlock) {
-        configurationBlock(self);
-    }
+    // 执行回调，允许自定义配置
+    configurationBlock(self);
     
     // 配置完成后调用更新方法，应用新的配置
     [self zhh_configuration];
@@ -133,32 +160,30 @@ static char zhh_tintColorKey;
     self.barTintColor = self.zhh_backgroundColor;
     // 设置导航栏标题的属性
     self.titleTextAttributes = titleTextAttributes;
-    // 如果 iOS 13 或更高版本，使用新的 `UINavigationBarAppearance` 进行配置
-    if (@available(iOS 13.0, *)) {
-        UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-        // 如果设置了全透明，配置透明背景
-        if (self.zhh_transparent) {
-            [appearance configureWithTransparentBackground];
-        } else {
-            // 否则配置为默认背景
-            [appearance configureWithDefaultBackground];
-        }
-        
-        // 设置导航栏的背景色和标题属性
-        appearance.backgroundColor = self.zhh_backgroundColor;
-        appearance.titleTextAttributes = titleTextAttributes;
-        
-        // 如果需要隐藏底部线条，设置阴影为透明
-        if (self.zhh_hideBottomLine) {
-            appearance.shadowImage = [UIImage new];
-            appearance.shadowColor = [UIColor clearColor];
-        }
-        
-        // 应用标准外观
-        self.standardAppearance = appearance;
-        // 如果启用了滚动边缘外观，设置滚动边缘外观
-        self.scrollEdgeAppearance = self.zhh_enableScrollEdgeAppearance ? appearance : nil;
+    // iOS 13.0+ 使用 UINavigationBarAppearance 进行配置
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    // 如果设置了全透明，配置透明背景
+    if (self.zhh_transparent) {
+        [appearance configureWithTransparentBackground];
+    } else {
+        // 否则配置为默认背景
+        [appearance configureWithDefaultBackground];
     }
+    
+    // 设置导航栏的背景色和标题属性
+    appearance.backgroundColor = self.zhh_backgroundColor;
+    appearance.titleTextAttributes = titleTextAttributes;
+    
+    // 如果需要隐藏底部线条，设置阴影为透明
+    if (self.zhh_hideBottomLine) {
+        appearance.shadowImage = [UIImage new];
+        appearance.shadowColor = [UIColor clearColor];
+    }
+    
+    // 应用标准外观
+    self.standardAppearance = appearance;
+    // 如果启用了滚动边缘外观，设置滚动边缘外观
+    self.scrollEdgeAppearance = self.zhh_enableScrollEdgeAppearance ? appearance : nil;
 }
 
 #pragma mark - Getters | Setters
@@ -196,6 +221,11 @@ static char zhh_tintColorKey;
 }
 
 - (void)setZhh_titleFont:(UIFont *)zhh_titleFont {
+    // 参数验证
+    if (!zhh_titleFont) {
+        NSLog(@"ZHHAnneKit 警告: 标题字体不能为空");
+        return;
+    }
     objc_setAssociatedObject(self, &zhh_titleFontKey, zhh_titleFont, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -204,6 +234,11 @@ static char zhh_tintColorKey;
 }
 
 - (void)setZhh_titleColor:(UIColor *)zhh_titleColor {
+    // 参数验证
+    if (!zhh_titleColor) {
+        NSLog(@"ZHHAnneKit 警告: 标题颜色不能为空");
+        return;
+    }
     objc_setAssociatedObject(self, &zhh_titleColorKey, zhh_titleColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -212,6 +247,11 @@ static char zhh_tintColorKey;
 }
 
 - (void)setZhh_backgroundColor:(UIColor *)zhh_backgroundColor {
+    // 参数验证
+    if (!zhh_backgroundColor) {
+        NSLog(@"ZHHAnneKit 警告: 背景颜色不能为空");
+        return;
+    }
     objc_setAssociatedObject(self, &zhh_backgroundColorKey, zhh_backgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -220,6 +260,11 @@ static char zhh_tintColorKey;
 }
 
 - (void)setZhh_tintColor:(UIColor *)zhh_tintColor {
+    // 参数验证
+    if (!zhh_tintColor) {
+        NSLog(@"ZHHAnneKit 警告: 主题颜色不能为空");
+        return;
+    }
     objc_setAssociatedObject(self, &zhh_tintColorKey, zhh_tintColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 

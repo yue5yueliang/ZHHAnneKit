@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, ZHHFeedbackType) {
  *
  *  使用示例：
  *  ```objc
- *  id *json = [ZHHCommonTools zhh_jsonWithFileName:@"example"];
+ *  id json = [ZHHCommonTools zhh_jsonWithFileName:@"example"];
  *  if ([json isKindOfClass:[NSDictionary class]]) {
  *      NSDictionary *dict = (NSDictionary *)json;
  *      // 处理字典数据

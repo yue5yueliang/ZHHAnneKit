@@ -320,19 +320,27 @@
 - (UIImage *)zhh_resizeImageToSize:(CGSize)size backgroundColor:(UIColor *)backgroundColor {
     // 1. 检查图片是否存在，以及目标尺寸是否有效
     if (!self || size.width <= 0 || size.height <= 0) {
-        NSLog(@"输入无效：图片为空或尺寸无效。");
+        NSLog(@"ZHHAnneKit 警告: 输入无效：图片为空或尺寸无效");
         return self ?: nil; // 防止图片为空导致崩溃
     }
 
     // 2. 如果原图尺寸比目标尺寸大，不进行缩放，直接返回原图
     CGSize originalSize = self.size;
     if (originalSize.width > size.width || originalSize.height > size.height) {
-        NSLog(@"原始图片尺寸 (%@) 超出目标尺寸 (%@)，返回原始图片。", NSStringFromCGSize(originalSize), NSStringFromCGSize(size));
+        NSLog(@"ZHHAnneKit 信息: 原始图片尺寸 (%@) 超出目标尺寸 (%@)，返回原始图片", NSStringFromCGSize(originalSize), NSStringFromCGSize(size));
         return self;
     }
 
     // 3. 创建新的绘图上下文
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    
+    // 添加错误处理
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    if (!context) {
+        NSLog(@"ZHHAnneKit 警告: 无法创建绘图上下文");
+        UIGraphicsEndImageContext();
+        return self;
+    }
 
     // 4. 填充背景颜色
     if (backgroundColor) {
@@ -352,6 +360,12 @@
 
     // 8. 结束绘图上下文
     UIGraphicsEndImageContext();
+
+    // 9. 检查生成的图片是否有效
+    if (!newImage) {
+        NSLog(@"ZHHAnneKit 警告: 图片缩放失败，返回原始图片");
+        return self;
+    }
 
     return newImage;
 }

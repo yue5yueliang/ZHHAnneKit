@@ -27,6 +27,21 @@ typedef void (^ZHHGestureActionBlock)(UIGestureRecognizer *gestureRecoginzer);
  @param block 手势触发时的回调代码块。
  */
 - (void)zhh_addLongPressActionWithBlock:(ZHHGestureActionBlock)block;
+
+/*!
+ @method zhh_removeTapAction
+ @abstract 移除点击手势。
+ @discussion 移除通过 zhh_addTapActionWithBlock: 添加的点击手势。
+ */
+- (void)zhh_removeTapAction;
+
+/*!
+ @method zhh_removeLongPressAction
+ @abstract 移除长按手势。
+ @discussion 移除通过 zhh_addLongPressActionWithBlock: 添加的长按手势。
+ */
+- (void)zhh_removeLongPressAction;
+
 @end
 
 

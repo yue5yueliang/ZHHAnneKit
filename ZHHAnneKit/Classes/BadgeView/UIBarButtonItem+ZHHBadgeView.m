@@ -90,6 +90,12 @@
     // 使用 Xcode 视图调试工具发现 UIBarButtonItem 的 Badge 父视图为 UIButton
     UIView *navigationButton = [self valueForKey:@"_view"];
     
+    // 添加空值检查
+    if (!navigationButton) {
+                NSLog(@"ZHHAnneKit 警告: 无法获取 UIBarButtonItem 的导航按钮");
+        return nil;
+    }
+    
     for (UIView *subView in navigationButton.subviews) {
         if ([subView isKindOfClass:[UIButton class]]) {
             subView.layer.masksToBounds = NO; // 取消裁剪以便显示 Badge

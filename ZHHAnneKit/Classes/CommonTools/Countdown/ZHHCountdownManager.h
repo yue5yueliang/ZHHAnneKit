@@ -20,6 +20,8 @@ typedef void(^ZHHCountdownCompletion)(void);
 
 /// 存储当前所有倒计时任务的字典，key 为任务的唯一标识，value 为对应的 timer
 @property (nonatomic, strong) NSMutableDictionary<NSString *, dispatch_source_t> *countdownTasks;
+/// 线程安全队列，用于保护 countdownTasks 字典的访问
+@property (nonatomic, strong) dispatch_queue_t countdownQueue;
 
 /// 获取单例管理器
 + (instancetype)sharedManager;

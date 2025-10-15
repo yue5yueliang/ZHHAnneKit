@@ -368,7 +368,7 @@
     
     // 如果解析失败，返回空字符串
     if (error) {
-        NSLog(@"Error parsing HTML: %@", error.localizedDescription);
+        NSLog(@"ZHHAnneKit 警告: HTML解析失败: %@", error.localizedDescription);
         return [[NSAttributedString alloc] initWithString:@""];
     }
     
@@ -577,7 +577,7 @@
     
     if (error) {
 #ifdef DEBUG
-        NSLog(@"Error converting object to JSON: %@", error.localizedDescription);
+        NSLog(@"ZHHAnneKit 警告: 对象转JSON失败: %@", error.localizedDescription);
 #endif
         return nil;
     }

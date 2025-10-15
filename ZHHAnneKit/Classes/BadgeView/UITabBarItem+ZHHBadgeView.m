@@ -11,7 +11,7 @@
 @implementation UITabBarItem (ZHHBadgeView)
 #pragma mark - Badge 相关功能扩展
 
-/// 获取或创建 `PPBadgeControl` 对象
+/// 获取或创建 `ZHHBadgeControl` 对象
 - (ZHHBadgeControl *)badgeView {
     return [self zhh_bottomView].badgeView;
 }
@@ -45,7 +45,7 @@
 }
 
 /// 设置 Badge 的伸缩模式
-/// @param flexMode `PPBadgeViewFlexMode` 伸缩模式
+/// @param flexMode `ZHHBadgeViewFlexMode` 伸缩模式
 - (void)zhh_setBadgeFlexMode:(ZHHBadgeViewFlexMode)flexMode {
     [[self zhh_bottomView] zhh_setBadgeFlexMode:flexMode];
 }
@@ -96,7 +96,10 @@
 - (UIView *)zhh_bottomView {
     // 利用 KVC 获取底层视图对象
     UIView *tabBarButton = [self valueForKey:@"_view"];
-    if (!tabBarButton) return nil; // 防止获取失败导致崩溃
+    if (!tabBarButton) {
+        NSLog(@"ZHHAnneKit 警告: 无法获取 UITabBarItem 的标签栏按钮");
+        return nil; // 防止获取失败导致崩溃
+    }
 
     // 遍历子视图，优先找到 UIImageView 类型视图作为 Badge 的父视图
     for (UIView *subView in tabBarButton.subviews) {

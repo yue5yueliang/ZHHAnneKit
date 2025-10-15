@@ -1,15 +1,27 @@
 Pod::Spec.new do |s|
   s.name             = 'ZHHAnneKit'
-  s.version          = '0.2.1'
-  s.summary          = '一套实用的分类与工具库，提升开发效率。'
+  s.version          = '0.2.2'
+  s.summary          = '一套高性能、安全可靠的 iOS 工具库，支持 iOS 13.0+'
   s.description      = <<-DESC
-  ZHHAnneKit 提供了一系列常用的分类和工具类，涵盖 Foundation、UIKit 和 QuartzCore 等模块，旨在简化日常开发工作，提高代码复用性和开发效率。
+  ZHHAnneKit 是一套轻量化、实用的工具库，包含常用的分类和工具类，帮助开发者提升效率、优化代码复用性。
+  
+  主要特性：
+  - 🚀 高性能：优化的内存管理和 Core Foundation 对象处理
+  - 🛡️ 安全可靠：完善的参数验证和错误处理
+  - 📱 iOS 13+：充分利用最新的 iOS 特性
+  - 🎨 UI 增强：丰富的 UIView 扩展方法
+  - 🔧 工具齐全：涵盖 Foundation、UIKit、QuartzCore、BadgeView 等模块
+  - 📚 文档完善：详细的方法注释和使用示例
+  
+  涵盖模块：Foundation 扩展、UIKit 扩展、QuartzCore 动画、BadgeView 组件、CommonTools 工具等。
   DESC
   s.homepage         = 'https://github.com/yue5yueliang/ZHHAnneKit'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { '桃色三岁' => '136769890@qq.com' }
   s.source           = { :git => 'https://github.com/yue5yueliang/ZHHAnneKit.git', :tag => s.version.to_s }
   s.ios.deployment_target = '13.0'
+  s.frameworks = 'UIKit', 'Foundation', 'QuartzCore', 'CoreGraphics', 'AVFoundation', 'CoreLocation', 'Social'
+  s.requires_arc = true
 
   s.default_subspec  = 'Core'
   s.subspec 'Core' do |core|
@@ -49,6 +61,7 @@ Pod::Spec.new do |s|
         
         commontools.subspec 'Permission' do |subspec|
             subspec.source_files = 'ZHHAnneKit/Classes/CommonTools/Permission/*.{h,m}'
+            subspec.frameworks = 'CoreLocation'
         end
     end
     
@@ -137,8 +150,7 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UIBarButtonItem' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIBarButtonItem/*.{h,m}'
-          subspec.dependency 'ZHHAnneKit/Core/UIKit/UIView'
-          subspec.dependency 'ZHHAnneKit/Core/UIKit/UIColor'
+          subspec.dependency 'ZHHAnneKit/Core/BadgeView'
       end
       uikit.subspec 'UIButton' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIButton/*.{h,m}'
@@ -152,6 +164,7 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UIControl' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIControl/*.{h,m}'
+          subspec.frameworks = 'AVFoundation'
       end
       uikit.subspec 'UIDevice' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIDevice/*.{h,m}'
@@ -188,6 +201,7 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UITabBarItem' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UITabBarItem/*.{h,m}'
+          subspec.dependency 'ZHHAnneKit/Core/BadgeView'
       end
       uikit.subspec 'UITableView' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UITableView/*.{h,m}'
@@ -200,9 +214,11 @@ Pod::Spec.new do |s|
       end
       uikit.subspec 'UIView' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIView/*.{h,m}'
+          subspec.dependency 'ZHHAnneKit/Core/BadgeView'
       end
       uikit.subspec 'UIViewController' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIViewController/*.{h,m}'
+          subspec.frameworks = 'Social'
       end
       uikit.subspec 'UIWindow' do |subspec|
           subspec.source_files = 'ZHHAnneKit/Classes/UIKit/UIWindow/*.{h,m}'

@@ -43,13 +43,13 @@
 
 - (UIViewController * _Nullable)zhh_findViewControllerWithClassName:(NSString * _Nonnull)className {
     if (!className || className.length == 0) {
-        NSLog(@"Error: ClassName cannot be nil or empty.");
+        NSLog(@"ZHHAnneKit 警告: 类名不能为空");
         return nil;
     }
     
     Class targetClass = NSClassFromString(className);
     if (!targetClass) {
-        NSLog(@"Error: Class '%@' not found.", className);
+        NSLog(@"ZHHAnneKit 警告: 未找到类 '%@'", className);
         return nil;
     }
     

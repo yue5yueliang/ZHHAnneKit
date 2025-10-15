@@ -1,5 +1,5 @@
 //
-//  CALayer+ZHHCommon.h
+//  CALayer+ZHHUtilities.h
 //  ZHHAnneKit
 //
 //  Created by 桃色三岁 on 2022/8/2.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CALayer (ZHHCommon)
+@interface CALayer (ZHHUtilities)
 
 /// 转场动画类型
 typedef NS_ENUM(NSInteger, ZHHTransitionAnimType) {
@@ -74,7 +74,7 @@ typedef NS_ENUM(NSInteger, ZHHTransitionCurve) {
 /// @param color 需要设置的边框颜色 (`UIColor`)
 - (void)zhh_setBorderColor:(UIColor *)color;
 
-/// 用于在 Interface Builder (Storyboard) 里直接设置 `shadowColor
+/// 用于在 Interface Builder (Storyboard) 里直接设置 `shadowColor`
 /// @param color 需要设置的阴影颜色 (`UIColor`)
 - (void)zhh_setShadowColor:(UIColor *)color;
 

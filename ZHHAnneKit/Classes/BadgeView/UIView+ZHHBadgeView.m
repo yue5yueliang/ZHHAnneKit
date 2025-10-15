@@ -20,17 +20,29 @@ static NSString *const ZHHBadgeViewKey = @"ZHHBadgeViewKey";
     self.badgeView.text = text;
     [self zhh_setBadgeFlexMode:self.badgeView.flexMode];
     
-    if (text) {
-        if (self.badgeView.widthConstraint && self.badgeView.widthConstraint.relation == NSLayoutRelationGreaterThanOrEqual) { return; }
-        self.badgeView.widthConstraint.active = NO;
-        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.badgeView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.badgeView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0];
-        [self.badgeView addConstraint:constraint];
-    } else {
-        if (self.badgeView.widthConstraint && self.badgeView.widthConstraint.relation == NSLayoutRelationEqual) { return; }
-        self.badgeView.widthConstraint.active = NO;
-        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.badgeView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.badgeView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0];
-        [self.badgeView addConstraint:constraint];
+    // 获取当前宽度约束
+    NSLayoutConstraint *currentWidthConstraint = self.badgeView.widthConstraint;
+    NSLayoutRelation targetRelation = text.length > 0 ? NSLayoutRelationGreaterThanOrEqual : NSLayoutRelationEqual;
+    
+    // 如果当前约束关系已经是目标关系，则不需要修改
+    if (currentWidthConstraint && currentWidthConstraint.relation == targetRelation) {
+        return;
     }
+    
+    // 移除当前宽度约束
+    if (currentWidthConstraint) {
+        currentWidthConstraint.active = NO;
+    }
+    
+    // 添加新的宽度约束
+    NSLayoutConstraint *newConstraint = [NSLayoutConstraint constraintWithItem:self.badgeView 
+                                                                   attribute:NSLayoutAttributeWidth 
+                                                                   relatedBy:targetRelation 
+                                                                      toItem:self.badgeView 
+                                                                   attribute:NSLayoutAttributeHeight 
+                                                                  multiplier:1.0 
+                                                                    constant:0];
+    [self.badgeView addConstraint:newConstraint];
 }
 
 /// 添加带数字的 Badge
@@ -289,12 +301,13 @@ static NSString *const ZHHBadgeViewKey = @"ZHHBadgeViewKey";
 /// @param layoutAttribute 需要获取的约束属性（如宽度、高度等）
 /// @return 如果存在对应的约束，返回它；否则返回 nil
 - (NSLayoutConstraint *)constraint:(id)item attribute:(NSLayoutAttribute)layoutAttribute {
-    for (NSLayoutConstraint *constraint in self.constraints) {
-        if (constraint.firstItem == item && constraint.firstAttribute == layoutAttribute) {
-            return constraint;
-        }
-    }
-    return nil;
+    // 优化：使用 NSPredicate 进行更高效的查找
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(NSLayoutConstraint *constraint, NSDictionary *bindings) {
+        return constraint.firstItem == item && constraint.firstAttribute == layoutAttribute;
+    }];
+    
+    NSArray *matchingConstraints = [self.constraints filteredArrayUsingPredicate:predicate];
+    return matchingConstraints.firstObject;
 }
 
 @end

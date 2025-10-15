@@ -18,7 +18,7 @@
 + (UIImage *)zhh_imageWithOriginalModeNamed:(NSString *)imageName {
     UIImage *image = [UIImage imageNamed:imageName];
     if (!image) {
-        NSLog(@"图片加载失败，名称: %@", imageName);
+        NSLog(@"ZHHAnneKit 警告: 图片加载失败，名称: %@", imageName);
         return nil;
     }
     return [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -107,7 +107,7 @@
     
     UIImage *image = [UIImage imageNamed:imageName];
     if (!image) {
-        NSLog(@"图片加载失败: %@", imageName);
+        NSLog(@"ZHHAnneKit 警告: 图片加载失败: %@", imageName);
         return nil;
     }
     
@@ -127,7 +127,7 @@
     // 创建视频资源
     AVURLAsset *asset = [AVURLAsset assetWithURL:videoUrl];
     if (!asset) {
-        NSLog(@"视频资源创建失败，URL: %@", videoUrl);
+        NSLog(@"ZHHAnneKit 警告: 视频资源创建失败，URL: %@", videoUrl);
         return nil;
     }
     
@@ -180,7 +180,7 @@
         }];
         return thumbnail;
     } else {
-        NSLog(@"不支持的对象类型: %@", NSStringFromClass([imageObj class]));
+        NSLog(@"ZHHAnneKit 警告: 不支持的对象类型: %@", NSStringFromClass([imageObj class]));
         return nil;
     }
 }

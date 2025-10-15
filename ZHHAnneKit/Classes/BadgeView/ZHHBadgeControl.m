@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UIColor *badgeViewColor;
 /// Badge 高度的约束，用于动态调整高度
 @property (nonatomic, strong) NSLayoutConstraint *badgeViewHeightConstraint;
+/// Badge 宽度的约束，用于动态调整宽度
+@property (nonatomic, strong) NSLayoutConstraint *badgeViewWidthConstraint;
 @end
 
 @implementation ZHHBadgeControl
@@ -96,14 +98,13 @@
     
     if (backgroundImage) {
         // 有背景图片时移除高度约束，设置透明背景
-        if (self.heightConstraint) {
-            self.badgeViewHeightConstraint = self.heightConstraint;
-            [self removeConstraint:self.heightConstraint];
+        if (self.badgeViewHeightConstraint) {
+            [self removeConstraint:self.badgeViewHeightConstraint];
         }
         self.backgroundColor = UIColor.clearColor;
     } else {
         // 没有背景图片时恢复高度约束，设置背景颜色
-        if (!self.heightConstraint && self.badgeViewHeightConstraint) {
+        if (self.badgeViewHeightConstraint) {
             [self addConstraint:self.badgeViewHeightConstraint];
         }
         self.backgroundColor = self.badgeViewColor;

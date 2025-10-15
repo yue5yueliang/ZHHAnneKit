@@ -83,7 +83,7 @@
 #else
 #import "UIApplication+ZHHUtilities.h"
 #import "UIBarButtonItem+ZHHUtilities.h"
-#import "UIBarButtonItem+ZHHUINavigationButton.h"
+#import "UIBarButtonItem+UINavigationButton.h"
 
 #import "UIButton+ZHHContentLayout.h"
 #import "UIButton+ZHHEmitter.h"

@@ -60,7 +60,7 @@
     NSError *error = nil;
     NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
-        NSLog(@"Error reading file %@.%@: %@", fileName, type, error.localizedDescription);
+        NSLog(@"ZHHAnneKit 警告: 读取文件 %@.%@ 失败: %@", fileName, type, error.localizedDescription);
         return nil;
     }
     return content;

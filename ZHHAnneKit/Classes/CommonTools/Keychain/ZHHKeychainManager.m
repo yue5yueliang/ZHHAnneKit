@@ -57,14 +57,10 @@
 
 #pragma mark - Private Helper Method
 
-/// 构造查询字典
+/// 构造查询字典（使用默认服务名）
 /// @param key 作为服务的唯一标识
 + (NSMutableDictionary *)zhh_keychainQueryForKey:(NSString *)key {
-    return [@{
-        (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
-        (__bridge id)kSecAttrService: @"com.example.KeychainService", // 服务名，可修改
-        (__bridge id)kSecAttrAccount: key // 账户名，对应 key
-    } mutableCopy];
+    return [self zhh_keychainQueryForKey:key service:@"com.example.KeychainService"];
 }
 
 /// 构造查询字典

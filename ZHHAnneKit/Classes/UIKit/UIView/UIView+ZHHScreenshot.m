@@ -15,12 +15,8 @@
 - (UIImage *)zhh_screenshot {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, [UIScreen mainScreen].scale);
     
-    // 根据iOS版本，选择合适的绘制方法
-    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
-    } else {
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    }
+    // iOS 13.0+ 直接使用 drawViewHierarchyInRect:afterScreenUpdates: 方法
+    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
     
     UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -58,12 +54,8 @@
     CGPoint anchorPoint = self.layer.anchorPoint;
     CGContextTranslateCTM(context, -actualBounds.size.width * anchorPoint.x, -actualBounds.size.height * anchorPoint.y);
     
-    // 绘制视图内容
-    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
-    } else {
-        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    }
+    // 绘制视图内容（iOS 13.0+）
+    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
     
     UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

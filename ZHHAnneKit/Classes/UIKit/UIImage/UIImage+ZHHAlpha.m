@@ -60,7 +60,7 @@
     CGImageRef imageRefWithAlpha = CGBitmapContextCreateImage(offscreenContext);
     if (!imageRefWithAlpha) {
         CGContextRelease(offscreenContext);
-        NSLog(@"创建包含 Alpha 通道的图片失败！");
+        NSLog(@"ZHHAnneKit 警告: 创建包含 Alpha 通道的图片失败");
         return nil;
     }
     

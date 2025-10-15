@@ -21,19 +21,20 @@
  @return 一个动态颜色对象，在浅色和深色模式下显示不同的颜色
  */
 + (UIColor *)colorWithLightColor:(UIColor *)lightColor darkColor:(UIColor *)darkColor {
-    // iOS 13 及以上系统，使用系统自适应暗黑模式的颜色
-    if (@available(iOS 13.0, *)) {
-        return [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
-            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-                return darkColor;  // 返回暗黑模式颜色
-            } else {
-                return lightColor; // 返回浅色模式颜色
-            }
-        }];
-    } else {
-        // iOS 13 以下，直接返回浅色模式颜色
-        return lightColor;
+    // 参数验证
+    if (!lightColor || !darkColor) {
+        NSLog(@"ZHHAnneKit 警告: 浅色和深色模式颜色不能为空");
+        return lightColor ?: darkColor ?: [UIColor clearColor];
     }
+    
+    // iOS 13.0+ 使用系统自适应暗黑模式的颜色
+    return [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+        if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            return darkColor;  // 返回暗黑模式颜色
+        } else {
+            return lightColor; // 返回浅色模式颜色
+        }
+    }];
 }
 
 /// 将 UIColor 转换为十六进制颜色字符串（默认不带透明度）
@@ -91,15 +92,24 @@
 /// @param alpha 透明度（优先使用 hexString 的 alpha 值，如果格式不带 alpha，则使用该参数）
 /// @return 转换后的 UIColor 对象
 + (UIColor *)zhh_colorWithHexString:(NSString *)hexString alpha:(float)alpha {
-    // 去掉前缀符号并转为大写
-    NSString *string = [[hexString stringByReplacingOccurrencesOfString:@"#" withString:@""] uppercaseString];
-    if ([string hasPrefix:@"0X"]) {
-        string = [string stringByReplacingOccurrencesOfString:@"0X" withString:@""];
+    // 参数验证
+    if (!hexString || hexString.length == 0) {
+        NSLog(@"ZHHAnneKit 警告: 十六进制字符串不能为空");
+        return nil;
     }
+    
+    // 去掉前缀符号并转为大写（优化字符串处理）
+    NSString *string = [hexString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([string hasPrefix:@"#"]) {
+        string = [string substringFromIndex:1];
+    } else if ([string hasPrefix:@"0X"] || [string hasPrefix:@"0x"]) {
+        string = [string substringFromIndex:2];
+    }
+    string = [string uppercaseString];
     
     // 检查长度是否合法
     if (string.length != 3 && string.length != 4 && string.length != 6 && string.length != 8) {
-        NSLog(@"Invalid hex string format: %@", hexString);
+        NSLog(@"ZHHAnneKit 警告: 无效的十六进制字符串格式: %@", hexString);
         return nil;
     }
     
@@ -197,7 +207,7 @@
 /// @param color 输入的 UIColor 对象
 + (void)zhh_rgbValueFromUIColor:(UIColor *)color {
     if (!color) {
-        NSLog(@"无法获取颜色值，因为输入的颜色为空");
+        NSLog(@"ZHHAnneKit 警告: 无法获取颜色值，因为输入的颜色为空");
         return;
     }
 
@@ -208,9 +218,9 @@
         NSInteger redValue = r * 255;
         NSInteger greenValue = g * 255;
         NSInteger blueValue = b * 255;
-        NSLog(@"--- 红色值: %ld, 绿色值: %ld, 蓝色值: %ld ---", (long)redValue, (long)greenValue, (long)blueValue);
+        NSLog(@"ZHHAnneKit 信息: RGB值 - 红色: %ld, 绿色: %ld, 蓝色: %ld", (long)redValue, (long)greenValue, (long)blueValue);
     } else {
-        NSLog(@"无法获取 RGB 值，请确保输入的颜色是通过 RGB 模型创建的");
+        NSLog(@"ZHHAnneKit 警告: 无法获取 RGB 值，请确保输入的颜色是通过 RGB 模型创建的");
     }
 }
 
@@ -218,6 +228,12 @@
 /// @param alpha 透明度，范围 [0, 1]，默认值为 1
 /// @return 随机生成的 UIColor
 + (instancetype)zhh_randomColorWithAlpha:(CGFloat)alpha {
+    // 参数验证
+    if (alpha < 0.0 || alpha > 1.0) {
+        NSLog(@"ZHHAnneKit 警告: 透明度值必须在 0.0 到 1.0 之间，使用默认值 1.0");
+        alpha = 1.0;
+    }
+    
     CGFloat red = arc4random_uniform(256) / 255.0;
     CGFloat green = arc4random_uniform(256) / 255.0;
     CGFloat blue = arc4random_uniform(256) / 255.0;
@@ -231,12 +247,20 @@
 
 /// 图片生成颜色
 + (UIColor *)zhh_colorWithImage:(UIImage *)image{
+    // 参数验证
+    if (!image) {
+        NSLog(@"ZHHAnneKit 警告: 图片不能为空");
+        return [UIColor clearColor];
+    }
     return [UIColor colorWithPatternImage:image];
 }
 
 /// 获取颜色的均值
 + (UIColor *)zhh_colorsAverage:(NSArray<UIColor*>*)colors{
-    if (!colors || colors.count == 0)  return nil;
+    if (!colors || colors.count == 0) {
+        NSLog(@"ZHHAnneKit 警告: 颜色数组不能为空");
+        return nil;
+    }
     CGFloat reds = 0.0f;
     CGFloat greens = 0.0f;
     CGFloat blues = 0.0f;
@@ -412,10 +436,32 @@
 }
 
 + (UIColor *)zhh_colorWithGradientColor1:(UIColor *)color1 color2:(UIColor *)color2 height:(CGFloat)height{
+    // 参数验证
+    if (!color1 || !color2) {
+        NSLog(@"ZHHAnneKit 警告: 渐变颜色不能为空");
+        return color1 ?: color2 ?: [UIColor clearColor];
+    }
+    
+    if (height <= 0) {
+        NSLog(@"ZHHAnneKit 警告: 渐变高度必须大于0");
+        return color1;
+    }
+    
     return [UIColor zhh_colorWithGradientColors:@[color1,color2] locations:nil point:CGPointZero size:height direction:(ZHHGradietDirectionTypeTopToBottom)];
 }
 
 + (UIColor *)zhh_colorWithGradientColor1:(UIColor *)color1 color2:(UIColor *)color2 width:(CGFloat)width{
+    // 参数验证
+    if (!color1 || !color2) {
+        NSLog(@"ZHHAnneKit 警告: 渐变颜色不能为空");
+        return color1 ?: color2 ?: [UIColor clearColor];
+    }
+    
+    if (width <= 0) {
+        NSLog(@"ZHHAnneKit 警告: 渐变宽度必须大于0");
+        return color1;
+    }
+    
     return [UIColor zhh_colorWithGradientColors:@[color1,color2] locations:nil point:CGPointZero size:width direction:(ZHHGradietDirectionTypeLeftToRight)];
 }
 
@@ -425,8 +471,19 @@
                                     size:(CGFloat)size
                                direction:(ZHHGradietDirectionType)direction {
     
+    // 参数验证
+    if (!colors || colors.count == 0) {
+        NSLog(@"ZHHAnneKit 警告: 渐变颜色数组不能为空");
+        return nil;
+    }
+    
+    if (colors.count < 2) {
+        NSLog(@"ZHHAnneKit 警告: 渐变至少需要两种颜色");
+        return colors.firstObject;
+    }
+    
     if (size <= 0) {
-        NSLog(@"错误：渐变绘制的尺寸无效 size:%f",size);
+        NSLog(@"ZHHAnneKit 警告: 渐变绘制的尺寸无效 size:%.2f", size);
         return nil;
     }
     

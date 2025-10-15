@@ -48,7 +48,7 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
         // 错误处理可根据需要进行日志记录或异常抛出
         if (error) {
-            NSLog(@"Error creating cache directory: %@", error.localizedDescription);
+            NSLog(@"ZHHAnneKit 警告: 创建缓存目录失败: %@", error.localizedDescription);
         }
     }
     

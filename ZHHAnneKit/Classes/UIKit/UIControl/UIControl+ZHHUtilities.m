@@ -100,16 +100,17 @@ static char const * const zhh_kSoundsKey = "zhh_kSoundsKey";
     
     // 创建并准备音效播放器
     AVAudioPlayer *tapSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:&error];
+    
+    // 如果创建音效播放器失败，输出错误信息并返回
+    if (!tapSound) {
+        NSLog(@"ZHHAnneKit 警告: 无法添加声音 - 错误: %@", error);
+        return;
+    }
+    
     NSString *controlEventKey = [NSString stringWithFormat:@"%zd", controlEvent];
     NSMutableDictionary *sounds = [self zhh_sounds];
     [sounds setObject:tapSound forKey:controlEventKey];
     [tapSound prepareToPlay];
-    
-    // 如果创建音效播放器失败，输出错误信息并返回
-    if (!tapSound) {
-        NSLog(@"Couldn't add sound - error: %@", error);
-        return;
-    }
     
     // 为指定的控制事件添加音效播放操作
     [self addTarget:tapSound action:@selector(play) forControlEvents:controlEvent];

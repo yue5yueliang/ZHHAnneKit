@@ -159,7 +159,8 @@
 /// 是否开启侧滑返回手势
 /// @param open 是否开启
 - (void)zhh_openPopGesture:(BOOL)open {
-    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+    // iOS 13.0+ 直接使用 interactivePopGestureRecognizer
+    if (self.navigationController.interactivePopGestureRecognizer) {
         // 遍历所有与侧滑手势相关的手势识别器并设置是否启用
         for (UIGestureRecognizer *popGesture in self.navigationController.interactivePopGestureRecognizer.view.gestureRecognizers) {
             popGesture.enabled = open;

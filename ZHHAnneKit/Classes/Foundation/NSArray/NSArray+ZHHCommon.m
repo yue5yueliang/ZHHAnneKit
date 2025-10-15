@@ -21,15 +21,9 @@
     NSSet *set1 = [NSSet setWithArray:self];
     NSSet *set2 = [NSSet setWithArray:otherArray];
 
-    // 检查是否存在交集
-    NSSet *intersectionSet = nil;
-    if ([set1 intersectsSet:set2]) {
-        intersectionSet = [set1 objectsPassingTest:^BOOL(id  _Nonnull obj, BOOL * _Nonnull stop) {
-            return [set2 containsObject:obj];
-        }];
-    } else {
-        intersectionSet = [NSSet set];
-    }
+    // 使用更高效的集合交集方法
+    NSMutableSet *intersectionSet = [set1 mutableCopy];
+    [intersectionSet intersectSet:set2];
     
     return intersectionSet.allObjects;
 }
@@ -114,7 +108,7 @@
     // 使用 NSPredicate 创建一个过滤条件：排除 temp 数组中的元素
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)", temp];
     // 使用 predicate 筛选当前数组中不在 temp 中的元素，并返回新的数组
-    return [self filteredArrayUsingPredicate:predicate].mutableCopy;
+    return [self filteredArrayUsingPredicate:predicate];
 }
 
 /// MARK: - 根据指定属性对对象数组进行升序或降序排序
@@ -133,6 +127,12 @@
 /// @param value 要匹配的字段值
 /// @return 返回匹配的元素组成的数组
 - (NSArray *)zhh_filterArrayByKey:(NSString *)key value:(NSString *)value {
+    // 参数验证
+    if (!key || key.length == 0 || !value) {
+        NSLog(@"ZHHAnneKit 警告: 筛选参数无效");
+        return @[];
+    }
+    
     // 构造Predicate格式字符串，执行匹配
     NSString *predicateFormat = [NSString stringWithFormat:@"%@ LIKE %@", key, value];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat];
@@ -145,6 +145,12 @@
 /// @param value 要比较的值
 /// @return 返回符合条件的数组
 - (NSArray *)zhh_filterArrayWithOperator:(NSString *)ope key:(NSString *)key value:(NSString *)value {
+    // 参数验证
+    if (!ope || ope.length == 0 || !key || key.length == 0 || !value) {
+        NSLog(@"ZHHAnneKit 警告: 筛选操作符参数无效");
+        return @[];
+    }
+    
     // 特殊处理支持拼音的操作符
     NSArray *supportedOperators = @[@"beginswith", @"endswith", @"contains"];
     if ([supportedOperators containsObject:ope.lowercaseString]) {
@@ -169,7 +175,7 @@
 
 // 判断字符串是否匹配操作符和值
 - (BOOL)zhh_isValue:(NSString *)targetValue matchesOperator:(NSString *)ope withValue:(NSString *)value {
-    if (!targetValue || !value) return NO;
+    if (!targetValue || !value || !ope) return NO;
     
     NSString *pinyinValue = [self zhh_pinyinFirstLetters:targetValue]; // 获取拼音首字母
 
@@ -190,6 +196,10 @@
 
 // 获取字符串的拼音首字母
 - (NSString *)zhh_pinyinFirstLetters:(NSString *)string {
+    if (!string || string.length == 0) {
+        return @"";
+    }
+    
     NSMutableString *mutableString = [string mutableCopy];
     CFStringTransform((__bridge CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, NO);
     CFStringTransform((__bridge CFMutableStringRef)mutableString, NULL, kCFStringTransformStripCombiningMarks, NO);

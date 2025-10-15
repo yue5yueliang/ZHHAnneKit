@@ -22,6 +22,12 @@ static char zhh_kActionHandlerLongPressGestureKey;
 /// 添加点击手势及回调
 /// @param block 点击手势回调
 - (void)zhh_addTapActionWithBlock:(ZHHGestureActionBlock)block {
+    // 参数验证
+    if (!block) {
+        NSLog(@"ZHHAnneKit 警告: 点击手势回调块不能为空");
+        return;
+    }
+    
     // 获取已有的点击手势
     UITapGestureRecognizer *gesture = objc_getAssociatedObject(self, &zhh_kActionHandlerTapGestureKey);
     if (!gesture) {
@@ -51,6 +57,12 @@ static char zhh_kActionHandlerLongPressGestureKey;
 /// 添加长按手势及回调
 /// @param block 长按手势回调
 - (void)zhh_addLongPressActionWithBlock:(ZHHGestureActionBlock)block {
+    // 参数验证
+    if (!block) {
+        NSLog(@"ZHHAnneKit 警告: 长按手势回调块不能为空");
+        return;
+    }
+    
     // 获取已有的长按手势
     UILongPressGestureRecognizer *gesture = objc_getAssociatedObject(self, &zhh_kActionHandlerLongPressGestureKey);
     if (!gesture) {
@@ -75,6 +87,28 @@ static char zhh_kActionHandlerLongPressGestureKey;
     }
 }
 
+#pragma mark - 移除手势
+
+/// 移除点击手势
+- (void)zhh_removeTapAction {
+    UITapGestureRecognizer *gesture = objc_getAssociatedObject(self, &zhh_kActionHandlerTapGestureKey);
+    if (gesture) {
+        [self removeGestureRecognizer:gesture];
+        objc_setAssociatedObject(self, &zhh_kActionHandlerTapGestureKey, nil, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, &zhh_kActionHandlerTapBlockKey, nil, OBJC_ASSOCIATION_COPY);
+    }
+}
+
+/// 移除长按手势
+- (void)zhh_removeLongPressAction {
+    UILongPressGestureRecognizer *gesture = objc_getAssociatedObject(self, &zhh_kActionHandlerLongPressGestureKey);
+    if (gesture) {
+        [self removeGestureRecognizer:gesture];
+        objc_setAssociatedObject(self, &zhh_kActionHandlerLongPressGestureKey, nil, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, &zhh_kActionHandlerLongPressBlockKey, nil, OBJC_ASSOCIATION_COPY);
+    }
+}
+
 @end
 
 @implementation UIView (LoadingIndicator)
@@ -88,13 +122,18 @@ static char kLoadingIndicatorKey;
 
 // 带有参数的加载指示器
 - (void)zhh_showLoadingIndicatorWithAlpha:(CGFloat)alpha indicatorStyle:(UIActivityIndicatorViewStyle)style color:(UIColor * _Nullable)color {
+    // 参数验证
+    if (alpha < 0.0 || alpha > 1.0) {
+        NSLog(@"ZHHAnneKit 警告: 透明度值必须在 0.0 到 1.0 之间");
+        alpha = 0.8; // 使用默认值
+    }
     
     // 检查是否已存在蒙层
     UIView *maskView = objc_getAssociatedObject(self, &kMaskViewKey);
     
     if (!maskView) {
         // 创建蒙层视图
-        maskView = [[UIView alloc] initWithFrame:self.bounds];
+        maskView = [[UIView alloc] init];
         maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:alpha];
         maskView.translatesAutoresizingMaskIntoConstraints = NO;
         
@@ -117,12 +156,8 @@ static char kLoadingIndicatorKey;
     UIActivityIndicatorView *loadingIndicator = objc_getAssociatedObject(self, &kLoadingIndicatorKey);
     
     if (!loadingIndicator) {
-        // 创建加载指示器
-        if (@available(iOS 13.0, *)) {
-            loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:style];
-        } else {
-            loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
-        }
+        // 创建加载指示器（iOS 13.0+）
+        loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:style];
         
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = NO;
         loadingIndicator.hidesWhenStopped = YES;
@@ -151,12 +186,14 @@ static char kLoadingIndicatorKey;
     UIView *maskView = objc_getAssociatedObject(self, &kMaskViewKey);
     UIActivityIndicatorView *loadingIndicator = objc_getAssociatedObject(self, &kLoadingIndicatorKey);
     
+    // 停止并移除加载指示器
     if (loadingIndicator) {
         [loadingIndicator stopAnimating];
         [loadingIndicator removeFromSuperview];
         objc_setAssociatedObject(self, &kLoadingIndicatorKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
+    // 移除蒙层视图
     if (maskView) {
         [UIView animateWithDuration:0.3 animations:^{
             maskView.alpha = 0;
